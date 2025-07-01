@@ -25,4 +25,17 @@ typedef struct s_s
 	char	**orignal_path;
 }	t_s_list;
 
-void	ft_first_step(t_s_list *s);
+typedef struct s_token_list
+{
+	struct   s_token_list *next;
+	char *data;	
+}	t_token;
+
+
+///ft_list.c  (LIST)
+
+t_token *ft_list_add(char *data);
+void ft_print_list(t_token *l);
+
+
+void ft_token(char *line,t_token *l);

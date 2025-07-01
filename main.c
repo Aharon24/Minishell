@@ -3,10 +3,13 @@
 int	main( void)
 {
 	t_s_list	s;
+	t_token		l;
 
+	l.next = NULL;
 	while (1)
 	{
 		s.line = readline("---minishell->");
-		ft_first_step(&s);
+		ft_token(s.line,&l);
 	}
+	//ft_print_list(&l);
 }

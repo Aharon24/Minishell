@@ -2,13 +2,14 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -lreadline
+CFLAGS = -Wall -Wextra -Werror  
 
 LIBFT_DIR = Libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
+LDFLAGS = -lreadline
 
  
-SRC = main.c ft_first_step.c 
+SRC = main.c ft_token.c  ft_list.c
  
 OBJ = $(SRC:.c=.o)
 
@@ -19,7 +20,7 @@ $(LIBFT_A):
 	$(MAKE) -C $(LIBFT_DIR)
  
 $(NAME): $(OBJ) $(LIBFT_A)
-	$(CC) $(CFLAGS) $(OBJ) -L$(LIBFT_DIR) -lft -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -L$(LIBFT_DIR)  $(LDFLAGS) -lft -o $(NAME)
 
  
 %.o: %.c
