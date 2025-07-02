@@ -10,7 +10,7 @@ int	main( void)
 	{
 		s.line = readline("---minishell-> ");
 		l = ft_token(s.line, l);
-		ft_print_enum(l);
+		//ft_print_enum(l);
 	}
 	//t_print_list_enum(&l);
 }
