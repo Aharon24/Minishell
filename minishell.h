@@ -17,25 +17,39 @@
 #include "Libft/libft.h"
 
 
-typedef struct s_s
+typedef enum e_token_type
 {
-	char	*line;
-	char	**arr;
-	char	*path_env;
-	char	**orignal_path;
-}	t_s_list;
+    TOKEN_WORD,       // обычное слово: команда или аргумент
+    TOKEN_PIPE,       // |
+    TOKEN_REDIRECT_IN,     // <
+    TOKEN_REDIRECT_OUT,    // >
+    TOKEN_REDIRECT_APPEND, // >>
+    TOKEN_HEREDOC,         // <<
+}   t_token_type;
 
-typedef struct s_token_list
+
+typedef struct s_token
 {
-	struct   s_token_list *next;
-	char *data;	
-}	t_token;
+    char            *value;       // текст токена (например "cat", "file.txt", ">>")
+    t_token_type     type;        // тип токена из enum
+    struct s_token  *next;        // следующий токен
+}   t_token;
 
+typedef struct s_line
+{
+    char *line;
+} t_line;
+ 
 
 ///ft_list.c  (LIST)
 
 t_token *ft_list_add(char *data);
 void ft_print_list(t_token *l);
+void ft_print_list_enum(t_token *l);
+void ft_print_enum(t_token *l);
 
+/// Token
 
-void ft_token(char *line,t_token *l);
+t_token	*ft_token(char *line,t_token *l);
+t_token	*ft_token_fill(char **arr,t_token *l);
+void ft_tayp_fill_enam(char *arr, t_token *new_node);

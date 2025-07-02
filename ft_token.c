@@ -1,46 +1,61 @@
 #include "minishell.h"
 
-// void	ft_first_step(t_s_list *s)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	s->path_env = getenv("PATH");
-// 	s->orignal_path = ft_split(s->path_env, ':');
-// 	while(s->orignal_path[i])
-// 	{
-// 		printf("%s\n",s->orignal_path[i]);
-// 		i++;
-// 	}
-// 	s->arr = ft_split(s->line, ' ');
-// 	if (access(s->arr[0], X_OK) == 0)
-// 		printf("OK\n");
-// }
 
 
-void ft_token(char *line, t_token *l)
+void ft_tayp_fill_enam(char *arr, t_token *new_node)
 {
-	int i = 0;
-	char **arr;
+	size_t len;
+
+	len = 0;
+	len = ft_strlen(arr);
+	if(ft_strncmp(arr,"|",len) == 0)
+		new_node->type = TOKEN_PIPE;
+	else if(ft_strncmp(arr,"<",len) == 0)
+		new_node->type = TOKEN_REDIRECT_IN;
+	else if(ft_strncmp(arr,">",len) == 0)
+		new_node->type = TOKEN_REDIRECT_OUT;
+	else if(ft_strncmp(arr,">>",len) == 0)
+		new_node->type = TOKEN_REDIRECT_APPEND;
+	else if(ft_strncmp(arr,"<<",len) == 0)
+		new_node->type = TOKEN_HEREDOC;
+	else{
+		new_node->type = TOKEN_WORD;
+	}
+}
+
+t_token	*ft_token_fill(char **arr,t_token *l)
+{
+	int i;
+
+	i = 0;
+	t_token *new_node;
 	t_token *head = NULL;
 	t_token *last = NULL;
-	t_token *new_node;
-
-	arr = ft_split(line, ' ');
 	while (arr[i])
 	{
 		new_node = ft_list_add(arr[i]);
+		ft_tayp_fill_enam(arr[i],new_node);
 		if (!head)
-			head = new_node;    
+		{
+			head = new_node;
+			last = head;
+		}    
 		else
 			last->next = new_node;  
 		last = new_node;        
 		i++;
 	}
 	l = head;
-	ft_print_list(head);
+	return (l);
 }
 
 
 
-
+t_token *ft_token(char *line, t_token *l)
+{
+	char **arr;
+	arr = ft_split(line, ' ');
+	l = ft_token_fill(arr,l);
+	ft_print_list(l);
+	return(l);
+}

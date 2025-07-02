@@ -2,14 +2,15 @@
 
 int	main( void)
 {
-	t_s_list	s;
-	t_token		l;
+	t_token		*l;
+	t_line		s;
 
-	l.next = NULL;
+	l = NULL;
 	while (1)
 	{
-		s.line = readline("---minishell->");
-		ft_token(s.line,&l);
+		s.line = readline("---minishell-> ");
+		l = ft_token(s.line, l);
+		ft_print_enum(l);
 	}
-	//ft_print_list(&l);
+	//t_print_list_enum(&l);
 }
