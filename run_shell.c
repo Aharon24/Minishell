@@ -26,7 +26,7 @@ void	run_shell(t_shell *shell)
 		}
 		if (tokenize(shell) == -1)
 			printf("Ошибка токенизации\n");
-		split_cmd(&cmd, shell->tokens);
+		cmd = split_cmd(&cmd, shell->tokens);
 		cleanup_loop(shell);
 	}
 }
