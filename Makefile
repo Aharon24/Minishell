@@ -9,7 +9,13 @@ LIBFT_A = $(LIBFT_DIR)/libft.a
 LDFLAGS = -lreadline
 
  
-SRC = main.c ft_token.c  ft_list.c ft_token_two.c
+SRC = main.c\
+	add_token.c\
+	ft_free.c\
+	init.c\
+	run_shell.c\
+	tokenize.c\
+	utils.c
  
 OBJ = $(SRC:.c=.o)
 

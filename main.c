@@ -2,15 +2,10 @@
 
 int	main( void)
 {
-	t_token		*l;
-	t_line		s;
+	t_shell shell;
 
-	l = NULL;
-	while (1)
-	{
-		s.line = readline("---minishell-> ");
-		l = ft_token(s.line, l);
-		//ft_print_enum(l);
-	}
-	//t_print_list_enum(&l);
+	init_shell(&shell);
+	run_shell(&shell);
+	return (0);
+
 }

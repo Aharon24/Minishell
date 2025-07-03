@@ -1,3 +1,6 @@
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,6 +17,12 @@
 
 //My Libery
 #include "Libft/libft.h"
+
+typedef struct s_command {
+    char **argv;
+    int argc;
+    struct s_command *next;
+} t_command;
 
 typedef enum e_token_type
 {
@@ -32,34 +41,32 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_line
+typedef struct s_shell
 {
 	char	*line;
-	char	*get_env;
-	char	**arr_get_env;
-}	t_line;
+	t_token	*tokens;
+}	t_shell;
 
-///ft_list.c  (LIST)
+//add_token.c
+t_token	*add_token(t_token **head, char *value, t_token_type type);
 
-t_token		*ft_list_add(char *data);
-void		ft_print_list(t_token *l);
-void		ft_print_list_enum(t_token *l);
-void		ft_print_enum(t_token *l);
+//ft_free.c
+void	clear_tokens(t_token **head);
+void	cleanup_loop(t_shell *shell);
 
-/// Token
+//init.c
+void	init_shell(t_shell *shell);
 
-t_token		*ft_token(char *line, t_token *l);
-t_token		*ft_token_fill(char **arr, t_token *l);
+//run_shell.c
+void	run_shell(t_shell *shell);
 
-/// fill
-void		ft_tayp_fill_enam(char *arr, t_token *new_node);
+//tokenize.c
+int		tokenize(t_shell *shell);
+int 	lexer(char *line, t_token **tokens);
+int		lex_pipe(t_token **tokens);
+int		lex_redir(char *line, t_token **tokens);
+int		lex_word(char *line, t_token **tokens);
 
-///work
-void		ft_token_work(t_token *l);
-void		ft_token_check_and_do(t_token *chek, int flag, t_line *line);
-void		ft_run_program(t_token *chek, t_line *line);
-void		ft_tray_acsses(char **arr_env, t_token *chek);
-char		**ft_arr_env_join_slesh(char **arr);
-
-//// check
-int			ft_strcmp(const char *str1, const char *str2);
+//utils.c
+char	*ft_strndup(char *line, int n);
+#endif
