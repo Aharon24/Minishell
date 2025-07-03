@@ -9,11 +9,27 @@
 // 	}
 // }
 
+// void	print_cmd(t_command *cmd)
+// {
+// 	int i = 0;
+
+// 	while(cmd)
+// 	{
+// 		i = 0;
+// 		while (cmd->argv[i])
+// 		{
+// 			printf("%s",cmd->argv[i]);
+// 			i++;
+// 		}
+// 		printf("\n");
+// 		cmd = cmd->next;
+// 	}
+// }
+
 void	run_shell(t_shell *shell)
 {
-	t_command cmd;
+	t_command *cmd;
 
-	init_cmd(&cmd);
 	while (1)
 	{
 		shell->line = readline("minishell-> ");
@@ -26,7 +42,9 @@ void	run_shell(t_shell *shell)
 		}
 		if (tokenize(shell) == -1)
 			printf("Ошибка токенизации\n");
-		cmd = split_cmd(&cmd, shell->tokens);
+		cmd = split_cmd(shell->tokens);
+		check_arrow(cmd);
+		print_cmd(cmd);
 		cleanup_loop(shell);
 	}
 }

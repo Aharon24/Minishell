@@ -71,6 +71,6 @@ int		lex_word(char *line, t_token **tokens);
 char	*ft_strndup(char *line, int n);
 
 //split_cmd.c
-t_command split_cmd(t_command *cmd_head, t_token *tokens);
+t_command *split_cmd(t_token *tokens);
 
 #endif
