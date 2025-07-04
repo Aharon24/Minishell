@@ -16,7 +16,9 @@ SRC = main.c\
 	run_shell.c\
 	tokenize.c\
 	utils.c\
-	split_cmd.c
+	split_cmd.c\
+	cd.c\
+	pwd.c
  
 OBJ = $(SRC:.c=.o)
 

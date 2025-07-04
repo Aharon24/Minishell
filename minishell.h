@@ -84,4 +84,10 @@ char	*ft_strndup(char *line, int n);
 //split_cmd.c
 t_command *split_cmd(t_token *tokens);
 
+///pwd.c
+void ft_pwd(void);
+
+//cd.c
+void ft_cd_more_argument(char *home, char *old_pwd,char  *path);
+void ft_cd(char **argv);
 #endif

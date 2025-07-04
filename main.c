@@ -7,5 +7,5 @@ int	main( void)
 	init_shell(&shell);
 	run_shell(&shell);
 	return (0);
-
+	
 }

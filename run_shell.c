@@ -69,7 +69,7 @@ void	run_shell(t_shell *shell)
 		if (tokenize(shell) == -1)
 			printf("Ошибка токенизации\n");
 		cmd = split_cmd(shell->tokens);
-		handle_redirection(cmd);
+		//handle_redirection(cmd);
 		print_cmd(cmd);
 		cleanup_loop(shell);
 	}
