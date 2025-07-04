@@ -14,6 +14,7 @@
 #include <term.h>
 #include <readline/readline.h> 
 #include <readline/history.h>
+#include <fcntl.h>
 
 //My Libery
 #include "Libft/libft.h"
@@ -77,6 +78,9 @@ int 	lexer(char *line, t_token **tokens);
 int		lex_pipe(t_token **tokens);
 int		lex_redir(char *line, t_token **tokens);
 int		lex_word(char *line, t_token **tokens);
+
+//handle_redirection.c
+int		handle_redirections(t_command *cmd);
 
 //utils.c
 char	*ft_strndup(char *line, int n);
