@@ -19,6 +19,13 @@
 //My Libery
 #include "Libft/libft.h"
 
+typedef struct s_env
+{
+	char *key;
+	char *value;
+	struct s_env *next;
+} t_env;
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,// обычное слово: команда или аргумент
@@ -55,6 +62,9 @@ typedef struct s_shell
 {
 	char	*line;
 	t_token	*tokens;
+	t_env	*env;
+	char	*old_path;
+	char	*home;
 }	t_shell;
 
 //add_.c
@@ -67,10 +77,11 @@ void	clear_tokens(t_token **head);
 void	cleanup_loop(t_shell *shell);
 
 //init.c
-void	init_shell(t_shell *shell);
+void	init_shell(t_shell *shell, char **env);
 
 //run_shell.c
 void	run_shell(t_shell *shell);
+void	print_tokens(t_token *tokens);
 
 //tokenize.c
 int		tokenize(t_shell *shell);
