@@ -10,7 +10,7 @@ LDFLAGS = -lreadline
 
  
 SRC = main.c\
-	add_token.c\
+	add_.c\
 	ft_free.c\
 	init.c\
 	run_shell.c\
