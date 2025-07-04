@@ -88,10 +88,15 @@ char	*ft_strndup(char *line, int n);
 //split_cmd.c
 t_command *split_cmd(t_token *tokens);
 
-///pwd.c
+//our_cmd/pwd.c
 void ft_pwd(void);
 
-//cd.c
+//our_cmd/cd.c
 void ft_cd_more_argument(char *home, char *old_pwd,char  *path);
 void ft_cd(char **argv);
+
+//built_in_faind_my.c
+void	ft_run_cmd(t_command *cmd);
+void	ft_built_in_faind(char **argv);
+
 #endif

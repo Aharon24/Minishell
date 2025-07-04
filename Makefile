@@ -15,11 +15,12 @@ SRC = main.c\
 	init.c\
 	run_shell.c\
 	tokenize.c\
-	handle_redirectons.c\
+	handle_redirection.c\
 	utils.c\
 	split_cmd.c\
-	cd.c\
-	pwd.c
+	our_cmd/cd.c\
+	our_cmd/pwd.c\
+	ft_bild_cmd.c
  
 OBJ = $(SRC:.c=.o)
 

@@ -71,6 +71,7 @@ void	run_shell(t_shell *shell)
 		cmd = split_cmd(shell->tokens);
 		//print_cmd(cmd);
 		handle_redirections(cmd);
+		ft_run_cmd(cmd);
 		cleanup_loop(shell);
 	}
 }

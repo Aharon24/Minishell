@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 
 // void ft_cd_more_argument(char *home, char *old_pwd,char  *path)
@@ -29,10 +29,7 @@ void ft_cd(char **argv)
     if(argv[2] == NULL)
     {
         if(argv[2] == NULL && home != NULL)
-        {
-            if(chdir(home) ==  0)
-                printf("n%s\n",home);
-        }
+            chdir(home);
         else
             perror(home);
     }
