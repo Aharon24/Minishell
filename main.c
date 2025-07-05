@@ -26,8 +26,8 @@ void	print_shell(t_shell *shell)
 	printf("\n--- Environment ---\n");
 	print_env(shell->env);
 
-	printf("\nOld path: %s\n", shell->old_path ? shell->old_path : "(null)");
-	printf("Home path: %s\n", shell->home ? shell->home : "(null)");
+	//printf("\nOld path: %s\n", shell->old_path ? shell->old_path : "(null)");
+	//printf("Home path: %s\n", shell->home ? shell->home : "(null)");
 
 	printf("====================\n");
 }

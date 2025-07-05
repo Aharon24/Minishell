@@ -63,7 +63,7 @@ typedef struct s_shell
 	char	*line;
 	t_token	*tokens;
 	t_env	*env;
-	char	*old_path;
+	char	*new_path;
 	char	*home;
 	char	*pwd;
 }	t_shell;
@@ -105,7 +105,7 @@ t_command *split_cmd(t_token *tokens);
 void ft_pwd(void);
 
 //our_cmd/cd.c
-void ft_cd_more_argument(char *old_pwd,char  *path, t_shell *shell);
+void ft_cd_more_argument(char  *path, t_shell *shell);
 void ft_cd(char **argv, t_shell *shell);
 
 //our_cmd/unset.c
@@ -122,5 +122,7 @@ void	ft_built_in_faind(char **argv, t_shell *shell);
 
 ///ft_faind_in_env.c
 char	*ft_faind_in_env(t_env *env, char *argument);
+char *ft_make_path(char *str);
+t_env	*ft_faind_and_change(char *argumnet, t_env *env, char *new_path);
 
 #endif
