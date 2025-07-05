@@ -25,7 +25,7 @@ void ft_cd_more_argument(char *old_pwd,char  *path)
 
 }
 
-void    ft_cd(char **argv)
+void    ft_cd(char **argv, t_shell *t_shell)
 {
     char    *old_pwd;
     char    *home;

@@ -104,10 +104,10 @@ void ft_pwd(void);
 
 //our_cmd/cd.c
 void ft_cd_more_argument(char *old_pwd,char  *path);
-void ft_cd(char **argv);
+void ft_cd(char **argv, t_shell *shell);
 
 //built_in_faind_my.c
-void	ft_run_cmd(t_command *cmd);
-void	ft_built_in_faind(char **argv);
+void	ft_run_cmd(t_command *cmd, t_shell *shell);
+void	ft_built_in_faind(char **argv, t_shell *shell);
 
 #endif

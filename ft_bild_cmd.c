@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-void	ft_built_in_faind(char **argv)
+void	ft_built_in_faind(char **argv,t_shell *shell)
 {
     if (ft_strncmp(argv[0], "cd", 2) == 0)
-        ft_cd(argv);
+        ft_cd(argv,shell);
     else if (ft_strncmp(argv[0], "pwd", 3) == 0)
 		ft_pwd();
     // else if (ft_strncmp(argv[0], "env", 3) == 0)
@@ -21,11 +21,11 @@ void	ft_built_in_faind(char **argv)
 }
 
 
-void ft_run_cmd(t_command *cmd)
+void ft_run_cmd(t_command *cmd, t_shell *shell)
 {
     while(cmd)
     {
-        ft_built_in_faind(cmd->argv);
+        ft_built_in_faind(cmd->argv,shell);
         cmd = cmd->next;
     }
 }
