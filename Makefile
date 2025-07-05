@@ -21,6 +21,7 @@ SRC = main.c\
 	our_cmd/cd.c\
 	our_cmd/pwd.c\
 	our_cmd/unset.c\
+	our_cmd/env.c\
 	ft_bild_cmd.c
  
 OBJ = $(SRC:.c=.o)

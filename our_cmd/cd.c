@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 
-void ft_cd_more_argument(char *old_pwd,char  *path)
+void ft_cd_more_argument(char *old_pwd, char  *path)
 {
     char *new_pwd;
     char *pwd;
@@ -25,15 +25,18 @@ void ft_cd_more_argument(char *old_pwd,char  *path)
 
 }
 
-void    ft_cd(char **argv, t_shell *t_shell)
+void    ft_cd(char **argv, t_shell *shell)
 {
     char    *old_pwd;
     char    *home;
     int     i;
 
+
     i = 0;
     home = getenv("HOME");
     old_pwd = getenv("OLDPWD");
+    if(home)
+        shell->home = home;    
 
   
     if (argv[1] == NULL)

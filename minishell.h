@@ -95,6 +95,7 @@ int		handle_redirections(t_command *cmd);
 
 //utils.c
 char	*ft_strndup(char *line, int n);
+int		ft_strcmp(char *s1, char *s2);
 
 //split_cmd.c
 t_command *split_cmd(t_token *tokens);
@@ -105,6 +106,13 @@ void ft_pwd(void);
 //our_cmd/cd.c
 void ft_cd_more_argument(char *old_pwd,char  *path);
 void ft_cd(char **argv, t_shell *shell);
+
+//our_cmd/unset.c
+void	ft_unset(char **argv, t_shell *shell);
+void	unset_env(t_env **env, char *key);
+
+//our_cmd/env.c
+void	ft_env(t_shell *shell);
 
 //built_in_faind_my.c
 void	ft_run_cmd(t_command *cmd, t_shell *shell);
