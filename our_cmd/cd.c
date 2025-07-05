@@ -5,13 +5,23 @@ void ft_cd_more_argument(char *old_pwd,char  *path)
 {
     char *new_pwd;
     char *pwd;
+    int check;
+
+    check = 0;
     pwd = old_pwd;
     pwd = getenv("PWD");
 
     pwd = ft_strjoin(pwd,"/");
     new_pwd = ft_strjoin(pwd,path);
-    chdir(new_pwd);
+    check = chdir(new_pwd);
+    if(check < 0)
+        perror("Not walid path");
     //printf("%s",new_pwd);
+    /*
+        -
+        ..
+
+    */
 
 }
 

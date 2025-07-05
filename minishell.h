@@ -103,7 +103,7 @@ t_command *split_cmd(t_token *tokens);
 void ft_pwd(void);
 
 //our_cmd/cd.c
-void ft_cd_more_argument(char *home, char *old_pwd,char  *path);
+void ft_cd_more_argument(char *old_pwd,char  *path);
 void ft_cd(char **argv);
 
 //built_in_faind_my.c
