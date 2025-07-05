@@ -22,7 +22,8 @@ SRC = main.c\
 	our_cmd/pwd.c\
 	our_cmd/unset.c\
 	our_cmd/env.c\
-	ft_bild_cmd.c
+	ft_bild_cmd.c\
+	our_cmd/ft_faind_in_env.c
  
 OBJ = $(SRC:.c=.o)
 
