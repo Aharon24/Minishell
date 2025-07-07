@@ -57,7 +57,7 @@ void	run_shell(t_shell *shell)
 
 	while (1)
 	{
-		shell->line = readline("minishell-> ");
+		shell->line = readline("minishell -> ");
 		if (!shell->line)
 			break;
 		add_history(shell->line);

@@ -2,8 +2,8 @@
 
 void	unset_env(t_env **env, char *key)
 {
-	t_env *curr;
-	t_env *prev;
+	t_env	*curr;
+	t_env	*prev;
 
 	curr = *env;
 	prev = NULL;
@@ -25,11 +25,11 @@ void	unset_env(t_env **env, char *key)
 	}
 }
 
-
 void	ft_unset(char **argv, t_shell *shell)
 {
-	int	i = 1;
+	int	i;
 
+	i = 0;
 	while (argv[i])
 	{
 		unset_env(&(shell->env), argv[i]);

@@ -107,6 +107,7 @@ void ft_pwd(void);
 //our_cmd/cd.c
 void ft_cd_more_argument(char  *path, t_shell *shell);
 void ft_cd(char **argv, t_shell *shell);
+void ft_finish(void);
 
 //our_cmd/unset.c
 void	ft_unset(char **argv, t_shell *shell);

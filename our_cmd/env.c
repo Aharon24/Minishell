@@ -2,8 +2,9 @@
 
 void	ft_env(t_shell *shell)
 {
-	t_env *env = shell->env;
+	t_env	*env;
 
+	env = shell->env;
 	while (env)
 	{
 		printf("%s=%s\n", env->key, env->value);
