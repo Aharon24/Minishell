@@ -14,8 +14,6 @@ void	ft_built_in_faind(char **argv, t_shell *shell)
 		ft_unset(argv, shell);
 	// else if (ft_strncmp(argv[0], "echo", 4) == 0)
 	// 	ft_echo();
-	// else if (ft_strncmp(argv[0], "exit", 4) == 0)
-	// 	ft_exit();
 	// else
 	// 	ft_execve();
 }
@@ -23,9 +21,61 @@ void	ft_built_in_faind(char **argv, t_shell *shell)
 
 void ft_run_cmd(t_command *cmd, t_shell *shell)
 {
-    while(cmd)
-    {
-        ft_built_in_faind(cmd->argv, shell);
-        cmd = cmd->next;
-    }
+	int		pipefd[2];
+	int		prev_fd;
+	pid_t	pid;
+	int		status;
+
+	prev_fd = -1;
+	while (cmd)
+	{
+		if (cmd->pip)
+		{
+			if (pipe(pipefd) == -1)
+			{
+				perror("pipe");
+				exit(2);
+			}
+		}
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork");
+			exit(2);
+		}
+		else if (pid == 0)
+		{
+			if (prev_fd != -1)
+			{
+				dup2(prev_fd, 0);
+				close(prev_fd);
+			}
+			if (cmd->pip)
+			{
+				close(pipefd[0]);
+				dup2(pipefd[1], 1);
+				close(pipefd[1]);
+			}
+			if (handle_redirections(cmd) == -1)
+				exit(2);
+			ft_built_in_faind(cmd->argv, shell);
+			exit(shell->exit_status);
+		}
+		else
+		{
+			if (prev_fd != -1)
+				close(prev_fd);
+			if (cmd->pip)
+			{
+				close(pipefd[1]);
+				prev_fd = pipefd[0];
+			}
+			else
+			{
+				prev_fd = -1;
+			}
+		}
+		cmd = cmd->next;
+	}
+	while (wait(&status) > 0);
 }

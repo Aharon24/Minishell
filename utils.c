@@ -25,3 +25,12 @@ char *ft_strndup(char *line, int n)
 	new[i] = '\0';
 	return (new);
 }
+
+int	is_exit_command(t_command *cmd)
+{
+	if (!cmd || !cmd->argv || !cmd->argv[0])
+		return (0);
+	if (ft_strcmp(cmd->argv[0], "exit") == 0 && cmd->argv[1] == NULL)
+		return (1);
+	return (0);
+}

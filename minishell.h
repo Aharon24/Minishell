@@ -66,6 +66,7 @@ typedef struct s_shell
 	char	*new_path;
 	char	*home;
 	char	*pwd;
+	int		exit_status;
 }	t_shell;
 
 //add_.c
@@ -76,6 +77,10 @@ void	add_redirect(t_redirect **head, t_redirect *new_redirect);
 //ft_free.c
 void	clear_tokens(t_token **head);
 void	cleanup_loop(t_shell *shell);
+void	free_shell(t_shell *shell);
+void	free_env(t_env *env);
+void	free_cmd(t_command *cmd);
+void	free_redirects(t_redirect *redir);
 
 //init.c
 void	init_shell(t_shell *shell, char **env);
@@ -97,6 +102,7 @@ int		handle_redirections(t_command *cmd);
 //utils.c
 char	*ft_strndup(char *line, int n);
 int		ft_strcmp(char *s1, char *s2);
+int		is_exit_command(t_command *cmd);
 
 //split_cmd.c
 t_command *split_cmd(t_token *tokens);
