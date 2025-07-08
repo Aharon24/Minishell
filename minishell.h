@@ -66,6 +66,8 @@ typedef struct s_shell
 	char	*new_path;
 	char	*home;
 	char	*pwd;
+	char	*old_path;
+	char	*temp;
 	int		exit_status;
 }	t_shell;
 
@@ -108,7 +110,7 @@ int		is_exit_command(t_command *cmd);
 t_command *split_cmd(t_token *tokens);
 
 //our_cmd/pwd.c
-void ft_pwd(void);
+void ft_pwd(char **argv);
 
 //our_cmd/cd.c
 void ft_cd_more_argument(char  *path, t_shell *shell);
@@ -122,14 +124,14 @@ void	unset_env(t_env **env, char *key);
 //our_cmd/env.c
 void	ft_env(t_shell *shell);
 
-//built_in_faind_my.c
+//ft_bild_cmd.c
 void	ft_run_cmd(t_command *cmd, t_shell *shell);
 void	ft_built_in_faind(char **argv, t_shell *shell);
-
+int		ft_bild_cmd_out_fork(char **argv,t_shell *shell);
 
 ///ft_faind_in_env.c
 char	*ft_faind_in_env(t_env *env, char *argument);
-char *ft_make_path(char *str);
+char	*ft_make_path(char *str);
 t_env	*ft_faind_and_change(char *argumnet, t_env *env, char *new_path);
 
 #endif

@@ -1,18 +1,37 @@
 #include "minishell.h"
 
+int	ft_bild_cmd_out_fork(char **argv,t_shell *shell)
+{
+	int len;
+
+	len = ft_strlen(argv[0]);
+	if (ft_strncmp(argv[0], "cd", len) == 0)
+	{
+        ft_cd(argv, shell);
+		return (1);
+	}
+	else if (ft_strncmp(argv[0], "unset", len) == 0)
+	{
+		ft_unset(argv, shell);
+		return (1);
+	}
+	else 
+		return (0);
+	// else if (ft_strncmp(argv[0], "export", len) == 0)
+	// 	ft_export();
+}
+
+
 void	ft_built_in_faind(char **argv, t_shell *shell)
 {
-    if (ft_strncmp(argv[0], "cd", 2) == 0)
-        ft_cd(argv, shell);
-    else if (ft_strncmp(argv[0], "pwd", 3) == 0)
-		ft_pwd();
-    else if (ft_strncmp(argv[0], "env", 3) == 0)
+	int len;
+
+	len = ft_strlen(argv[0]);
+    if (ft_strncmp(argv[0], "pwd", len) == 0)
+		ft_pwd(argv);
+    else if (ft_strncmp(argv[0], "env", len) == 0)
 		ft_env(shell);
-	// else if (ft_strncmp(argv[0], "export", 6) == 0)
-	// 	ft_export();
-	else if (ft_strncmp(argv[0], "unset", 5) == 0)
-		ft_unset(argv, shell);
-	// else if (ft_strncmp(argv[0], "echo", 4) == 0)
+	// else if (ft_strncmp(argv[0], "echo", len) == 0)
 	// 	ft_echo();
 	// else
 	// 	ft_execve();
@@ -26,56 +45,63 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 	pid_t	pid;
 	int		status;
 
+
+	///// else keyser stugel cmd txaxpoxelu het kapvac  
 	prev_fd = -1;
 	while (cmd)
 	{
-		if (cmd->pip)
+		if(ft_bild_cmd_out_fork(cmd->argv,shell) == 1)
+			cmd = cmd->next;
+		else 
 		{
-			if (pipe(pipefd) == -1)
-			{
-				perror("pipe");
-				exit(2);
-			}
-		}
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("fork");
-			exit(2);
-		}
-		else if (pid == 0)
-		{
-			if (prev_fd != -1)
-			{
-				dup2(prev_fd, 0);
-				close(prev_fd);
-			}
 			if (cmd->pip)
 			{
-				close(pipefd[0]);
-				dup2(pipefd[1], 1);
-				close(pipefd[1]);
+				if (pipe(pipefd) == -1)
+				{
+					perror("pipe");
+					exit(2);
+				}
 			}
-			if (handle_redirections(cmd) == -1)
-				exit(2);
-			ft_built_in_faind(cmd->argv, shell);
-			exit(shell->exit_status);
-		}
-		else
-		{
-			if (prev_fd != -1)
-				close(prev_fd);
-			if (cmd->pip)
+			pid = fork();
+			if (pid == -1)
 			{
-				close(pipefd[1]);
-				prev_fd = pipefd[0];
+				perror("fork");
+				exit(2);
+			}
+			else if (pid == 0)
+			{
+				if (prev_fd != -1)
+				{
+					dup2(prev_fd, 0);
+					close(prev_fd);
+				}
+				if (cmd->pip)
+				{
+					close(pipefd[0]);
+					dup2(pipefd[1], 1);
+					close(pipefd[1]);
+				}
+				if (handle_redirections(cmd) == -1)
+					exit(2);
+				ft_built_in_faind(cmd->argv, shell);
+				exit(shell->exit_status);
 			}
 			else
 			{
-				prev_fd = -1;
+				if (prev_fd != -1)
+					close(prev_fd);
+				if (cmd->pip)
+				{
+					close(pipefd[1]);
+					prev_fd = pipefd[0];
+				}
+				else
+				{
+					prev_fd = -1;
+				}
 			}
+			cmd = cmd->next;
 		}
-		cmd = cmd->next;
 	}
 	while (wait(&status) > 0);
 }

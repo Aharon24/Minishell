@@ -16,12 +16,27 @@ void	ft_cd_more_argument(char *path, t_shell *shell)
 
 	len = 0;
 	len = ft_strlen(path);
-	env_get = ft_faind_in_env(shell->env, "PWD");
-	new_pwd1 = ft_strjoin("/", path);
-	new_pwd2 = ft_strjoin(env_get, new_pwd1);
-	if (chdir(new_pwd2) == 0)
+	if (strncmp(path, "-", len) == 0)
 	{
 		pwd = ft_faind_in_env(shell->env, "PWD");
+		printf("%s\n",pwd);
+		if (!shell->old_path)
+			shell->old_path = pwd;
+		chdir(shell->old_path);
+		//printf("%s\n",shell->old_path);
+		shell->temp = shell->old_path;
+		shell->old_path = pwd;
+		pwd = shell->temp;
+		//printf("%s\n",pwd);
+		return ;
+	}
+	//env_get = ft_faind_in_env(shell->env, "PWD");
+	//new_pwd1 = ft_strjoin("/", path);
+	//new_pwd2 = ft_strjoin(env_get, new_pwd1);
+	if (chdir(path) == 0)
+	{
+		pwd = ft_faind_in_env(shell->env, "PWD");
+		shell->old_path = pwd;
 		pwd = new_pwd2;
 		ft_faind_and_change("PWD", shell->env, new_pwd2);
 		printf("\nWork\n");
