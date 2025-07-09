@@ -3,13 +3,13 @@
 
 int	ft_check_t(t_shell *shell, char *path)
 {
-	int check;
-	int i;
-	char *new;
-	char *pwd;
+	int		check;
+	int 	i;
+	char 	*new;
+	char 	*pwd;
 
 	check = 0;
-	printf("%s",shell->home);
+	printf("%s", shell->home);
 	i = 0;
 	if (path[i] == '~')
 		path++;
@@ -22,10 +22,11 @@ int	ft_check_t(t_shell *shell, char *path)
 	new[i] = '\0';
 	if (!shell->home)
 		shell->home = ft_faind_in_env(shell->env, "HOME");
-	pwd = ft_strjoin(shell->home,new);
-	if(chdir(pwd) == 0)
+	pwd = ft_strjoin(shell->home, new);
+	if (chdir(pwd) == 0)
 	{
 		///
 		return (1);
+	}
 	return (0);
 }

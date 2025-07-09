@@ -24,30 +24,30 @@ t_token	*add_token(t_token **head, char *value, t_token_type type)
 	}
 	return (new);
 }
-void add_new_cmd(t_command **cmd_head, t_command *new_cmd)
-{
-    t_command *last;
 
-    if (!(*cmd_head))
-    {
-        *cmd_head = new_cmd;
-    }
-    else
-    {
-        last = *cmd_head;
-        while (last->next)
-            last = last->next;
-        last->next = new_cmd;
-    }
+void	add_new_cmd(t_command **cmd_head, t_command *new_cmd)
+{
+	t_command	*last;
+
+	if (!(*cmd_head))
+	{
+		*cmd_head = new_cmd;
+	}
+	else
+	{
+		last = *cmd_head;
+		while (last->next)
+			last = last->next;
+		last->next = new_cmd;
+	}
 }
 
 void	add_redirect(t_redirect **head, t_redirect *new_redirect)
 {
-	t_redirect *tmp;
+	t_redirect	*tmp;
 
 	if (!head || !new_redirect)
-		return;
-
+		return ;
 	if (!*head)
 	{
 		*head = new_redirect;
