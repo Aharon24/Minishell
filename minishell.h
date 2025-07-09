@@ -116,6 +116,12 @@ void ft_pwd(char **argv);
 void ft_cd_more_argument(char  *path, t_shell *shell);
 void ft_cd(char **argv, t_shell *shell);
 void ft_finish(void);
+void ft_update_pwd(t_shell *shell);
+void ft_end_e(t_shell *shell, char *path);
+//// [5]
+
+///our_cmd/cd_2.c
+int ft_check_t(t_shell *shell, char *path);
 
 //our_cmd/unset.c
 void	ft_unset(char **argv, t_shell *shell);

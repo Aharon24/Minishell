@@ -1,5 +1,32 @@
 #include "../minishell.h"
 
+
+void ft_end_e(t_shell *shell, char *path)
+{
+	if (path[0] == '~' && path[1] == '\0')
+	{
+		shell->old_path = ft_faind_in_env(shell->env,"PWD");
+		ft_faind_and_change("OLDPWD",shell->env,shell->old_path);
+		ft_faind_and_change("PWD", shell->env, shell->home);
+		chdir(shell->home);
+		return ;
+	}
+	else if (path[0] == '~' && path[1])
+	{
+		ft_check_t(shell,path);
+	}
+}
+void ft_update_pwd(t_shell *shell)
+{
+	char *pwd;
+	char cwd[4096];
+	pwd = ft_faind_in_env(shell->env,"PWD");
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		pwd = ft_strdup(cwd);
+	ft_faind_and_change("PWD",shell->env,pwd);
+	ft_faind_and_change("OLDPWD",shell->env,shell->old_path);
+}
+
 void	ft_finish(void)
 {
 	perror("Too MANY Arguments");
@@ -8,38 +35,30 @@ void	ft_finish(void)
 
 void	ft_cd_more_argument(char *path, t_shell *shell)
 {
-	char	*new_pwd1;
-	char	*new_pwd2;
 	int		len;
 	char	*pwd;
-	char	*env_get;
 
 	len = 0;
 	len = ft_strlen(path);
 	if (strncmp(path, "-", len) == 0)
 	{
 		pwd = ft_faind_in_env(shell->env, "PWD");
-		printf("%s\n",pwd);
-		if (!shell->old_path)
+		if(!shell->old_path)
 			shell->old_path = pwd;
+		else
+			shell->old_path = ft_faind_in_env(shell->env,"OLDPWD");
 		chdir(shell->old_path);
-		//printf("%s\n",shell->old_path);
-		shell->temp = shell->old_path;
-		shell->old_path = pwd;
-		pwd = shell->temp;
-		//printf("%s\n",pwd);
+		shell->temp  = pwd;
+		ft_faind_and_change("PWD",shell->env,shell->old_path);
+		ft_faind_and_change("OLDPWD",shell->env,shell->temp);
+		printf("%s\n",ft_faind_in_env(shell->env,"PWD"));
 		return ;
 	}
-	//env_get = ft_faind_in_env(shell->env, "PWD");
-	//new_pwd1 = ft_strjoin("/", path);
-	//new_pwd2 = ft_strjoin(env_get, new_pwd1);
 	if (chdir(path) == 0)
 	{
 		pwd = ft_faind_in_env(shell->env, "PWD");
 		shell->old_path = pwd;
-		pwd = new_pwd2;
-		ft_faind_and_change("PWD", shell->env, new_pwd2);
-		printf("\nWork\n");
+		ft_update_pwd(shell);
 	}
 	else
 		perror(path);
@@ -58,12 +77,19 @@ void	ft_cd(char **argv, t_shell *shell)
 	{
 		if (argv[1] == NULL && home != NULL)
 		{
+			shell->old_path = ft_faind_in_env(shell->env,"PWD");
+			ft_faind_and_change("OLDPWD",shell->env,shell->old_path);
 			ft_faind_and_change("PWD", shell->env, home);
 			chdir(home);
 			return ;
 		}
 		else
 			perror(home);
+	}
+	else if(strncmp(&argv[1][0], "~",1) == 0)
+	{
+		ft_end_e(shell,argv[1]);
+		return ;
 	}
 	while (argv[i])
 		i++;

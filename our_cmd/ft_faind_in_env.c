@@ -14,7 +14,6 @@ t_env	*ft_faind_and_change(char *argument, t_env *env, char *new_path)
 		faind = faind->next;
 	}
 	faind->value = new_path;
-	printf("%s\n ", new_path);
 	return (faind);
 }
 
