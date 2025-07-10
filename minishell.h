@@ -16,7 +16,7 @@
 #include <readline/history.h>
 #include <fcntl.h>
 
-//My Libery
+// My Libery
 #include "Libft/libft.h"
 
 typedef struct s_env
@@ -24,7 +24,14 @@ typedef struct s_env
 	char *key;
 	char *value;
 	struct s_env *next;
-} t_env;
+}	t_env;
+
+typedef struct s_export
+{
+	char *key;
+	char *value;
+	struct s_export *next;
+}	t_export;
 
 typedef enum e_token_type
 {
@@ -63,7 +70,8 @@ typedef struct s_shell
 	char	*line;
 	t_token	*tokens;
 	t_env	*env;
-	char	*new_path;//?
+	t_export *export;
+	char	*new_path;//? we not use it ??? chesk !
 	char	*home_chesk;
 	char	*home;
 	char	*pwd;
@@ -132,6 +140,10 @@ void	unset_env(t_env **env, char *key);
 
 //our_cmd/env.c
 void	ft_env(t_shell *shell);
+
+//our_cmd/export.c
+void	ft_export(t_shell *shell);
+
 
 //ft_bild_cmd.c
 void	ft_run_cmd(t_command *cmd, t_shell *shell);

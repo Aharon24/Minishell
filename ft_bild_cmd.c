@@ -17,8 +17,8 @@ int	ft_bild_cmd_out_fork(char **argv,t_shell *shell)
 	}
 	else 
 		return (0);
-	// else if (ft_strncmp(argv[0], "export", len) == 0)
-	// 	ft_export();
+	else if (ft_strncmp(argv[0], "export", len) == 0)
+		ft_export();
 }
 
 
