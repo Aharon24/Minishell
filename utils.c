@@ -10,14 +10,14 @@ int	ft_strcmp(char *s1, char *s2)
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
-char *ft_strndup(char *line, int n)
+char	*ft_strndup(char *line, int n)
 {
-    char	*new;
+	char	*new;
 	int		i;
 
 	i = 0;
 	new = malloc(sizeof(char) * (n + 1));
-	while(line[i] && i < n)
+	while (line[i] && i < n)
 	{
 		new[i] = line[i];
 		i++;

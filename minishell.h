@@ -63,12 +63,14 @@ typedef struct s_shell
 	char	*line;
 	t_token	*tokens;
 	t_env	*env;
-	char	*new_path;
+	char	*new_path;//?
+	char	*home_chesk;
 	char	*home;
 	char	*pwd;
 	char	*old_path;
 	char	*temp;
 	int		exit_status;
+	int		len;
 }	t_shell;
 
 //add_.c
@@ -121,7 +123,8 @@ void ft_end_e(t_shell *shell, char *path);
 //// [5]
 
 ///our_cmd/cd_2.c
-int ft_check_t(t_shell *shell, char *path);
+void ft_check_t(t_shell *shell, char *path);
+int	ft_check_len_argv(char **argv);
 
 //our_cmd/unset.c
 void	ft_unset(char **argv, t_shell *shell);

@@ -1,18 +1,13 @@
-
 #include "../minishell.h"
 
-int	ft_check_t(t_shell *shell, char *path)
+void	ft_check_t(t_shell *shell, char *path)
 {
-	int		check;
-	int 	i;
-	char 	*new;
-	char 	*pwd;
+	int		i;
+	char	*new;
+	char	*pwd;
+	char	*get_pwd;
 
-	check = 0;
-	printf("%s", shell->home);
 	i = 0;
-	if (path[i] == '~')
-		path++;
 	new = malloc ((ft_strlen(path) + 1) * sizeof(char));
 	while (path[i])
 	{
@@ -25,8 +20,25 @@ int	ft_check_t(t_shell *shell, char *path)
 	pwd = ft_strjoin(shell->home, new);
 	if (chdir(pwd) == 0)
 	{
-		///
-		return (1);
+		get_pwd = ft_faind_in_env(shell->env, "PWD");
+		ft_faind_and_change("OLDPWD", shell->env, get_pwd);
+		ft_faind_and_change("PWD", shell->env, pwd);
 	}
-	return (0);
+	else
+		perror("No");
+}
+
+int	ft_check_len_argv(char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+		i++;
+	if (i > 2)
+	{
+		ft_finish();
+		return (0);
+	}
+	return (1);
 }

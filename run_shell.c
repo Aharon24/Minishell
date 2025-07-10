@@ -11,10 +11,11 @@ void	print_tokens(t_token *tokens)
 
 void	print_cmd(t_command *cmd)
 {
-	int i;
-	t_redirect *redir;
-	int cmd_index = 0;
+	int			i;
+	t_redirect	*redir;
+	int			cmd_index;
 
+	cmd_index = 0;
 	while (cmd)
 	{
 		printf("\n=== Command %d ===\n", cmd_index++);
@@ -45,26 +46,24 @@ void	print_cmd(t_command *cmd)
 				printf("heredoc:        %s\n", redir->filename);
 			redir = redir->next;
 		}
-
 		cmd = cmd->next;
 	}
 }
 
-
 void	run_shell(t_shell *shell)
 {
-	t_command *cmd;
+	t_command	*cmd;
 
 	while (1)
 	{
 		shell->line = readline("minishell -> ");
 		if (!shell->line)
-			break;
+			break ;
 		add_history(shell->line);
 		if (shell->line[0] == '\0')
 		{
 			free(shell->line);
-			continue;
+			continue ;
 		}
 		if (tokenize(shell) == -1)
 			printf("Ошибка токенизации\n");
@@ -77,7 +76,7 @@ void	run_shell(t_shell *shell)
 			//free_shell(shell);
 			exit(shell->exit_status);
 		}
-		ft_run_cmd(cmd,shell);
+		ft_run_cmd(cmd, shell);
 		cleanup_loop(shell);
 	}
 }

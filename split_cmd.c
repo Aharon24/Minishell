@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void new_cmd_init(t_command *new_cmd)
+void	new_cmd_init(t_command *new_cmd)
 {
 	new_cmd->argv = NULL;
 	new_cmd->pip = 0;
@@ -8,36 +8,39 @@ void new_cmd_init(t_command *new_cmd)
 	new_cmd->next = NULL;
 }
 
-int size_(t_token *tokens)
+int	size_(t_token *tokens)
 {
-	int size = 0;
+	int	size;
+
+	size = 0;
 	while (tokens && tokens->type != TOKEN_PIPE)
 	{
 		if (tokens->type == TOKEN_WORD)
 			size++;
 		tokens = tokens->next;
 	}
-	return size;
+	return (size);
 }
 
-t_command *split_cmd(t_token *tokens)
+t_command	*split_cmd(t_token *tokens)
 {
-	t_command *cmd_head = NULL;
-	t_command *new_cmd;
-	t_redirect *redir;
-	int i;
-	int size;
+	t_command	*cmd_head;
+	t_command	*new_cmd;
+	t_redirect	*redir;
+	int			i;
+	int			size;
 
+	cmd_head = NULL;
 	while (tokens)
 	{
 		new_cmd = malloc(sizeof(t_command));
 		if (!new_cmd)
-			return NULL;
+			return (NULL);
 		new_cmd_init(new_cmd);
 		size = size_(tokens);
 		new_cmd->argv = malloc(sizeof(char *) * (size + 1));
 		if (!new_cmd->argv)
-			return NULL;
+			return (NULL);
 		i = 0;
 		while (tokens && tokens->type != TOKEN_PIPE)
 		{
@@ -53,7 +56,7 @@ t_command *split_cmd(t_token *tokens)
 			{
 				redir = malloc(sizeof(t_redirect));
 				if (!redir)
-					return NULL;
+					return (NULL);
 				redir->type = tokens->type;
 				tokens = tokens->next;
 				if (!tokens || tokens->type != TOKEN_WORD)
@@ -77,5 +80,5 @@ t_command *split_cmd(t_token *tokens)
 		}
 		add_new_cmd(&cmd_head, new_cmd);
 	}
-	return cmd_head;
+	return (cmd_head);
 }

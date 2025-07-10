@@ -2,11 +2,13 @@
 
 int	lex_word(char *line, t_token **tokens)
 {
-	int	i = 0;
+	int		i;
+	char	*word;
 
+	i = 0;
 	while (line[i] && line[i] != ' ' && line[i] != '|' && line[i] != '<' && line[i] != '>')
 		i++;
-	char *word = ft_strndup(&line[0], i);
+	word = ft_strndup(&line[0], i);
 	add_token(tokens, word, TOKEN_WORD);
 	return (i);
 }
@@ -25,10 +27,10 @@ int	lex_redir(char *line, t_token **tokens)
 	}
 	else
 	{
-        if (line[0] == '>')
-            add_token(tokens, ft_strdup(">"), TOKEN_REDIRECT_OUT);
-        else
-            add_token(tokens, ft_strdup("<"), TOKEN_REDIRECT_IN);
+		if (line[0] == '>')
+			add_token(tokens, ft_strdup(">"), TOKEN_REDIRECT_OUT);
+		else
+			add_token(tokens, ft_strdup("<"), TOKEN_REDIRECT_IN);
 		return (1);
 	}
 }
@@ -39,17 +41,17 @@ int	lex_pipe(t_token **tokens)
 	return (1);
 }
 
-int lexer(char *line, t_token **tokens)
+int	lexer(char *line, t_token **tokens)
 {
 	int	i;
 
-    i = 0;
+	i = 0;
 	while (line[i])
 	{
 		while (line[i] == ' ')
 			i++;
 		if (!line[i])
-			break;
+			break ;
 		if (line[i] == '|')
 			i += lex_pipe(tokens);
 		else if (line[i] == '>' || line[i] == '<')
@@ -57,7 +59,7 @@ int lexer(char *line, t_token **tokens)
 		else
 			i += lex_word(&line[i], tokens);
 	}
-    return (0);
+	return (0);
 }
 
 int	tokenize(t_shell *shell)
