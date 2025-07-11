@@ -26,7 +26,7 @@ SRC = main.c\
 	our_cmd/ft_faind_in_env.c\
 	our_cmd/cd_2.c\
 	our_cmd/export.c\
-	uor_cmd/echo.c
+	#uor_cmd/echo.c
  
 OBJ = $(SRC:.c=.o)
 

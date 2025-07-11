@@ -15,10 +15,13 @@ int	ft_bild_cmd_out_fork(char **argv,t_shell *shell)
 		ft_unset(argv, shell);
 		return (1);
 	}
+	else if (ft_strncmp(argv[0], "export", len) == 0)
+	{
+		ft_export(shell,argv);
+		return (1);
+	}
 	else 
 		return (0);
-	else if (ft_strncmp(argv[0], "export", len) == 0)
-		ft_export();
 }
 
 

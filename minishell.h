@@ -26,12 +26,7 @@ typedef struct s_env
 	struct s_env *next;
 }	t_env;
 
-typedef struct s_export
-{
-	char *key;
-	char *value;
-	struct s_export *next;
-}	t_export;
+
 
 typedef enum e_token_type
 {
@@ -70,7 +65,7 @@ typedef struct s_shell
 	char	*line;
 	t_token	*tokens;
 	t_env	*env;
-	t_export *export;
+	t_env	*export;
 	char	*new_path;//? we not use it ??? chesk !
 	char	*home_chesk;
 	char	*home;
@@ -96,6 +91,7 @@ void	free_redirects(t_redirect *redir);
 
 //init.c
 void	init_shell(t_shell *shell, char **env);
+t_env	*new_env_node(char *key, char *value);
 
 //run_shell.c
 void	run_shell(t_shell *shell);
@@ -137,12 +133,16 @@ int	ft_check_len_argv(char **argv);
 //our_cmd/unset.c
 void	ft_unset(char **argv, t_shell *shell);
 void	unset_env(t_env **env, char *key);
+int		ft_strcmp(char *s1, char *s2);
 
 //our_cmd/env.c
 void	ft_env(t_shell *shell);
 
 //our_cmd/export.c
-void	ft_export(t_shell *shell);
+void	ft_export(t_shell*shell, char **argv);
+t_env	*ft_set_up_export(t_env *e,t_env *env);
+void	ft_print_export(t_env *export);
+//void	ft_check_line_export(char *arr);
 
 
 //ft_bild_cmd.c
