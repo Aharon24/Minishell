@@ -1,9 +1,45 @@
 #include "../minishell.h"
 
+void	ft_validation(char *arg, t_shell *shell)
+{
+	int	i;
 
-// void	ft_check_line_export(char *arr)
-// {
+	i = 0;
+	printf("%s\n",str);
+	while (arg[i] && arg[i] != '=')
+	{
+		if(i == 0)
+		{
+			if ((arg[i] >= 'a' && arg[i] <= 'z') || (arg[i] >= 'A' &&arg[i] <= 'Z')  || arg[i] == '_' )
+				i++;
+			else
+			{
+				perror("not walid");
+				return ;
+			}
+		}
+		if((arg[i] >= 'a' && arg[i] <= 'z') || (arg[i] >= 'A' && arg[i] <= 'Z')  ||arg[i] == '_' || (arg[i] >= '0' && arg[i] <= '9'))
+			i++;
+		else
+		{
+			perror("not work");
+			return ;
+		}
+	}
+	ft_add_export_or_env(shell,arg);
+}
 
+void	ft_check_line_export(char **argv, t_shell *shell)
+{
+	int	i;
+
+	i = 1;
+	while (argv[i])
+	{
+		ft_validation(argv[i],shell);
+		i++;
+	}
+}
 void ft_print_export(t_env *export)
 {
 	t_env	*e;
@@ -30,8 +66,6 @@ void ft_print_export(t_env *export)
 		e = e->next;
 	}
 }
-
-
 
 t_env	*ft_set_up_export(t_env *e,t_env *env)
 {
@@ -64,15 +98,15 @@ void ft_export(t_shell*shell, char **argv)
 		ft_print_export(e);
 		return ;
 	}
-	else if(argv[2])
-	{
-		perror("To may Argument");
-		return ;
-	}
+	// else if(argv[2])
+	// {
+	// 	perror("To may Argument");
+	// 	return ;
+	// }
 	else if(argv[1])
 	{
-		//ft_check_line_export(argv[1]);
-		return ;
+		ft_check_line_export(argv,shell);
+	//return ;
 	}
 	shell->export = e;
 }

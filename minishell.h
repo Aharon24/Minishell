@@ -142,7 +142,12 @@ void	ft_env(t_shell *shell);
 void	ft_export(t_shell*shell, char **argv);
 t_env	*ft_set_up_export(t_env *e,t_env *env);
 void	ft_print_export(t_env *export);
+void	ft_validation(char *str, t_shell *shell);
+void	ft_check_line_export(char **argv, t_shell *shell);
 //void	ft_check_line_export(char *arr);
+
+//our_cmd/export_2.c
+void ft_add_export_or_env(t_shell *shell);
 
 
 //ft_bild_cmd.c

@@ -1,6 +1,4 @@
-
 NAME = minishell
-
 CC = cc
 CFLAGS = -Wall -Wextra -Werror  
 
@@ -26,6 +24,7 @@ SRC = main.c\
 	our_cmd/ft_faind_in_env.c\
 	our_cmd/cd_2.c\
 	our_cmd/export.c\
+	our_cmd/export_2.c\
 	#uor_cmd/echo.c
  
 OBJ = $(SRC:.c=.o)
