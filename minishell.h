@@ -153,6 +153,10 @@ void	ft_add_export_or_env(t_shell *shell, char *arg);
 int ft_validation_argument(char *arg);
 void	ft_printf_export(t_env *export);
 
+///ft_exece.c
+void	ft_execve(char **argv, t_shell *shell);
+char	*find_path_helper(char **paths, char *cmd);
+char	*find_path(t_env *s, char *cmd);
 
 
 //ft_bild_cmd.c
