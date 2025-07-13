@@ -35,6 +35,8 @@ void ft_add_export(t_env *export, char *arg)
 		start = start->next;
 	key = ft_ket_string(arg);
 	value = ft_value_string(arg);
+	if (ft_faind_key )
+
 	start->next = new_env_node(key, value)
 }
 void ft_add_env(t_env, char *arg)
