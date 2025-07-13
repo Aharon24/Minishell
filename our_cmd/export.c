@@ -5,7 +5,7 @@ void	ft_validation(char *arg, t_shell *shell)
 	shell->temp = ft_strdup("1");
 	if(ft_validation_argument(arg) == 1) 
 	{
-		ft_add_export_or_env(shell, arg);
+		//ft_add_export_or_env(shell, arg);
 	}
 	else
 	{
@@ -46,7 +46,7 @@ void ft_sort_export(t_env *export)
 		else
 			s = s->next;
 	}
-	ft_print_export(e);
+	//ft_print_export(e);
 }
 
 t_env	*ft_set_up_export(t_env *e,t_env *env)

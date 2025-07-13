@@ -36,8 +36,8 @@ void	ft_built_in_faind(char **argv, t_shell *shell)
 		ft_env(shell);
 	// else if (ft_strncmp(argv[0], "echo", len) == 0)
 	// 	ft_echo();
-	// else
-	// 	ft_execve();
+	else
+		ft_execve(argv, shell);
 }
 
 
