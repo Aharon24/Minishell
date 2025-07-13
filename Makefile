@@ -25,6 +25,7 @@ SRC = main.c\
 	our_cmd/cd_2.c\
 	our_cmd/export.c\
 	our_cmd/export_2.c\
+	our_cmd/export_chesk.c\
 	#uor_cmd/echo.c
  
 OBJ = $(SRC:.c=.o)
