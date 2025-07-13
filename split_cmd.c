@@ -29,7 +29,7 @@ t_command	*split_cmd(t_token *tokens)
 	t_redirect	*redir;
 	int			i;
 	int			size;
-2	
+
 	cmd_head = NULL;
 	while (tokens)
 	{
