@@ -22,7 +22,7 @@ int	size_(t_token *tokens)
 	return (size);
 }
 
-t_command	*split_cmd(t_token *tokens)
+t_command	*split_cmd(t_token *tokens, t_shell *shell)
 {
 	t_command	*cmd_head;
 	t_command	*new_cmd;
@@ -46,7 +46,7 @@ t_command	*split_cmd(t_token *tokens)
 		{
 			if (tokens->type == TOKEN_WORD)
 			{
-				new_cmd->argv[i++] = ft_strdup(tokens->value);
+				new_cmd->argv[i++] = remove_quotes_and_expand(tokens->value, shell->env);;
 				tokens = tokens->next;
 			}
 			else if (tokens->type == TOKEN_REDIRECT_IN ||
@@ -64,7 +64,7 @@ t_command	*split_cmd(t_token *tokens)
 					ft_putstr_fd("syntax error near unexpected token `newline'\n", 2);
 					exit(2);
 				}
-				redir->filename = ft_strdup(tokens->value);
+				redir->filename = remove_quotes_and_expand(tokens->value, shell->env);;
 				redir->next = NULL;
 				add_redirect(&new_cmd->redirects, redir);
 				tokens = tokens->next;
