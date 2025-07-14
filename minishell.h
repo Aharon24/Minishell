@@ -151,8 +151,10 @@ void	ft_check_line_export(char **argv, t_shell *shell);
 
 //our_cmd/export_2.c
 void	ft_add_export_or_env(t_shell *shell, char *arg);
-void	ft_add_export(t_env *export, char *arg);
+t_env   *ft_add_export(t_env *export, char *arg);
+t_env *ft_add_env(t_env *env, char *arg);
 char	*ft_ket_string(char *arg);
+char	*ft_value_string(char *arg);
 
 //our_cmd/export_chesk.c
 int		ft_validation_argument(char *arg);

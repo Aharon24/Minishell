@@ -45,7 +45,7 @@ char	*remove_quotes_and_expand(char *input, t_env *env)
 	sq = 0;
 	dq = 0;
 	len = ft_strlen(input);
-	res = malloc(len * 2 + 1);
+	res = malloc(len * 100 + 1);
 	if (!res)
 		return (NULL);
 	k = 0;
