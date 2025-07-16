@@ -2,20 +2,17 @@
 
 int	ft_bild_cmd_out_fork(char **argv,t_shell *shell)
 {
-	int len;
-
-	len = ft_strlen(argv[0]);
-	if (ft_strncmp(argv[0], "cd", len) == 0)
+	if (ft_strncmp(argv[0], "cd",2) == 0)
 	{
         ft_cd(argv, shell);
 		return (1);
 	}
-	else if (ft_strncmp(argv[0], "unset", len) == 0)
+	else if (ft_strncmp(argv[0], "unset",5) == 0)
 	{
 		ft_unset(argv, shell);
 		return (1);
 	}
-	else if (ft_strncmp(argv[0], "export", len) == 0)
+	else if (ft_strncmp(argv[0], "export",6) == 0)
 	{
 		ft_export(shell,argv);
 		return (1);
@@ -27,12 +24,9 @@ int	ft_bild_cmd_out_fork(char **argv,t_shell *shell)
 
 void	ft_built_in_faind(char **argv, t_shell *shell)
 {
-	int len;
-
-	len = ft_strlen(argv[0]);
-    if (ft_strncmp(argv[0], "pwd", len) == 0)
+    if (ft_strncmp(argv[0], "pwd", 3) == 0)
 		ft_pwd(argv);
-    else if (ft_strncmp(argv[0], "env", len) == 0)
+    else if (ft_strncmp(argv[0], "env", 3) == 0)
 		ft_env(shell);
 	// else if (ft_strncmp(argv[0], "echo", len) == 0)
 	// 	ft_echo();

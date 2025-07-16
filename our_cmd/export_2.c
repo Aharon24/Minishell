@@ -43,7 +43,7 @@ t_env	*ft_add_export(t_env *export, char *arg)
     while(arg[i] && arg[i] != '=')
         i++;
     if (arg[i + 1] == '\0')
-        value  = ft_strdup("");
+        value  = NULL;
 	else
 		value = ft_value_string(arg);
 	printf("key in export %s \n",key);
@@ -71,10 +71,14 @@ t_env *ft_add_env(t_env *env, char *arg)
     while(arg[i] && arg[i] != '=')
         i++;
     if (arg[i + 1] == '\0')
+	{
+		printf("ssssssssssssss\n");
         value  = ft_strdup("");
+	}
 	else
 		value = ft_value_string(arg);
 	start->next = new_env_node(key,value);
+	printf("VALUE=%s",start->value);
 	return (env);
 }
 char	*ft_value_string(char *arg)
@@ -103,7 +107,7 @@ char	*ft_value_string(char *arg)
 		new[j] = link[j];
 		j++;
 	}
-	new[i] = '\0';
+	new[j] = '\0';
 	return (new);
 }
 
@@ -114,7 +118,9 @@ char	*ft_ket_string(char *arg)
 
     i = 0;
     while (arg[i] && arg[i] != '=')
-        i++;
+	    i++;
+	if (arg[i] == '=')
+		i++;
     new = malloc((i + 1) * sizeof(char));
     i = 0;
     while (arg[i] && arg[i] != '=')
@@ -122,6 +128,12 @@ char	*ft_ket_string(char *arg)
         new[i] = arg[i];
         i++;
     }
-    new[i] = '\0';
+	if(arg[i] == '=')
+	{
+		new[i] = '=';
+		new[i + 1] = '\0';
+		return (new);
+	}
+	new[i] = '\0';
     return (new);
 }

@@ -2,7 +2,6 @@
 
 void	ft_validation(char *arg, t_shell *shell)
 {
-	shell->temp = ft_strdup("1");
 	if(ft_validation_argument(arg) == 1) 
 		ft_add_export_or_env(shell, arg);
 	else
