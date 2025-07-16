@@ -14,10 +14,10 @@ void	ft_add_export_or_env(t_shell *shell, char *arg)
 	else if (arg[i] == '=' && arg[i + 1] == '\0')
 	{
 		shell->export = ft_add_export(shell->export, arg);
-		  shell->env =  ft_add_env(shell->env, arg);
+		shell->env =  ft_add_env(shell->env, arg);
 	}
 	else
-		{
+	{
 		shell->export = ft_add_export(shell->export, arg);
 		shell->env = ft_add_env(shell->env, arg);
 	}
@@ -31,7 +31,7 @@ t_env	*ft_add_export(t_env *export, char *arg)
     int     i;
     
     i = 0;
-    printf("%s\n",arg);
+    printf("LINE  %s\n",arg);
     value = NULL;
 	key = NULL;
     if (!export || !export->next)
@@ -48,6 +48,7 @@ t_env	*ft_add_export(t_env *export, char *arg)
 		value = ft_value_string(arg);
 	printf("key in export %s \n",key);
 	start->next = new_env_node(key,value);
+	printf("key %s value %s",start->next->key,start->next->value);
 	return (export);
 }
 
@@ -59,7 +60,6 @@ t_env *ft_add_env(t_env *env, char *arg)
     int     i;
 
 	i = 0;
-    printf("%s\n",arg);
     value = NULL;
 	key = NULL;
     if (!env || !env->next)
@@ -83,9 +83,10 @@ char	*ft_value_string(char *arg)
 	int j; 
 	char *new;
 	char *link;
+
 	new = NULL;
 	i = 0;
-	i = 0;
+	j = 0;
 	new = NULL;
 	while (arg[i] && arg[i] != '=')
 		i++;
@@ -93,8 +94,10 @@ char	*ft_value_string(char *arg)
 	link = &arg[i];
 	if (arg[i] == '\0')
 		return (NULL);
-	j = 0;
+	while(link[j])
+		j++;
 	new = malloc( (j + 1) * sizeof(char));
+	j = 0;
 	while (link[j])
 	{
 		new[j] = link[j];

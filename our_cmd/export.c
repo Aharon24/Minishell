@@ -28,6 +28,7 @@ void ft_sort_export(t_env *export)
 	t_env	*e;
 	t_env	*s;
 	char	*tmp;
+	char 	*tmp_value;
 
 	e = export;
 	s = e;
@@ -36,8 +37,11 @@ void ft_sort_export(t_env *export)
 		if (ft_strcmp(s->key,s->next->key) > 0)
 		{
 			tmp = s->key;
+			tmp_value = s->value;
 			s->key = s->next->key;
+			s->value = s->next->value;
 			s->next->key =  tmp;
+			s->next->value = tmp_value;
 			s = e;
 		}
 		else
@@ -77,10 +81,9 @@ void ft_export(t_shell*shell, char **argv)
 	    shell->export = e;
     }
     else
-    {
-        write(1,"AA\n",3);
+	{
         e = shell->export;
-    }
+	}
 	if (!argv[1])
 	{
 		ft_sort_export(e);
