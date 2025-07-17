@@ -69,12 +69,16 @@ void	run_shell(t_shell *shell)
 			printf("Ошибка токенизации\n");
 		cmd = split_cmd(shell->tokens, shell);
 		//print_cmd(cmd);
-		if (is_exit_command(cmd))
+		if (cmd->next == NULL)
 		{
-			//cleanup_loop(shell);
-			//free_cmd(cmd);
-			//free_shell(shell);
-			exit(shell->exit_status);
+			//printf("%s\n", cmd->argv[1]);
+			if (is_exit_command(cmd))
+			{
+				//cleanup_loop(shell);
+				//free_cmd(cmd);
+				//free_shell(shell);
+				exit(shell->exit_status);
+			}
 		}
 		ft_run_cmd(cmd, shell);
 		cleanup_loop(shell);

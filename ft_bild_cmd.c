@@ -80,6 +80,13 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 				}
 				if (handle_redirections(cmd) == -1)
 					exit(2);
+				if (is_exit_command(cmd))
+				{
+					//cleanup_loop(shell);
+					//free_cmd(cmd);
+					//free_shell(shell);
+					exit(shell->exit_status);
+				}
 				ft_built_in_faind(cmd->argv, shell);
 				exit(shell->exit_status);
 			}
