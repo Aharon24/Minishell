@@ -30,12 +30,12 @@ typedef struct s_env
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,// обычное слово: команда или аргумент
-	TOKEN_PIPE,//|
-	TOKEN_REDIRECT_IN,//<
-	TOKEN_REDIRECT_OUT,//>
-	TOKEN_REDIRECT_APPEND,//>>
-	TOKEN_HEREDOC,// <<
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIRECT_IN,
+	TOKEN_REDIRECT_OUT,
+	TOKEN_REDIRECT_APPEND,
+	TOKEN_HEREDOC,
 }	t_token_type;
 
 typedef struct s_redirect
@@ -64,9 +64,8 @@ typedef struct s_shell
 {
 	char	*line;
 	t_token	*tokens;
-	t_env	*env;
+	t_env	*env; //free
 	t_env	*export;
-	char	*new_path;//? we not use it ??? chesk !
 	char	*home_chesk;
 	char	*home;
 	char	*pwd;
@@ -81,12 +80,13 @@ void	add_new_cmd(t_command **cmd_head, t_command *new_cmd);
 void	add_redirect(t_redirect **head, t_redirect *new_redirect);
 
 //ft_free.c
-void	clear_tokens(t_token **head);
+void	free_tokens(t_token **head);
 void	cleanup_loop(t_shell *shell);
 void	free_shell(t_shell *shell);
 void	free_env(t_env *env);
 void	free_cmd(t_command *cmd);
 void	free_redirects(t_redirect *redir);
+void	free_command(t_command *cmd);
 
 //init.c
 void	init_shell(t_shell *shell, char **env);

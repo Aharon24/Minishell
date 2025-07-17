@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	clear_tokens(t_token **head)
+void	free_tokens(t_token **head)
 {
 	t_token *tmp;
 
@@ -18,7 +18,7 @@ void cleanup_loop(t_shell *shell)
 		free(shell->line);
 	shell->line = NULL;
 
-	clear_tokens(&(shell->tokens));
+	free_tokens(&(shell->tokens));
 	shell->tokens = NULL;
 }
 
@@ -33,27 +33,38 @@ void	free_redirects(t_redirect *redir)
 		free(tmp);
 	}
 }
-void	free_cmd(t_command *cmd)
+
+void free_command(t_command *cmd)
+{
+	int i;
+
+	if (!cmd)
+		return;
+
+	if (cmd->argv)
+	{
+		i = 0;
+		while (cmd->argv[i])
+			free(cmd->argv[i++]);
+		free(cmd->argv);
+	}
+
+	free_redirects(cmd->redirects);
+	free(cmd);
+}
+
+void free_cmd(t_command *cmd)
 {
 	t_command *tmp;
-	int i;
 
 	while (cmd)
 	{
-		tmp = cmd;
-		cmd = cmd->next;
-
-		if (tmp->argv)
-		{
-			i = 0;
-			while (tmp->argv[i])
-				free(tmp->argv[i++]);
-			free(tmp->argv);
-		}
-		free_redirects(tmp->redirects);
-		free(tmp);
+		tmp = cmd->next;
+		free_command(cmd);
+		cmd = tmp;
 	}
 }
+
 void	free_env(t_env *env)
 {
 	t_env *tmp;
@@ -73,9 +84,9 @@ void	free_shell(t_shell *shell)
 		free_env(shell->env);
 	shell->env = NULL;
 
-	if (shell->new_path)
-		free(shell->new_path);
-	shell->new_path = NULL;
+	if (shell->tokens)
+		free_tokens(&(shell->tokens));
+	shell->tokens = NULL;
 
 	if (shell->home)
 		free(shell->home);

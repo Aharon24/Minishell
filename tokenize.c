@@ -6,7 +6,8 @@ int	lex_word(char *line, t_token **tokens)
 	char	*word;
 
 	i = 0;
-	while (line[i] && line[i] != ' ' && line[i] != '|' && line[i] != '<' && line[i] != '>')
+	while (line[i] && line[i] != ' ' && line[i] != '|'
+		&& line[i] != '<' && line[i] != '>')
 		i++;
 	word = ft_strndup(&line[0], i);
 	add_token(tokens, word, TOKEN_WORD);
