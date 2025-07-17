@@ -159,11 +159,14 @@ char	*ft_value_string(char *arg);
 //our_cmd/export_chesk.c
 int		ft_validation_argument(char *arg);
 void	ft_printf_export(t_env *export);
+char	*ft_add_env_value(char *arg);
 
 ///ft_exece.c
 void	ft_execve(char **argv, t_shell *shell);
 char	*find_path_helper(char **paths, char *cmd);
 char	*find_path(t_env *s, char *cmd);
+char	*ft_add_env_key(char *arg);
+int 	ft_chesk_eqvel(char *str);
 
 
 //ft_bild_cmd.c
@@ -175,5 +178,6 @@ int		ft_bild_cmd_out_fork(char **argv,t_shell *shell);
 char	*ft_faind_in_env(t_env *env, char *argument);
 char	*ft_make_path(char *str);
 t_env	*ft_faind_and_change(char *argumnet, t_env *env, char *new_path);
+
 
 #endif
