@@ -16,6 +16,8 @@ void	ft_check_line_export(char **argv, t_shell *shell)
 	int	i;
 
 	i = 1;
+	if (argv[1][0] == '_' && argv[1][1] == '\0')
+		return ;
 	while (argv[i])
 	{
 		ft_validation(argv[i],shell);
@@ -86,6 +88,11 @@ void ft_export(t_shell*shell, char **argv)
 	if (!argv[1])
 	{
 		ft_sort_export(e);
+		return ;
+	}
+	else if(argv[2])
+	{
+		perror("to Many argument");
 		return ;
 	}
 	else if(argv[1])

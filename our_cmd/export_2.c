@@ -31,15 +31,17 @@ t_env	*ft_add_export(t_env *export, char *arg)
     int     i;
     
     i = 0;
+	start = export;
     printf("LINE  %s\n",arg);
     value = NULL;
 	key = NULL;
     if (!export || !export->next)
 		return (NULL);
-	start = export;
+	key = ft_ket_string(arg);
+	if (ft_faind_key_in(start, key) == 1)
+		unset_env(&start, key);
     while (start->next)
 		start = start->next;
-	key = ft_ket_string(arg);
     while(arg[i] && arg[i] != '=')
         i++;
     if (arg[i + 1] == '\0')
@@ -65,9 +67,11 @@ t_env *ft_add_env(t_env *env, char *arg)
     if (!env || !env->next)
 		return (NULL);
 	start = env;
-    while (start->next)
-		start = start->next;
 	key = ft_add_env_key(arg);
+	if (ft_faind_key_in(start, key) == 1)
+		unset_env(&start, key);
+	while (start->next)
+		start = start->next;
     while(arg[i] && arg[i] != '=')
         i++;
     if (arg[i + 1] == '\0')
@@ -130,11 +134,6 @@ char	*ft_ket_string(char *arg)
 		printf("->%c\n",arg[j]);
         j++;
     }
-	// if (arg[i - 1] == '=')
-	// {
-	// 	new[i] = '\0';
-	// 	return (new);
-	// }
 	if(arg[j] == '=' && arg[j - 1] != '=')
 	{
 		new[j] = '=';

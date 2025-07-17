@@ -9,6 +9,8 @@ void	unset_env(t_env **env, char *key)
 	prev = NULL;
 	while (curr)
 	{
+		if (ft_strcmp("_",key) == 0)
+			return;
 		if (ft_strcmp(curr->key, key) == 0)
 		{
 			if (prev)
@@ -29,7 +31,7 @@ void	ft_unset(char **argv, t_shell *shell)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (argv[i])
 	{
 		unset_env(&(shell->env), argv[i]);
