@@ -37,75 +37,79 @@ void	ft_built_in_faind(char **argv, t_shell *shell)
 
 void ft_run_cmd(t_command *cmd, t_shell *shell)
 {
-	int		pipefd[2];
-	int		prev_fd;
-	pid_t	pid;
-	int		status;
+	int pipefd[2];
+	int prev_fd = -1;
+	pid_t pid;
+	int wstatus;
 
-
-	///// else keyser stugel cmd txaxpoxelu het kapvac  
-	prev_fd = -1;
 	while (cmd)
 	{
-		if(ft_bild_cmd_out_fork(cmd->argv,shell) == 1)
-			cmd = cmd->next;
-		else 
+		if (ft_bild_cmd_out_fork(cmd->argv, shell) == 1)
 		{
+			cmd = cmd->next;
+			continue;
+		}
+
+		if (cmd->pip)
+		{
+			if (pipe(pipefd) == -1)
+			{
+				perror("pipe");
+				g_exit_status = 1;
+				return ;
+			}
+		}
+
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork");
+			g_exit_status = 1;
+			return;
+		}
+		else if (pid == 0)
+		{
+			if (prev_fd != -1)
+			{
+				dup2(prev_fd, STDIN_FILENO);
+				close(prev_fd);
+			}
 			if (cmd->pip)
 			{
-				if (pipe(pipefd) == -1)
-				{
-					perror("pipe");
-					exit(2);
-				}
+				close(pipefd[0]);
+				dup2(pipefd[1], STDOUT_FILENO);
+				close(pipefd[1]);
 			}
-			pid = fork();
-			if (pid == -1)
-			{
-				perror("fork");
+			if (handle_redirections(cmd) == -1)
 				exit(2);
-			}
-			else if (pid == 0)
+
+			if (is_exit_command(cmd))
+				exit(g_exit_status);
+
+			ft_built_in_faind(cmd->argv, shell);
+
+			exit(g_exit_status);
+		}
+		else
+		{
+			if (prev_fd != -1)
+				close(prev_fd);
+			if (cmd->pip)
 			{
-				if (prev_fd != -1)
-				{
-					dup2(prev_fd, 0);
-					close(prev_fd);
-				}
-				if (cmd->pip)
-				{
-					close(pipefd[0]);
-					dup2(pipefd[1], 1);
-					close(pipefd[1]);
-				}
-				if (handle_redirections(cmd) == -1)
-					exit(2);
-				if (is_exit_command(cmd))
-				{
-					//cleanup_loop(shell);
-					//free_cmd(cmd);
-					//free_shell(shell);
-					exit(shell->exit_status);
-				}
-				ft_built_in_faind(cmd->argv, shell);
-				exit(shell->exit_status);
+				close(pipefd[1]);
+				prev_fd = pipefd[0];
 			}
 			else
-			{
-				if (prev_fd != -1)
-					close(prev_fd);
-				if (cmd->pip)
-				{
-					close(pipefd[1]);
-					prev_fd = pipefd[0];
-				}
-				else
-				{
-					prev_fd = -1;
-				}
-			}
-			cmd = cmd->next;
+				prev_fd = -1;
 		}
+		cmd = cmd->next;
 	}
-	while (wait(&status) > 0);
+
+	while (wait(&wstatus) > 0)
+	{
+		if (WIFEXITED(wstatus))
+			g_exit_status = WEXITSTATUS(wstatus);
+		else if (WIFSIGNALED(wstatus))
+			g_exit_status = 128 + WTERMSIG(wstatus);
+	}
 }

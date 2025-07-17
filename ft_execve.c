@@ -1,11 +1,108 @@
 #include "minishell.h"
 
+int		size_env(t_env *env)
+{
+	int	i;
+
+	i = 0;
+	if (!env)
+		return (0);
+	while (env)
+	{
+		i++;
+		env = env->next;
+	}
+	return (i);
+}
+int	size_key_value(char *key, char *value)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (key[i] != '\0')
+		i++;
+	j = 0;
+	while (value[j] != '\0')
+		j++;
+	return (i + j + 1);
+}
+
+char	**shell_2_char(t_env *env)
+{
+	char	**my_env;
+	int		size;
+	int		i;
+
+	i = 0;
+	size = size_env(env);
+	my_env = malloc((size + 1) * sizeof(char *));
+	if (!my_env)
+	{
+		g_exit_status = 1;
+		return (NULL);
+	}
+	while (env)
+	{
+		int		key_len;
+		int		val_len;
+		int		j;
+		int		t;
+
+		t = 0;
+		j = 0;
+		key_len = 0;
+		val_len = 0;
+		while (env->key[key_len])
+			key_len++;
+		while (env->value[val_len])
+			val_len++;
+		my_env[i] = malloc(key_len + val_len + 2);
+		if (!my_env[i])
+		{
+			g_exit_status = 1;
+			return (NULL);
+		}
+		while (j < key_len)
+			my_env[i][t++] = env->key[j++];
+		my_env[i][t++] = '=';
+		j = 0;
+		while (j < val_len)
+			my_env[i][t++] = env->value[j++];
+
+		my_env[i][t] = '\0';
+
+		i++;
+		env = env->next;
+	}
+	my_env[i] = NULL;
+	return (my_env);
+}
+
 void	ft_execve(char **argv, t_shell *shell)
 {
 	char	*cmd_path;
+	char	**my_env;
 
+	my_env = NULL;
 	cmd_path = find_path(shell->env,argv[0]);
-	execve(cmd_path,argv,NULL);
+	if (!cmd_path)
+	{
+		printf("minishell: %s: command not found\n", argv[0]);
+		g_exit_status = 127;
+		exit(g_exit_status);
+	}
+	my_env = shell_2_char(shell->env);
+	if (!my_env)
+	{
+		printf("minishell: failed to prepare environment\n");
+		g_exit_status = 1;
+		exit(g_exit_status);
+	}
+	execve(cmd_path, argv, my_env);
+	perror("minishell: execve");
+	g_exit_status = 126;
+	exit(g_exit_status);
 }
 
 

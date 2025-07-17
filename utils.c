@@ -38,6 +38,8 @@ char	*remove_quotes_and_expand(char *input, t_env *env)
 	int		k;
 	int		len;
 	char	*res;
+	int		o;
+	char 	*exit_code_str;
 
 
 	i = 0;
@@ -62,6 +64,15 @@ char	*remove_quotes_and_expand(char *input, t_env *env)
 		{
 			dq = !dq;
 			i++;
+		}
+		else if (input[i] == '$' && input[i + 1] == '?' && sq == 0)
+		{
+			exit_code_str = ft_itoa(g_exit_status);
+			o = 0;
+			while (exit_code_str[o])
+				res[j++] = exit_code_str[o++];
+			free(exit_code_str);
+			i += 2;
 		}
 		else if (input[i] == '$' && sq == 0 &&
 			(ft_isalpha(input[i + 1]) || input[i + 1] == '_'))

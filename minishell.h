@@ -19,14 +19,14 @@
 // My Libery
 #include "Libft/libft.h"
 
+extern int g_exit_status;
+
 typedef struct s_env
 {
 	char *key;
 	char *value;
 	struct s_env *next;
 }	t_env;
-
-
 
 typedef enum e_token_type
 {
@@ -72,7 +72,6 @@ typedef struct s_shell
 	char	*pwd;
 	char	*old_path;
 	char	*temp;
-	int		exit_status;
 	int		len;
 }	t_shell;
 
@@ -173,6 +172,7 @@ char	*find_path_helper(char **paths, char *cmd);
 char	*find_path(t_env *s, char *cmd);
 char	*ft_add_env_key(char *arg);
 int 	ft_chesk_eqvel(char *str);
+char	**shell_2_char(t_env *env);
 
 
 //ft_bild_cmd.c

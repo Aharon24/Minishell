@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#include <stdio.h>
+int g_exit_status = 0;
 
 void	print_env(t_env *env)
 {

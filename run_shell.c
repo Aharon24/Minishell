@@ -66,21 +66,26 @@ void	run_shell(t_shell *shell)
 			continue ;
 		}
 		if (tokenize(shell) == -1)
-			printf("Ошибка токенизации\n");
-		cmd = split_cmd(shell->tokens, shell);
-		//print_cmd(cmd);
-		if (cmd->next == NULL)
 		{
-			//printf("%s\n", cmd->argv[1]);
-			if (is_exit_command(cmd))
-			{
-				//cleanup_loop(shell);
-				//free_cmd(cmd);
-				//free_shell(shell);
-				exit(shell->exit_status);
-			}
+			printf("Ошибка токенизации\n");
+			g_exit_status = 258;
+			free(shell->line);
+			continue ;
+		}
+		cmd = split_cmd(shell->tokens, shell);
+		if (!cmd)
+		{
+			printf("Ошибка разбора команд\n");
+			g_exit_status = 1;
+			free(shell->line);
+			continue;
+		}
+		if (cmd->next == NULL && is_exit_command(cmd))
+		{
+			exit(g_exit_status);
 		}
 		ft_run_cmd(cmd, shell);
 		cleanup_loop(shell);
 	}
 }
+
