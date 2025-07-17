@@ -159,6 +159,9 @@ char	*ft_value_string(char *arg);
 //our_cmd/export_3.c
 int ft_faind_key_in(t_env *e_e, char *key);
 
+//our_cmd/echo.c
+void	ft_echo(char **argv);
+
 //our_cmd/export_chesk.c
 int		ft_validation_argument(char *arg);
 void	ft_printf_export(t_env *export);

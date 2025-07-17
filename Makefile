@@ -28,8 +28,7 @@ SRC = main.c\
 	our_cmd/export_3.c\
 	our_cmd/export_chesk.c\
 	ft_execve.c\
-
-	#uor_cmd/echo.c
+	our_cmd/echo.c
  
 OBJ = $(SRC:.c=.o)
 

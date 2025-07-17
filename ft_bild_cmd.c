@@ -28,8 +28,8 @@ void	ft_built_in_faind(char **argv, t_shell *shell)
 		ft_pwd(argv);
     else if (ft_strncmp(argv[0], "env", 3) == 0)
 		ft_env(shell);
-	// else if (ft_strncmp(argv[0], "echo", len) == 0)
-	// 	ft_echo();
+	else if (ft_strncmp(argv[0], "echo", 4) == 0)
+		ft_echo(argv);
 	else
 		ft_execve(argv, shell);
 }
