@@ -15,6 +15,7 @@ SRC = main.c\
 	tokenize.c\
 	handle_redirection.c\
 	utils.c\
+	utils_2.c\
 	split_cmd.c\
 	our_cmd/cd.c\
 	our_cmd/pwd.c\
