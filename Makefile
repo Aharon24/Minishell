@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror  
+CFLAGS = -Wall -Wextra -Werror   -g3
 
 LIBFT_DIR = Libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
@@ -28,7 +28,8 @@ SRC = main.c\
 	our_cmd/export_3.c\
 	our_cmd/export_chesk.c\
 	ft_execve.c\
-	our_cmd/echo.c
+	our_cmd/echo.c\
+	ft_free_2.c
  
 OBJ = $(SRC:.c=.o)
 

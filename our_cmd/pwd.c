@@ -8,7 +8,8 @@ void	ft_pwd(char **argv)
 	{
 		printf("Too many arguments\n");
 		g_exit_status = 1;
-		return;
+		ft_free_arr(argv);
+		return ;
 	}
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
@@ -18,6 +19,7 @@ void	ft_pwd(char **argv)
 	else
 	{
 		perror("minishell: pwd");
+		ft_free_arr(argv);
 		g_exit_status = 1;
 	}
 }

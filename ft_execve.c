@@ -83,7 +83,9 @@ void	ft_execve(char **argv, t_shell *shell)
 {
 	char	*cmd_path;
 	char	**my_env;
+	int		ev;
 
+	ev = 0;
 	my_env = NULL;
 	cmd_path = find_path(shell->env,argv[0]);
 	if (!cmd_path)
@@ -97,10 +99,12 @@ void	ft_execve(char **argv, t_shell *shell)
 	{
 		printf("minishell: failed to prepare environment\n");
 		g_exit_status = 1;
+		free(cmd_path);
 		exit(g_exit_status);
 	}
 	execve(cmd_path, argv, my_env);
 	perror("minishell: execve");
+
 	g_exit_status = 126;
 	exit(g_exit_status);
 }
@@ -147,5 +151,6 @@ char	*find_path(t_env *s, char *cmd)
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
+	free(paths);
 	return (find_path_helper(paths, cmd));
 }

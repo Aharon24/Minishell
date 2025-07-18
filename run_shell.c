@@ -91,4 +91,5 @@ void	run_shell(t_shell *shell)
 		ft_run_cmd(cmd, shell);
 		cleanup_loop(shell);
 	}
+	free_shell(shell);
 }

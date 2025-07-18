@@ -30,7 +30,7 @@ void	ft_built_in_faind(char **argv, t_shell *shell)
 		ft_env(shell);
 	else if (ft_strncmp(argv[0], "echo", 4) == 0)
 		ft_echo(argv);
-	else
+	else 
 		ft_execve(argv, shell);
 }
 
@@ -49,7 +49,6 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 			cmd = cmd->next;
 			continue;
 		}
-
 		if (cmd->pip)
 		{
 			if (pipe(pipefd) == -1)
@@ -112,4 +111,5 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 		else if (WIFSIGNALED(wstatus))
 			g_exit_status = 128 + WTERMSIG(wstatus);
 	}
+	
 }

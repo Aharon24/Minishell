@@ -88,6 +88,9 @@ void	free_cmd(t_command *cmd);
 void	free_redirects(t_redirect *redir);
 void	free_command(t_command *cmd);
 
+////ft_free_2.c
+void ft_free_arr(char **arr);
+
 //init.c
 void	init_shell(t_shell *shell, char **env);
 t_env	*new_env_node(char *key, char *value);
