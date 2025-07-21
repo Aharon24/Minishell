@@ -1,8 +1,8 @@
 #include "../minishell.h"
 
-int ft_faind_key_in(t_env *e_e, char *key)
+int	ft_faind_key_in(t_env *e_e, char *key)
 {
-	t_env *e;
+	t_env	*e;
 
 	e = e_e;
 	while (e)

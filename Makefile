@@ -30,7 +30,8 @@ SRC = main.c\
 	our_cmd/export_chesk.c\
 	ft_execve.c\
 	our_cmd/echo.c\
-	ft_free_2.c
+	ft_free_2.c\
+	ft_heredoc.c
  
 OBJ = $(SRC:.c=.o)
 

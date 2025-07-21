@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		size_env(t_env *env)
+int	size_env(t_env *env)
 {
 	int	i;
 
@@ -14,6 +14,7 @@ int		size_env(t_env *env)
 	}
 	return (i);
 }
+
 int	size_key_value(char *key, char *value)
 {
 	int	i;
@@ -33,6 +34,10 @@ char	**shell_2_char(t_env *env)
 	char	**my_env;
 	int		size;
 	int		i;
+	int		key_len;
+	int		val_len;
+	int		j;
+	int		t;
 
 	i = 0;
 	size = size_env(env);
@@ -44,11 +49,6 @@ char	**shell_2_char(t_env *env)
 	}
 	while (env)
 	{
-		int		key_len;
-		int		val_len;
-		int		j;
-		int		t;
-
 		t = 0;
 		j = 0;
 		key_len = 0;
@@ -69,9 +69,7 @@ char	**shell_2_char(t_env *env)
 		j = 0;
 		while (j < val_len)
 			my_env[i][t++] = env->value[j++];
-
 		my_env[i][t] = '\0';
-
 		i++;
 		env = env->next;
 	}
@@ -83,11 +81,9 @@ void	ft_execve(char **argv, t_shell *shell)
 {
 	char	*cmd_path;
 	char	**my_env;
-	int		ev;
 
-	ev = 0;
 	my_env = NULL;
-	cmd_path = find_path(shell->env,argv[0]);
+	cmd_path = find_path(shell->env, argv[0]);
 	if (!cmd_path)
 	{
 		printf("minishell: %s: command not found\n", argv[0]);
@@ -109,7 +105,6 @@ void	ft_execve(char **argv, t_shell *shell)
 	g_exit_status = 126;
 	exit(g_exit_status);
 }
-
 
 char	*find_path_helper(char **paths, char *cmd)
 {
@@ -143,9 +138,10 @@ char	*find_path(t_env *s, char *cmd)
 {
 	char	**paths;
 	char	*path_env;
+
 	if (access(cmd, X_OK) == 0)
 		return (ft_strdup(cmd));
-	path_env = ft_faind_in_env(s,"PATH");
+	path_env = ft_faind_in_env(s, "PATH");
 	if (!path_env)
 		return (NULL);
 	paths = ft_split(path_env, ':');
