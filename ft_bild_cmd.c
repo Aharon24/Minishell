@@ -85,13 +85,11 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 			if (ft_strcmp(cmd->argv[0], "exit") == 0)
 			{
 				g_exit_status = ft_check_exit_cmd(cmd->argv);
-<<<<<<< Updated upstream
 				if (cmd->pip == 1)
 					exit(0);
 				if (g_exit_status != 257 && g_exit_status != 258)
 					exit(g_exit_status);
 				exit(0);
-=======
 	   			if (g_exit_status != 257)
     				exit(g_exit_status);
 				g_exit_status = 1;
@@ -100,7 +98,6 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 				free(shell->line);
 				free_tokens(&(shell->tokens));
        			continue ;
->>>>>>> Stashed changes
 			}
 
 			ft_built_in_faind(cmd->argv, shell);
