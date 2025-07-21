@@ -82,17 +82,17 @@ void	run_shell(t_shell *shell)
 			free_tokens(&(shell->tokens));
 			continue ;
 		}
-		if ( (ft_strcmp(cmd->argv[0], "exit") == 0) && (cmd->next == NULL))
+		if ((ft_strcmp(cmd->argv[0], "exit") == 0) && (cmd->next == NULL))
 		{
-			shell->exit_i = ft_chesk_exit_cmd(cmd->argv);
-			g_exit_status = shell->exit_i;
-			exit(g_exit_status);
-		}
-		else if (cmd->next == NULL && is_exit_command(cmd))
-		{
-			//free_shell(shell);
-			//free_cmd(cmd);
-			exit(g_exit_status);
+			g_exit_status = ft_check_exit_cmd(cmd->argv);
+	   		if (g_exit_status != 257)
+    			exit(g_exit_status);
+			g_exit_status = 1;
+			printf("exit\nexit: too many arguments\n");
+			free_cmd(cmd);
+			free(shell->line);
+			free_tokens(&(shell->tokens));
+       		continue ;
 		}
 		ft_run_cmd(cmd, shell);
 		cleanup_loop(shell);

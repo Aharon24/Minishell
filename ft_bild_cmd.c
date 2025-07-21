@@ -82,9 +82,18 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 			if (handle_redirections(cmd) == -1)
 				exit(2);
 
-			if (is_exit_command(cmd))
-				exit(g_exit_status);
-
+			if (ft_strcmp(cmd->argv[0], "exit") == 0)
+			{
+				g_exit_status = ft_check_exit_cmd(cmd->argv);
+	   			if (g_exit_status != 257)
+    				exit(g_exit_status);
+				g_exit_status = 1;
+				("exit: too many arguments\n");
+				free_cmd(cmd);
+				free(shell->line);
+				free_tokens(&(shell->tokens));
+       			continue ;
+			}
 			ft_built_in_faind(cmd->argv, shell);
 
 			exit(g_exit_status);

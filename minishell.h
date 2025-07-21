@@ -113,14 +113,13 @@ int		handle_redirections(t_command *cmd);
 //utils.c
 char	*ft_strndup(char *line, int n);
 int		ft_strcmp(char *s1, char *s2);
-int		is_exit_command(t_command *cmd);
 char	*get_env_value(char *key, t_env *env);
 char	*remove_quotes_and_expand(char *input, t_env *env);
 int		copy_var_value(char *res, int j, char *input, int *i, t_env *env);
 
 ///utils_2.c
-int	ft_chesk_exit_cmd(char **argv);
-int	ft_ch(char **arr);
+int	ft_check_exit_cmd(char **argv);
+int	ft_ch(char *arr);
 
 //split_cmd.c
 t_command *split_cmd(t_token *tokens, t_shell *shell);
