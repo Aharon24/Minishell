@@ -82,29 +82,33 @@ void	ft_execve(char **argv, t_shell *shell)
 	char	*cmd_path;
 	char	**my_env;
 
+	ev = 0;
 	my_env = NULL;
-	cmd_path = find_path(shell->env, argv[0]);
+	cmd_path = find_path(shell->env,argv[0]);
 	if (!cmd_path)
 	{
-		printf("minishell: %s: command not found\n", argv[0]);
+		write(2, "minishell: ", 11);
+		write(2, argv[0], ft_strlen(argv[0]));
+		write(2, ": command not found\n", 21);
 		g_exit_status = 127;
 		exit(g_exit_status);
 	}
 	my_env = shell_2_char(shell->env);
 	if (!my_env)
 	{
-		printf("minishell: failed to prepare environment\n");
+		write(2, "minishell: failed to prepare environment\n", 41);
 		g_exit_status = 1;
-		//free(cmd_path);
 		exit(g_exit_status);
 	}
 	if ((ft_strcmp("cat", argv[0]) == 0) && argv[1] == NULL)
 		return ;
 	execve(cmd_path, argv, my_env);
-	perror("minishell: execve");
+	write(2, "minishell: execve: ", 20);
+	write(2, "\n", 1);
 	g_exit_status = 126;
 	exit(g_exit_status);
 }
+
 
 char	*find_path_helper(char **paths, char *cmd)
 {

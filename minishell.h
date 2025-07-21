@@ -20,7 +20,6 @@
 #include "Libft/libft.h"
 
 extern int g_exit_status;
-
 typedef struct s_env
 {
 	char *key;
@@ -68,7 +67,7 @@ typedef struct s_shell
 	t_env	*export;
 	char	*home_chesk;
 	char	*home;
-	char	*pwd;
+	char	*pwd;q
 	char	*old_path;
 	char	*temp;
 	int		len;

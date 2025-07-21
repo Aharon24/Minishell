@@ -84,11 +84,6 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 
 			if (ft_strcmp(cmd->argv[0], "exit") == 0)
 			{
-				g_exit_status = ft_check_exit_cmd(cmd->argv);
-				if (cmd->pip == 1)
-					exit(0);
-				if (g_exit_status != 257 && g_exit_status != 258)
-					exit(g_exit_status);
 				exit(0);
 	   			if (g_exit_status != 257)
     				exit(g_exit_status);
@@ -101,7 +96,6 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 			}
 
 			ft_built_in_faind(cmd->argv, shell);
-
 			exit(g_exit_status);
 		}
 		else
@@ -121,10 +115,15 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 
 	while (wait(&wstatus) > 0)
 	{
-		if (WIFEXITED(wstatus))
-			g_exit_status = WEXITSTATUS(wstatus);
-		else if (WIFSIGNALED(wstatus))
-			g_exit_status = 128 + WTERMSIG(wstatus);
+    	if (WIFEXITED(wstatus))
+        	g_exit_status = WEXITSTATUS(wstatus);
+    	else if (WIFSIGNALED(wstatus))
+    	{
+        	int sig = WTERMSIG(wstatus);
+        	if (sig == SIGPIPE)
+            	;
+        	else
+            	g_exit_status = 128 + sig;
+    	}
 	}
-	
 }
