@@ -11,12 +11,10 @@ int ft_check_exit_cmd(char **argv)
 		return (0);
 	else if (ft_ch(argv[1]))
 	{
-		printf("%s numeric argument required\n",argv[1]);
-		return (2);
+		return (258);
 	}
 	else if(argv[2])
 		return (257);
-
 	number = ft_atoi(argv[1]);
 	//printf("11 ->%d\n",number);
 	if(number >= 256)

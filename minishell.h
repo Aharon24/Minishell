@@ -73,6 +73,7 @@ typedef struct s_shell
 	char	*temp;
 	int		len;
 	int		exit_i;
+	int		check_exit;
 }	t_shell;
 
 //add_.c

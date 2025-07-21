@@ -82,17 +82,36 @@ void	run_shell(t_shell *shell)
 			free_tokens(&(shell->tokens));
 			continue ;
 		}
-		if ((ft_strcmp(cmd->argv[0], "exit") == 0) && (cmd->next == NULL))
+		if ((ft_strcmp(cmd->argv[0], "exit") == 0))
 		{
 			g_exit_status = ft_check_exit_cmd(cmd->argv);
-	   		if (g_exit_status != 257)
+	   		if (g_exit_status != 257 && (cmd->next == NULL) && g_exit_status != 258)
     			exit(g_exit_status);
-			g_exit_status = 1;
-			printf("exit\nexit: too many arguments\n");
-			free_cmd(cmd);
-			free(shell->line);
-			free_tokens(&(shell->tokens));
-       		continue ;
+			else if (g_exit_status == 258 && cmd->next == NULL)
+			{
+				g_exit_status = 2;
+				printf("exit\nexit: %s: numeric argument required\n", cmd->argv[1]);
+				exit(g_exit_status);
+			}
+			else if (g_exit_status == 258 && cmd->next != NULL)
+			{
+				g_exit_status = 0;
+				printf("exit: %s: numeric argument required\n", cmd->argv[1]);
+			}
+			else if (g_exit_status == 257 && cmd->next == NULL)
+			{
+				printf("exit\nexit: too many arguments\n");
+				g_exit_status = 1;
+				free_cmd(cmd);
+				free(shell->line);
+				free_tokens(&shell->tokens);
+				continue ;
+			}
+			else if (g_exit_status == 257 && cmd->next != NULL)
+			{
+				printf("exit: too many arguments\n");
+				g_exit_status = 1;
+			}
 		}
 		ft_run_cmd(cmd, shell);
 		cleanup_loop(shell);
