@@ -3,11 +3,14 @@
 void	ft_add_export_or_env(t_shell *shell, char *arg)
 {
 	int	i;
+	int n;
 
 	i = 0;
 	while (arg[i] && arg[i] != '=')
 		i++;
-	ft_faind_and_rm(arg,shell);
+	n = ft_faind_and_rm(arg,shell);
+	if (n == 2)
+		return ;
 	if (arg[i] != '=')
 	{
 		shell->export = ft_add_export(shell->export, arg);

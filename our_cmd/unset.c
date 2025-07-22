@@ -61,11 +61,21 @@ char	*ft_ket_string_rm(char *arg)
 }
 
 
-void ft_faind_and_rm(char *arg, t_shell *shell)
+int ft_faind_and_rm(char *arg, t_shell *shell)
 {
+	char *key_;
+	char *get;
 	char *key;
 
-	key = ft_ket_string_rm(arg);
-	printf("-----------%s\n",key);
-	unset_env(&(shell->export),key);
+	
+	key_ = ft_ket_string_rm(arg);
+	key = ft_ket_string(arg);
+	//printf("-----------%s key_ %s\n",key ,key_);
+	get = ft_faind_in_env(shell->export,key);
+	//printf("get %s",get);
+	if(!get)
+		unset_env(&(shell->export),key_);
+	if((ft_strcmp(key,arg) == 0 ) || (ft_strcmp(arg,key_) == 0))
+		return (2);
+	return (1);
 }
