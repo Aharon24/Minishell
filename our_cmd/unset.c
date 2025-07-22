@@ -35,6 +35,37 @@ void	ft_unset(char **argv, t_shell *shell)
 	while (argv[i])
 	{
 		unset_env(&(shell->env), argv[i]);
+		unset_env(&(shell->export),argv[i]);
 		i++;
 	}
+}
+
+char	*ft_ket_string_rm(char *arg)
+{
+	int		i;
+	char	*new;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (arg[i] && arg[i] != '=')
+		i++;
+	new = malloc((i + 1) * sizeof(char));
+	while (arg[j] && j <= i - 1)
+	{
+		new[j] = arg[j];
+		j++;
+	}
+	new[j] = '\0';
+	return (new);
+}
+
+
+void ft_faind_and_rm(char *arg, t_shell *shell)
+{
+	char *key;
+
+	key = ft_ket_string_rm(arg);
+	printf("-----------%s\n",key);
+	unset_env(&(shell->export),key);
 }

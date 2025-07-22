@@ -7,6 +7,7 @@ void	ft_add_export_or_env(t_shell *shell, char *arg)
 	i = 0;
 	while (arg[i] && arg[i] != '=')
 		i++;
+	ft_faind_and_rm(arg,shell);
 	if (arg[i] != '=')
 	{
 		shell->export = ft_add_export(shell->export, arg);
@@ -37,9 +38,8 @@ t_env	*ft_add_export(t_env *export, char *arg)
 	if (!export || !export->next)
 	return (NULL);
 	key = ft_ket_string(arg);
-	//printf("key - %s\n",key);
 	if (ft_faind_key_in(start, key) == 1)
-	unset_env(&start, key);
+		unset_env(&start, key);
 	while (start->next)
 		start = start->next;
 	while (arg[i] && arg[i] != '=')
