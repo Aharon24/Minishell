@@ -82,7 +82,6 @@ void	ft_execve(char **argv, t_shell *shell)
 	char	*cmd_path;
 	char	**my_env;
 
-	ev = 0;
 	my_env = NULL;
 	cmd_path = find_path(shell->env,argv[0]);
 	if (!cmd_path)

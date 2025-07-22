@@ -31,7 +31,7 @@ SRC = main.c\
 	ft_execve.c\
 	our_cmd/echo.c\
 	ft_free_2.c\
-	ft_heredoc.c
+	#ft_heredoc.c
  
 OBJ = $(SRC:.c=.o)
 

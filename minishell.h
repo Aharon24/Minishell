@@ -67,7 +67,7 @@ typedef struct s_shell
 	t_env	*export;
 	char	*home_chesk;
 	char	*home;
-	char	*pwd;q
+	char	*pwd;
 	char	*old_path;
 	char	*temp;
 	int		len;

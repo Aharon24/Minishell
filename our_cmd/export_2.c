@@ -35,10 +35,11 @@ t_env	*ft_add_export(t_env *export, char *arg)
 	value = NULL;
 	key = NULL;
 	if (!export || !export->next)
-		return (NULL);
+	return (NULL);
 	key = ft_ket_string(arg);
+	//printf("key - %s\n",key);
 	if (ft_faind_key_in(start, key) == 1)
-		unset_env(&start, key);
+	unset_env(&start, key);
 	while (start->next)
 		start = start->next;
 	while (arg[i] && arg[i] != '=')
@@ -121,10 +122,9 @@ char	*ft_ket_string(char *arg)
 	if (arg[i] == '=')
 		i++;
 	new = malloc((i + 1) * sizeof(char));
-	while (arg[j] && j < i - 1)
+	while (arg[j] && j <= i - 1)
 	{
 		new[j] = arg[j];
-		printf("->%c\n", arg[j]);
 		j++;
 	}
 	if (arg[j] == '=' && arg[j - 1] != '=')
