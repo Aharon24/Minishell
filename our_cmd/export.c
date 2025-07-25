@@ -91,11 +91,6 @@ void	ft_export(t_shell*shell, char **argv)
 		ft_sort_export(e);
 		return ;
 	}
-	else if (argv[2])
-	{
-		perror("to Many argument");
-		return ;
-	}
 	else if (argv[1])
 		ft_check_line_export(argv, shell);
 }

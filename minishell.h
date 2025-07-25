@@ -143,11 +143,11 @@ void ft_check_t(t_shell *shell, char *path);
 int	ft_check_len_argv(char **argv);
 
 //our_cmd/unset.c
-void	ft_unset(char **argv, t_shell *shell);
 void	unset_env(t_env **env, char *key);
-int		ft_strcmp(char *s1, char *s2);
-int	ft_faind_and_rm(char *arg, t_shell *shell);
-char	*ft_ket_string_rm(char *arg);
+void	ft_unset(char **argv, t_shell *shell);
+int		ft_faind_and_rm(char *arg, t_shell *shell);
+int		ft_chesk__(char *str);
+
 
 //our_cmd/env.c
 void	ft_env(t_shell *shell);

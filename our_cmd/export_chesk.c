@@ -12,7 +12,7 @@ void	ft_printf_export(t_env *export)
 		else if (!e->value && (ft_chesk_eqvel(e->key) == 0))
 			printf("declare -x %s\n", e->key);
 		else
-			printf("declare -x %s\"%s\"\n", e->key, e->value);
+			printf("declare -x %s=\"%s\"\n", e->key, e->value);
 		e = e->next;
 	}
 }

@@ -11,6 +11,11 @@ void	ft_add_export_or_env(t_shell *shell, char *arg)
 	n = ft_faind_and_rm(arg,shell);
 	if (n == 2)
 		return ;
+	// if(n == 3)
+	// {
+	// 	shell->export = ft_add_export(shell->export, arg);
+	// 	return ;
+	// }
 	if (arg[i] != '=')
 	{
 		shell->export = ft_add_export(shell->export, arg);
@@ -39,7 +44,7 @@ t_env	*ft_add_export(t_env *export, char *arg)
 	value = NULL;
 	key = NULL;
 	if (!export || !export->next)
-	return (NULL);
+		return (NULL);
 	key = ft_ket_string(arg);
 	if (ft_faind_key_in(start, key) == 1)
 		unset_env(&start, key);
@@ -47,8 +52,8 @@ t_env	*ft_add_export(t_env *export, char *arg)
 		start = start->next;
 	while (arg[i] && arg[i] != '=')
 		i++;
-	if (arg[i + 1] == '\0')
-		value = NULL;
+	if (arg[i + 1] == '\0' && arg[i] == '=')
+		value = ft_strdup("");
 	else
 		value = ft_value_string(arg);
 	start->next = new_env_node(key, value);
@@ -122,8 +127,6 @@ char	*ft_ket_string(char *arg)
 	j = 0;
 	while (arg[i] && arg[i] != '=')
 		i++;
-	if (arg[i] == '=')
-		i++;
 	new = malloc((i + 1) * sizeof(char));
 	while (arg[j] && j <= i - 1)
 	{
@@ -132,8 +135,7 @@ char	*ft_ket_string(char *arg)
 	}
 	if (arg[j] == '=' && arg[j - 1] != '=')
 	{
-		new[j] = '=';
-		new[j + 1] = '\0';
+		new[j] = '\0';
 		return (new);
 	}
 	new[j] = '\0';
