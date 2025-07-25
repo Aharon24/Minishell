@@ -76,7 +76,6 @@ void	run_shell(t_shell *shell)
 		cmd = split_cmd(shell->tokens, shell);
 		if (!cmd)
 		{
-			printf("Comand Error\n");
 			g_exit_status = 1;
 			free(shell->line);
 			free_tokens(&(shell->tokens));

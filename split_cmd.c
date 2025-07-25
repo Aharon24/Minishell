@@ -53,7 +53,7 @@ int	process_redirect(t_token **tokens, t_command *new_cmd, t_shell *shell)
 	if (!(*tokens) || (*tokens)->type != TOKEN_WORD)
 	{
 		ft_putstr_fd("syntax error near unexpected token `newline'\n", 2);
-		exit(2);
+		return -1;
 	}
 	redir->filename = remove_quotes_and_expand((*tokens)->value, shell->env);
 	if (!redir->filename)
