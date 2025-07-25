@@ -49,27 +49,41 @@
 // 		cmd = cmd->next;
 // 	}
 // }
+void	handle_sigint(int signum)
+{
+	(void)signum;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+void	setup_signals(void)
+{
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+}
 
 void	run_shell(t_shell *shell)
 {
 	t_command	*cmd;
 
+	setup_signals();
 	while (1)
 	{
 		shell->line = readline("minishell -> ");
 		if (!shell->line)
+		{
+			printf("exit\n");
 			break ;
+		}
 		add_history(shell->line);
 		if (shell->line[0] == '\0')
-		{
-			free(shell->line);
 			continue ;
-		}
 		if (tokenize(shell) == -1)
 		{
 			printf("tokenize error\n");
 			g_exit_status = 258;
-			free(shell->line);
 			free_tokens(&(shell->tokens));
 			continue ;
 		}
@@ -77,7 +91,6 @@ void	run_shell(t_shell *shell)
 		if (!cmd)
 		{
 			g_exit_status = 1;
-			free(shell->line);
 			free_tokens(&(shell->tokens));
 			continue ;
 		}
@@ -92,7 +105,6 @@ void	run_shell(t_shell *shell)
 					printf("exit: too many arguments\n");
 				g_exit_status = 1;
 				free_cmd(cmd);
-				free(shell->line);
 				free_tokens(&shell->tokens);
 				continue ;
 			}

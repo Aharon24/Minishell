@@ -86,6 +86,7 @@ void	init_shell(t_shell *shell, char **env)
 	shell->old_path = NULL;
 	shell->home = NULL;
 	shell->export = NULL;
+	shell->pwd = NULL;
 	shell->check_exit = 0;
 	shell->env = init_env(env, shell);
 	if (!shell->env)
