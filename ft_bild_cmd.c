@@ -142,8 +142,18 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
 
     while (wait(&wstatus) > 0)
     {
-        if (WIFEXITED(wstatus))
-            g_exit_status = WEXITSTATUS(wstatus);
+		if (WIFSIGNALED(wstatus))
+		{
+			int sig = WTERMSIG(wstatus);
+			if (sig == SIGSEGV)
+				printf("Segmentation fault\n");
+			else if (sig == SIGQUIT)
+				printf("Quit\n");
+			else if (sig == SIGINT)
+				printf("\n");
+			else
+				printf("Process terminated by signal %d\n", sig);
+		}
         else if (WIFSIGNALED(wstatus))
         {
             int sig = WTERMSIG(wstatus);
