@@ -197,6 +197,7 @@ char	*ft_faind_in_env(t_env *env, char *argument);
 char	*ft_make_path(char *str);
 t_env	*ft_faind_and_change(char *argumnet, t_env *env, char *new_path);
 
-// ft_heredoc.c
+// ft_main.c
+void	handle_sigcat(int signum);
 
 #endif

@@ -52,10 +52,20 @@
 void	handle_sigint(int signum)
 {
 	(void)signum;
+	g_exit_status = 130;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+}
+
+void	handle_sigcat(int signum)
+{
+	(void)signum;
+	g_exit_status = 130;
+	// write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
 }
 
 void	setup_signals(void)
@@ -68,9 +78,9 @@ void	run_shell(t_shell *shell)
 {
 	t_command	*cmd;
 
-	setup_signals();
 	while (1)
 	{
+		setup_signals();
 		shell->line = readline("minishell -> ");
 		if (!shell->line)
 		{

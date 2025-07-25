@@ -89,6 +89,7 @@ void ft_run_cmd(t_command *cmd, t_shell *shell)
         }
 
         pid = fork();
+        signal(SIGINT, handle_sigcat);
         if (pid == -1)
         {
             perror("fork");
