@@ -33,97 +33,122 @@ void	ft_built_in_faind(char **argv, t_shell *shell)
 	else 
 		ft_execve(argv, shell);
 }
+int	read_all_heredocs(t_command *cmd_list)
+{
+	t_command *cmd = cmd_list;
+	int heredoc_fd;
+	t_redirect *redir;
+
+	while (cmd)
+	{
+		cmd->has_heredoc = 0;
+		redir = cmd->redirects;
+		while (redir)
+		{
+			if (redir->type == TOKEN_HEREDOC)
+			{
+				if (handle_heredoc(redir, &heredoc_fd) < 0)
+					return -1;
+				cmd->heredoc_fd = heredoc_fd;
+				cmd->has_heredoc = 1;
+			}
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+	return 0;
+}
 
 
 void ft_run_cmd(t_command *cmd, t_shell *shell)
 {
-	int pipefd[2];
-	int prev_fd = -1;
-	pid_t pid;
-	int wstatus;
+    int pipefd[2];
+    int prev_fd = -1;
+    pid_t pid;
+    int wstatus;
 
-	while (cmd)
-	{
-		if (ft_bild_cmd_out_fork(cmd->argv, shell) == 1)
-		{
-			cmd = cmd->next;
-			continue;
-		}
-		if (cmd->pip)
-		{
-			if (pipe(pipefd) == -1)
-			{
-				perror("pipe");
-				g_exit_status = 1;
-				return ;
-			}
-		}
+    if (read_all_heredocs(cmd) == -1)
+        return;
 
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("fork");
-			g_exit_status = 1;
-			return;
-		}
-		else if (pid == 0)
-		{
-			if (prev_fd != -1)
-			{
-				dup2(prev_fd, STDIN_FILENO);
-				close(prev_fd);
-			}
-			if (cmd->pip)
-			{
-				close(pipefd[0]);
-				dup2(pipefd[1], STDOUT_FILENO);
-				close(pipefd[1]);
-			}
-			if (handle_redirections(cmd) == -1)
-				exit(2);
+    while (cmd)
+    {
+        if (ft_bild_cmd_out_fork(cmd->argv, shell) == 1)
+        {
+            cmd = cmd->next;
+            continue;
+        }
 
-			if (ft_strcmp(cmd->argv[0], "exit") == 0)
-			{
-				exit(0);
-	   			if (g_exit_status != 257)
-    				exit(g_exit_status);
-				g_exit_status = 1;
-				printf("exit: too many arguments\n");
-				free_cmd(cmd);
-				free(shell->line);
-				free_tokens(&(shell->tokens));
-       			continue ;
-			}
+        if (cmd->pip)
+        {
+            if (pipe(pipefd) == -1)
+            {
+                perror("pipe");
+                g_exit_status = 1;
+                return;
+            }
+        }
 
-			ft_built_in_faind(cmd->argv, shell);
-			exit(g_exit_status);
-		}
-		else
-		{
-			if (prev_fd != -1)
-				close(prev_fd);
-			if (cmd->pip)
-			{
-				close(pipefd[1]);
-				prev_fd = pipefd[0];
-			}
-			else
-				prev_fd = -1;
-		}
-		cmd = cmd->next;
-	}
+        pid = fork();
+        if (pid == -1)
+        {
+            perror("fork");
+            g_exit_status = 1;
+            return;
+        }
+        else if (pid == 0)
+        {
+            if (cmd->pip)
+            {
+                close(pipefd[0]);
+                dup2(pipefd[1], STDOUT_FILENO);
+                close(pipefd[1]);
+            }
 
-	while (wait(&wstatus) > 0)
-	{
-    	if (WIFEXITED(wstatus))
-        	g_exit_status = WEXITSTATUS(wstatus);
-    	else if (WIFSIGNALED(wstatus))
-    	{
-        	int sig = WTERMSIG(wstatus);
-        	if (sig == SIGPIPE)
-            	;
-        	else
-            	g_exit_status = 128 + sig;
-    	}
-	}
+            if (handle_redirections(cmd) == -1)
+                exit(2);
+
+            if (cmd->has_heredoc)
+            {
+                dup2(cmd->heredoc_fd, STDIN_FILENO);
+                close(cmd->heredoc_fd);
+            }
+            else if (prev_fd != -1)
+            {
+                dup2(prev_fd, STDIN_FILENO);
+                close(prev_fd);
+            }
+
+            if (ft_strcmp(cmd->argv[0], "exit") == 0)
+                exit(0);
+
+            ft_built_in_faind(cmd->argv, shell);
+            exit(g_exit_status);
+        }
+        else
+        {
+            if (prev_fd != -1)
+                close(prev_fd);
+
+            if (cmd->pip)
+            {
+                close(pipefd[1]);
+                prev_fd = pipefd[0];
+            }
+            else
+                prev_fd = -1;
+        }
+        cmd = cmd->next;
+    }
+
+    while (wait(&wstatus) > 0)
+    {
+        if (WIFEXITED(wstatus))
+            g_exit_status = WEXITSTATUS(wstatus);
+        else if (WIFSIGNALED(wstatus))
+        {
+            int sig = WTERMSIG(wstatus);
+            if (sig != SIGPIPE)
+                g_exit_status = 128 + sig;
+        }
+    }
 }

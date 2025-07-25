@@ -99,8 +99,6 @@ void	ft_execve(char **argv, t_shell *shell)
 		g_exit_status = 1;
 		exit(g_exit_status);
 	}
-	if ((ft_strcmp("cat", argv[0]) == 0) && argv[1] == NULL)
-		return ;
 	execve(cmd_path, argv, my_env);
 	write(2, "minishell: execve: ", 20);
 	write(2, "\n", 1);

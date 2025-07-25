@@ -49,6 +49,8 @@ typedef struct s_command
 	char **argv;
 	t_redirect *redirects;
 	int pip;
+	int	has_heredoc;
+	int	heredoc_fd;
 	struct s_command *next;
 }	t_command;
 
@@ -109,6 +111,7 @@ int		lex_word(char *line, t_token **tokens);
 
 //handle_redirection.c
 int		handle_redirections(t_command *cmd);
+int		handle_heredoc(t_redirect *redir, int *heredoc_fd);
 
 //utils.c
 char	*ft_strndup(char *line, int n);

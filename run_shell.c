@@ -105,7 +105,7 @@ void	run_shell(t_shell *shell)
 					printf("exit: %s: numeric argument required\n", cmd->argv[1]);
 				exit(2);
 			}
-			else
+			else if (cmd->next == NULL)
 			{
 				printf("exit\n");
 				exit(g_exit_status);
