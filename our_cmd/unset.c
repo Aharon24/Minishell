@@ -35,36 +35,35 @@ void	ft_unset(char **argv, t_shell *shell)
 	while (argv[i])
 	{
 		unset_env(&(shell->env), argv[i]);
-		unset_env(&(shell->export),argv[i]);
+		unset_env(&(shell->export), argv[i]);
 		i++;
 	}
 }
 
-int ft_faind_and_rm(char *arg, t_shell *shell)
+int	ft_faind_and_rm(char *arg, t_shell *shell)
 {
-	char *get;
-	char *key;
+	char	*get;
+	char	*key;
 
 	key = NULL;
 	get = NULL;
 	key = ft_ket_string(arg);
-	printf("-----------key %s\n",key);
-	get = ft_faind_in_env(shell->export,key);
-	if(!get)
-		unset_env(&(shell->export),key);
-	if((ft_strcmp(key,arg) == 0 ) && get)
+	get = ft_faind_in_env(shell->export, key);
+	if (!get)
+		unset_env(&(shell->export), key);
+	if ((ft_strcmp(key, arg) == 0) && get)
 		return (2);
 	return (1);
 }
 
-int ft_chesk__(char *str)
+int	ft_chesk__(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
-		if(str[i] == '=')
+		if (str[i] == '=')
 			return (1);
 		i++;
 	}

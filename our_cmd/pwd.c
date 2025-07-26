@@ -16,6 +16,10 @@ void	ft_pwd(char **argv)
 		printf("%s\n", cwd);
 		g_exit_status = 0;
 	}
+	// else if(!cwd)
+	// {
+	// 	printf("--->%s\n", cwd);
+	// }
 	else
 	{
 		perror("minishell: pwd");

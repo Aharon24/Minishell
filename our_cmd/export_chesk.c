@@ -17,23 +17,10 @@ void	ft_printf_export(t_env *export)
 	}
 }
 
-int	ft_validation_argument(char *arg)
+int	ft_validation_argument(char *arg, int i)
 {
-	int	i;
-
-	i = 0;
-	if (arg[i] == '=')
-	{
-		printf("bash: export: `%s': not a valid identifier\n",arg);
-		return (0);
-	}
-	if(arg[i] == '_' && (arg[1] == '=' || arg[1] == '\0'))
-		return (3);
 	while (arg[i] && arg[i] != '=')
 	{
-		// printf("arg[i] -> %c\n",arg[i]);
-		// printf("%s\n",arg);
-		// printf("1 -> %d\n",i);
 		if (i == 0)
 		{
 			if ((arg[i] >= 'a' && arg[i] <= 'z') || (arg[i] >= 'A' && arg[i] <= 'Z')  || arg[i] == '_')
@@ -44,16 +31,14 @@ int	ft_validation_argument(char *arg)
 				return (0);
 			}
 		}
-		// printf("2 -> %d\n",i);
 		if ((arg[i] >= 'a' && arg[i] <= 'z') || (arg[i] >= 'A' && arg[i] <= 'Z')  || (arg[i] == '_') || (arg[i] >= '0' && arg[i] <= '9'))
 			i++;
-		// printf("3 -> %d\n",i);
 		if ( arg[i] == '\0' || arg[i] == '=')
 			return (1);
-		// printf("4 -> %d\n",i);
-		if (!((arg[i] >= 'a' && arg[i] <= 'z') || (arg[i] >= 'A' && arg[i] <= 'Z') || arg[i] == '_' || (arg[i] >= '0' && arg[i] <= '9') || arg[i] == '='))
+		if (!((arg[i] >= 'a' && arg[i] <= 'z') || (arg[i] >= 'A' && arg[i] <= 'Z') 
+			|| arg[i] == '_' || (arg[i] >= '0' && arg[i] <= '9') || arg[i] == '='))
 		{
-			printf("bash: export: `%s': not a valid identifier\n",arg);
+			printf("bash: export: `%s': not a valid identifier\n", arg);
 			return (0);
 		}
 	}

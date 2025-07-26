@@ -174,7 +174,7 @@ int ft_faind_key_in(t_env *e_e, char *key);
 void	ft_echo(char **argv);
 
 //our_cmd/export_chesk.c
-int		ft_validation_argument(char *arg);
+int	ft_validation_argument(char *arg, int i);
 void	ft_printf_export(t_env *export);
 char	*ft_add_env_value(char *arg);
 

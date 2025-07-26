@@ -35,7 +35,5 @@ void	ft_echo(char **argv)
 		i++;
 	}
 	if (check)
-	{
 		printf("\n");
-	}
 }

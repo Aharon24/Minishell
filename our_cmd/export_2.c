@@ -11,11 +11,6 @@ void	ft_add_export_or_env(t_shell *shell, char *arg)
 	n = ft_faind_and_rm(arg,shell);
 	if (n == 2)
 		return ;
-	// if(n == 3)
-	// {
-	// 	shell->export = ft_add_export(shell->export, arg);
-	// 	return ;
-	// }
 	if (arg[i] != '=')
 	{
 		shell->export = ft_add_export(shell->export, arg);

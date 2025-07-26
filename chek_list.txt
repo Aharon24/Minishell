@@ -1,5 +1,0 @@
-$
->>
-error hendling
-leak
-norminet
