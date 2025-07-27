@@ -51,6 +51,7 @@ typedef struct s_command
 	int pip;
 	int	has_heredoc;
 	int	heredoc_fd;
+	int	syntax_error;
 	struct s_command *next;
 }	t_command;
 
@@ -199,5 +200,6 @@ t_env	*ft_faind_and_change(char *argumnet, t_env *env, char *new_path);
 
 // ft_main.c
 void	handle_sigcat(int signum);
+void	handle_sigint(int signum);
 
 #endif

@@ -2,14 +2,20 @@
 
 int	lex_word(char *line, t_token **tokens)
 {
-	int		i;
-	char	*word;
+	int		i = 0;
+	char	quote = 0;
 
-	i = 0;
-	while (line[i] && line[i] != ' ' && line[i] != '|'
-		&& line[i] != '<' && line[i] != '>')
+	while (line[i])
+	{
+		if (!quote && (line[i] == '\'' || line[i] == '\"'))
+			quote = line[i];
+		else if (quote && line[i] == quote)
+			quote = 0;
+		else if (!quote && (line[i] == ' ' || line[i] == '|' || line[i] == '<' || line[i] == '>'))
+			break;
 		i++;
-	word = ft_strndup(&line[0], i);
+	}
+	char *word = ft_strndup(line, i);
 	add_token(tokens, word, TOKEN_WORD);
 	return (i);
 }

@@ -2,11 +2,11 @@
 
 int ft_check_exit_cmd(char **argv)
 {
-	int i;
+	//int i;
 	int number;
 
 	//printf("aaaa\n");
-	i = 0;
+	//i = 0;
 	if (argv[1] == NULL)
 		return (0);
 	else if (ft_ch(argv[1]))
