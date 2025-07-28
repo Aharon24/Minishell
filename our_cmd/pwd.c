@@ -1,29 +1,21 @@
 #include "../minishell.h"
 
-void	ft_pwd(char **argv)
+void	ft_pwd(t_shell *shell, char **argv)
 {
 	char	cwd[4096];
 
-	if (argv[1] != NULL)
-	{
-		printf("Too many arguments\n");
-		g_exit_status = 1;
-		ft_free_arr(argv);
-		return ;
-	}
+	argv = NULL;
+	if(!shell->pwd)
+		shell->pwd = ft_faind_in_env(shell->env, "PWD");
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
 		printf("%s\n", cwd);
 		g_exit_status = 0;
 	}
-	// else if(!cwd)
-	// {
-	// 	printf("--->%s\n", cwd);
-	// }
 	else
 	{
-		perror("minishell: pwd");
-		ft_free_arr(argv);
-		g_exit_status = 1;
+		shell->pwd = ft_strjoin(shell->pwd, "..");
+		printf("%s\n", shell->pwd);
 	}
+		
 }

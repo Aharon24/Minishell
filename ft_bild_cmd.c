@@ -25,7 +25,7 @@ int	ft_bild_cmd_out_fork(char **argv,t_shell *shell)
 void	ft_built_in_faind(char **argv, t_shell *shell)
 {
     if (ft_strncmp(argv[0], "pwd", 3) == 0)
-		ft_pwd(argv);
+		ft_pwd(shell, argv);
     else if (ft_strncmp(argv[0], "env", 3) == 0)
 		ft_env(shell);
 	else if (ft_strncmp(argv[0], "echo", 4) == 0)

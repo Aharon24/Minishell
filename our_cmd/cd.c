@@ -1,5 +1,6 @@
 #include "../minishell.h"
 
+
 void	ft_end_e(t_shell *shell, char *path)
 {
 	if (path[0] == '~' && path[1] == '\0')

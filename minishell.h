@@ -129,7 +129,7 @@ int	ft_ch(char *arr);
 t_command *split_cmd(t_token *tokens, t_shell *shell);
 
 //our_cmd/pwd.c
-void ft_pwd(char **argv);
+void ft_pwd(t_shell *shell, char **argv);
 
 //our_cmd/cd.c
 void ft_cd_more_argument(char  *path, t_shell *shell);
