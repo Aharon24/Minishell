@@ -23,7 +23,7 @@ int	ft_validation_argument(char *arg, int i)
 	{
 		if (i == 0)
 		{
-			if ((arg[i] >= 'a' && arg[i] <= 'z') || (arg[i] >= 'A' && arg[i] <= 'Z')  || arg[i] == '_')
+			if (( (ft_isalpha(arg[i])) || arg[i] == '_'))
 				i++;
 			else
 			{
@@ -31,12 +31,11 @@ int	ft_validation_argument(char *arg, int i)
 				return (0);
 			}
 		}
-		if ((arg[i] >= 'a' && arg[i] <= 'z') || (arg[i] >= 'A' && arg[i] <= 'Z')  || (arg[i] == '_') || (arg[i] >= '0' && arg[i] <= '9'))
+		if ( (ft_isalpha(arg[i]))  || (arg[i] == '_') || (ft_isdigit(arg[i])))
 			i++;
 		if ( arg[i] == '\0' || arg[i] == '=')
 			return (1);
-		if (!((arg[i] >= 'a' && arg[i] <= 'z') || (arg[i] >= 'A' && arg[i] <= 'Z') 
-			|| arg[i] == '_' || (arg[i] >= '0' && arg[i] <= '9') || arg[i] == '='))
+		if (!( (ft_isalnum(arg[i])) || arg[i] == '_' || arg[i] == '='))
 		{
 			printf("bash: export: `%s': not a valid identifier\n", arg);
 			return (0);

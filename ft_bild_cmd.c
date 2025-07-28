@@ -197,10 +197,10 @@ void ft_run_cmd(t_command *cmd_list, t_shell *shell)
         }
 
         pid = fork();
+        signal(SIGINT, handle_sigcat);
+        signal(SIGQUIT, SIG_DFL);
         if (pid == 0)
         {
-            signal(SIGINT, SIG_DFL);
-            signal(SIGQUIT, SIG_DFL);
 
             if (is_pipe)
             {
