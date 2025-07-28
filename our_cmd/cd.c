@@ -20,17 +20,58 @@ void	ft_end_e(t_shell *shell, char *path)
 	}
 }
 
-void	ft_update_pwd(t_shell *shell)
+void ft_update_pwd(t_shell *shell)
 {
-	char	*pwd;
-	char	cwd[4096];
+    char cwd[4096];
+    char *new_pwd;
 
-	pwd = ft_faind_in_env(shell->env, "PWD");
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		pwd = ft_strdup(cwd);
-	ft_faind_and_change("PWD", shell->env, pwd);
-	ft_faind_and_change("OLDPWD", shell->env, shell->old_path);
+    if (getcwd(cwd, sizeof(cwd)) != NULL)
+    {
+        if (shell->pwd)
+            free(shell->pwd);
+        shell->pwd = ft_strdup(cwd);
+    }
+    else
+    {
+        if (shell->pwd)
+        {
+            new_pwd = malloc(strlen(shell->pwd) + 3);
+            if (!new_pwd)
+                return;
+            ft_strlcpy(new_pwd, shell->pwd, 4096);
+            ft_strlcat(new_pwd, "/..", 4096);
+			printf("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
+            free(shell->pwd);
+            shell->pwd = new_pwd;
+        }
+    }
+    ft_faind_and_change("PWD", shell->env, shell->pwd);
+    ft_faind_and_change("OLDPWD", shell->env, shell->old_path);
 }
+
+
+
+// void ft_update_pwd(t_shell *shell)
+// {
+// 	char cwd[4096];
+// 	char *pwd;
+
+// 	if (getcwd(cwd, sizeof(cwd)) != NULL)
+// 	{
+// 		pwd = ft_strdup(cwd);
+// 		if (shell->pwd)
+// 			free(shell->pwd);
+// 		shell->pwd = ft_strdup(cwd);
+// 	}
+// 	else
+// 	{
+// 		pwd = ft_strdup(shell->pwd);
+// 	}
+
+// 	ft_faind_and_change("PWD", shell->env, pwd);
+// 	ft_faind_and_change("OLDPWD", shell->env, shell->old_path);
+// 	free(pwd);
+// }
 
 void	ft_finish(void)
 {
