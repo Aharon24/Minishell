@@ -213,7 +213,6 @@ void run_shell(t_shell *shell)
         }
 
         add_history(shell->line);
-
         if (process_tokens(shell) == -1)
         {
             write(2, "minishell: syntax error\n", 25);
@@ -231,10 +230,11 @@ void run_shell(t_shell *shell)
             continue;
         }
 
+
+		
         ft_run_cmd(cmd, shell);
         cleanup_loop(shell);
         free(shell->line);
     }
-
     free_shell(shell);
 }
