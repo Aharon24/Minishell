@@ -19,13 +19,14 @@ void	free_env(t_env *env)
 
 	while (env)
 	{
-		tmp = env;
-		env = env->next;
-		free(tmp->key);
-		free(tmp->value);
-		free(tmp);
+		tmp = env->next;
+		free(env->key);
+		free(env->value);
+		free(env);
+		env = tmp;
 	}
 }
+
 
 void	free_tokens(t_token **head)
 {

@@ -1,20 +1,23 @@
 #include "../minishell.h"
 
-t_env	*ft_faind_and_change(char *argument, t_env *env, char *new_path)
+t_env *ft_faind_and_change(char *argument, t_env *env, char *new_path)
 {
-	int		len;
-	t_env	*faind;
+    int len;
+    t_env *faind;
 
-	faind = env;
-	len = ft_strlen(argument);
-	while (faind)
-	{
-		if (ft_strncmp(faind->key, argument, len) == 0)
-			break ;
-		faind = faind->next;
-	}
-	faind->value = new_path;
-	return (faind);
+    faind = env;
+    len = ft_strlen(argument);
+    while (faind)
+    {
+        if (ft_strncmp(faind->key, argument, len) == 0)
+        {
+            free(faind->value);
+            faind->value = ft_strdup(new_path);
+            break;
+        }
+        faind = faind->next;
+    }
+    return (faind);
 }
 
 char	*ft_make_path(char *str)

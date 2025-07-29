@@ -146,7 +146,6 @@ int	process_tokens(t_shell *shell)
 {
 	if (tokenize(shell) == -1)
 	{
-		write(2, "minishell: syntax error\n", 25);
 		g_exit_status = 258;
 		free_tokens(&shell->tokens);
 		return (-1);
@@ -160,35 +159,6 @@ int	process_tokens(t_shell *shell)
 	return (0);
 }
 
-// void	run_shell(t_shell *shell)
-// {
-// 	t_command	*cmd;
-
-// 	while (1)
-// 	{
-// 		shell->line = read_line_or_exit();
-// 		if (!shell->line)
-// 			break ;
-// 		if (process_tokens(shell) == -1)
-// 		{
-// 			free(shell->line);
-// 			continue ;
-// 		}
-// 		cmd = split_cmd(shell->tokens, shell);
-// 		if (!cmd)
-// 		{
-// 			g_exit_status = 1;
-// 			free_tokens(&shell->tokens);
-// 			free(shell->line);
-// 			continue ;
-// 		}
-// 		ft_run_cmd(cmd, shell);
-// 		cleanup_loop(shell, &cmd);
-// 		free(shell->line);
-// 	}
-// 	free_shell(shell);
-// }
-
 void run_shell(t_shell *shell)
 {
     t_command *cmd;
@@ -198,7 +168,6 @@ void run_shell(t_shell *shell)
         signal(SIGINT, handle_sigint);
         signal(SIGQUIT, SIG_IGN);
 
-		g_exit_status = 0;
         shell->line = readline("minishell -> ");
         if (!shell->line)
         {
@@ -216,11 +185,10 @@ void run_shell(t_shell *shell)
 
         if (process_tokens(shell) == -1)
         {
-            write(2, "minishell: syntax error\n", 25);
-            g_exit_status = 258;
+            g_exit_status = 2;
             free_tokens(&shell->tokens);
             free(shell->line);
-            continue;
+            continue ;
         }
         cmd = split_cmd(shell->tokens, shell);
         if (!cmd)
@@ -230,11 +198,10 @@ void run_shell(t_shell *shell)
             free(shell->line);
             continue;
         }
-
         ft_run_cmd(cmd, shell);
+		free_cmd(cmd);
         cleanup_loop(shell);
         free(shell->line);
     }
-
     free_shell(shell);
 }

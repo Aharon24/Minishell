@@ -14,6 +14,7 @@ SRC = main.c\
 	run_shell.c\
 	tokenize.c\
 	handle_redirection.c\
+	validation_tokens.c\
 	utils.c\
 	utils_2.c\
 	split_cmd.c\
