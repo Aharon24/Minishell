@@ -1,5 +1,53 @@
 #include "../minishell.h"
 
+int	validate_tokens(t_token *tokens)
+{
+	t_token	*cur;
+
+	cur = tokens;
+	if (!cur)
+		return (0);
+	if (cur->type == TOKEN_PIPE)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+		return (-1);
+	}
+	while (cur)
+	{
+		if (cur->type == TOKEN_PIPE
+			&& (!cur->next || cur->next->type == TOKEN_PIPE))
+		{
+			if (cur->next == NULL)
+				ft_putstr_fd("minishell: syntax error "
+					"near unexpected token `newline'\n", 2);
+			else
+				ft_putstr_fd("minishell: syntax error "
+					"near unexpected token `|'\n", 2);
+			return (-1);
+		}
+		cur = cur->next;
+	}
+	return (0);
+}
+
+int	extract_key_value(char *env_entry, char **key, char **value)
+{
+	char	*equal;
+
+	equal = ft_strchr(env_entry, '=');
+	if (!equal)
+		return (0);
+	*key = ft_strndup(env_entry, equal - env_entry);
+	*value = ft_strdup(equal + 1);
+	if (!*key || !*value)
+	{
+		free(*key);
+		free(*value);
+		return (0);
+	}
+	return (1);
+}
+
 int ft_check_exit_cmd(char **argv)
 {
 	//int i;

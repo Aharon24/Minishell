@@ -1,5 +1,34 @@
 #include "minishell.h"
 
+int	ft_handle_exit_cmd(char **argv)
+{
+	int		i;
+	long	exit_code;
+	char	*endptr;
+
+	if (!argv[1])
+		return (0);
+	exit_code = strtol(argv[1], &endptr, 10);
+	if (*endptr != '\0')
+		return (258);
+	i = 1;
+	while (argv[i])
+		i++;
+	if (i > 2)
+		return (257);
+	return ((int)(exit_code & 0xFF));
+}
+
+void	print_str(const char *str)
+{
+	size_t	len;
+
+	len = 0;
+	while (str[len])
+		len++;
+	write(2, str, len);
+}
+
 char	*get_env_value(char *key, t_env *env)
 {
 	while (env)
@@ -27,65 +56,6 @@ int	copy_var_value(char *res, int j, char *input, int *i, t_env *env)
 	free(name);
 	free(val);
 	return (j);
-}
-
-char	*remove_quotes_and_expand(char *input, t_env *env)
-{
-	int		i;
-	int		j;
-	int		sq;
-	int		dq;
-	int		k;
-	int		len;
-	char	*res;
-	int		o;
-	char 	*exit_code_str;
-
-
-	i = 0;
-	j = 0;
-	sq = 0;
-	dq = 0;
-	len = ft_strlen(input);
-	res = malloc(len * 100 + 1);
-	if (!res)
-		return (NULL);
-	k = 0;
-	while (k < len * 2 + 1)
-		res[k++] = 0;
-	while (input[i])
-	{
-		if (input[i] == '\'' && dq == 0)
-		{
-			sq = !sq;
-			i++;
-		}
-		else if (input[i] == '"' && sq == 0)
-		{
-			dq = !dq;
-			i++;
-		}
-		else if (input[i] == '$' && input[i + 1] == '?' && sq == 0)
-		{
-			exit_code_str = ft_itoa(g_exit_status);
-			o = 0;
-			while (exit_code_str[o])
-				res[j++] = exit_code_str[o++];
-			free(exit_code_str);
-			i += 2;
-		}
-		else if (input[i] == '$' && sq == 0 &&
-			(ft_isalpha(input[i + 1]) || input[i + 1] == '_'))
-			j = copy_var_value(res, j, input, &i, env);
-		else
-		{
-			res[j] = input[i];
-			j++;
-			i++;
-		}
-	}
-	res[j] = '\0';
-	return (res);
 }
 
 int ft_strcmp(char *s1, char *s2)

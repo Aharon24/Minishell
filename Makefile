@@ -9,7 +9,7 @@ LDFLAGS = -lreadline
  
 SRC = main.c\
 	add_.c\
-	ft_free.c\
+	ft_free_1.c\
 	init.c\
 	run_shell.c\
 	tokenize.c\
@@ -17,11 +17,16 @@ SRC = main.c\
 	utils.c\
 	utils_2.c\
 	split_cmd.c\
+	split_cmd_2.c\
+	split_cmd_3.c\
 	our_cmd/cd.c\
 	our_cmd/pwd.c\
 	our_cmd/unset.c\
 	our_cmd/env.c\
-	ft_bild_cmd.c\
+	ft_bild_cmd_1.c\
+	ft_bild_cmd_2.c\
+	ft_bild_cmd_3.c\
+	ft_bild_cmd_helper.c\
 	our_cmd/ft_faind_in_env.c\
 	our_cmd/cd_2.c\
 	our_cmd/export.c\

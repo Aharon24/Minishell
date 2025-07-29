@@ -1,5 +1,19 @@
 #include "minishell.h"
 
+int	init_remove_data(t_expand_data *d, char *input)
+{
+	d->i = 0;
+	d->j = 0;
+	d->sq = 0;
+	d->dq = 0;
+	d->len = ft_strlen(input);
+	d->res = malloc(d->len * 100 + 1);
+	if (!d->res)
+		return (0);
+	ft_memset(d->res, 0, d->len * 100 + 1);
+	return (1);
+}
+
 t_env	*new_env_node(char *key, char *value)
 {
 	t_env	*node;
@@ -15,43 +29,31 @@ t_env	*new_env_node(char *key, char *value)
 
 void	set_home_if_needed(const char *key, const char *value, t_shell *shell)
 {
-	int		size;
-	int		j;
-
 	if (ft_strncmp(key, "HOME", 4) == 0)
 	{
-		size = ft_strlen(value);
-		shell->home = malloc(sizeof(char) * (size + 1));
-		if (!shell->home)
-			return ;
-		j = 0;
-		while (value[j])
-		{
-			shell->home[j] = value[j];
-			j++;
-		}
-		shell->home[j] = '\0';
+		if (shell->home)
+			free(shell->home);
+		shell->home = ft_strdup(value);
 	}
 }
 
 t_env	*process_env_var(char *env_entry, t_shell *shell,
-		t_env **tail, t_env **head)
+			t_env **tail, t_env **head)
 {
-	char	*equal;
 	char	*key;
 	char	*value;
 	t_env	*new;
 
-	equal = ft_strchr(env_entry, '=');
-	if (!equal)
+	if (!extract_key_value(env_entry, &key, &value))
 		return (NULL);
-	key = ft_strndup(env_entry, equal - env_entry);
-	value = ft_strdup(equal + 1);
-	if (ft_strncmp(key, "HOME", 4) == 0)
-		set_home_if_needed(key, value, shell);
+	set_home_if_needed(key, value, shell);
 	new = new_env_node(key, value);
 	if (!new)
+	{
+		free(key);
+		free(value);
 		return (NULL);
+	}
 	if (!*head)
 		*head = new;
 	else
@@ -91,7 +93,7 @@ void	init_shell(t_shell *shell, char **env)
 	shell->env = init_env(env, shell);
 	if (!shell->env)
 	{
-		printf("minishell: failed to initialize environment\n");
+		write(2, "minishell: failed to initialize environment\n", 44);
 		exit(1);
 	}
 }
