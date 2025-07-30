@@ -89,23 +89,6 @@ char	*read_line_or_exit(void)
 	return (line);
 }
 
-int	process_tokens(t_shell *shell)
-{
-	if (tokenize(shell) == -1)
-	{
-		g_exit_status = 258;
-		free_tokens(&shell->tokens);
-		return (-1);
-	}
-	if (validate_tokens(shell->tokens) == -1)
-	{
-		g_exit_status = 2;
-		free_tokens(&shell->tokens);
-		return (-1);
-	}
-	return (0);
-}
-
 void	run_shell(t_shell *shell)
 {
 	t_command	*cmd;
@@ -126,7 +109,7 @@ void	run_shell(t_shell *shell)
 			continue ;
 		}
 		add_history(shell->line);
-		if (process_tokens(shell) == -1)
+		if (tokenize(shell) == -1)
 		{
 			g_exit_status = 2;
 			free_tokens(&shell->tokens);

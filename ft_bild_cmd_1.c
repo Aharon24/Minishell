@@ -70,6 +70,12 @@ void	ft_run_cmd(t_command *cmd_list, t_shell *shell)
 
 	if (read_all_heredocs(cmd_list) == -1)
 		return ;
+	if (validate_tokens(shell->tokens) == -1)
+	{
+		g_exit_status = 2;
+		free_tokens(&shell->tokens);
+		return ;
+	}
 	cmd = cmd_list;
 	prev_fd = -1;
 	while (cmd)
