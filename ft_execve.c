@@ -139,6 +139,7 @@ char	*find_path(t_env *s, char *cmd)
 {
 	char	**paths;
 	char	*path_env;
+	char	*result;
 
 	if (access(cmd, X_OK) == 0)
 		return (ft_strdup(cmd));
@@ -148,5 +149,7 @@ char	*find_path(t_env *s, char *cmd)
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
-	return (find_path_helper(paths, cmd));
+	result = find_path_helper(paths, cmd);
+	ft_free_arr(paths);
+	return (result);
 }

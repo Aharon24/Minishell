@@ -126,6 +126,12 @@ int		lex_pipe(t_token **tokens);
 int		lex_redir(char *line, t_token **tokens);
 int		lex_word(char *line, t_token **tokens);
 
+//validation_tokens.c
+int	is_redirection(t_token_type type);
+int	check_pipe_error(t_token *token);
+int	check_redirection_error(t_token *token);
+int	validate_tokens(t_token *tokens);
+
 //handle_redirection.c
 int		handle_redirections(t_command *cmd);
 int		handle_heredoc(t_redirect *redir, int *heredoc_fd);
@@ -144,7 +150,6 @@ int	ft_handle_exit_cmd(char **argv);
 int	ft_check_exit_cmd(char **argv);
 int	ft_ch(char *arr);
 int	extract_key_value(char *env_entry, char **key, char **value);
-int	validate_tokens(t_token *tokens);
 
 //split_cmd.c
 t_command *split_cmd(t_token *tokens, t_shell *shell);
@@ -176,7 +181,7 @@ char	*remove_quotes_and_expand(char *input, t_env *env);
 void ft_cd_more_argument(char  *path, t_shell *shell);
 void ft_cd(char **argv, t_shell *shell);
 void ft_finish(void);
-void ft_update_pwd(t_shell *shell);
+void ft_update_pwd(t_shell *shell, char *path);
 void ft_end_e(t_shell *shell, char *path);
 
 ///our_cmd/cd_2.c

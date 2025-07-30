@@ -27,17 +27,7 @@ t_env	*new_env_node(char *key, char *value)
 	return (node);
 }
 
-void	set_home_if_needed(const char *key, const char *value, t_shell *shell)
-{
-	if (ft_strncmp(key, "HOME", 4) == 0)
-	{
-		if (shell->home)
-			free(shell->home);
-		shell->home = ft_strdup(value);
-	}
-}
-
-t_env	*process_env_var(char *env_entry, t_shell *shell,
+t_env	*process_env_var(char *env_entry,
 			t_env **tail, t_env **head)
 {
 	char	*key;
@@ -46,7 +36,6 @@ t_env	*process_env_var(char *env_entry, t_shell *shell,
 
 	if (!extract_key_value(env_entry, &key, &value))
 		return (NULL);
-	set_home_if_needed(key, value, shell);
 	new = new_env_node(key, value);
 	if (!new)
 	{
@@ -61,7 +50,7 @@ t_env	*process_env_var(char *env_entry, t_shell *shell,
 	return (new);
 }
 
-t_env	*init_env(char **envp, t_shell *shell)
+t_env	*init_env(char **envp)
 {
 	t_env	*head;
 	t_env	*tail;
@@ -73,7 +62,7 @@ t_env	*init_env(char **envp, t_shell *shell)
 	i = 0;
 	while (envp[i])
 	{
-		new = process_env_var(envp[i], shell, &tail, &head);
+		new = process_env_var(envp[i], &tail, &head);
 		if (new)
 			tail = new;
 		i++;
@@ -90,7 +79,7 @@ void	init_shell(t_shell *shell, char **env)
 	shell->export = NULL;
 	shell->pwd = NULL;
 	shell->check_exit = 0;
-	shell->env = init_env(env, shell);
+	shell->env = init_env(env);
 	if (!shell->env)
 	{
 		write(2, "minishell: failed to initialize environment\n", 44);

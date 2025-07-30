@@ -10,7 +10,10 @@ void	ft_echo(char **argv)
 	j = 0;
 	check = 1;
 	if (!argv[1])
+	{
 		printf("\n");
+		return ;
+	}
 	if (argv[i][0] == '-')
 	{
 		j = 1;
