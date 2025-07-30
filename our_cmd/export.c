@@ -2,15 +2,15 @@
 
 void	ft_validation(char *arg, t_shell *shell)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (arg[0] == '=')
 	{
-		printf("bash: export: `%s': not a valid identifier\n",arg);
+		printf("minishell: export: `%s': not a valid identifier\n", arg);
 		return ;
 	}
-	if(arg[0] == '_' && (arg[1] == '=' || arg[1] == '\0'))
+	if (arg[0] == '_' && (arg[1] == '=' || arg[1] == '\0'))
 		return ;
 	if (ft_validation_argument(arg, i) == 1)
 		ft_add_export_or_env(shell, arg);

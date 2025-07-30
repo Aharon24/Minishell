@@ -14,6 +14,7 @@ SRC = main.c\
 	run_shell.c\
 	tokenize.c\
 	handle_redirection.c\
+	handle_redirection_helper.c\
 	validation_tokens.c\
 	utils.c\
 	utils_2.c\
@@ -30,11 +31,14 @@ SRC = main.c\
 	ft_bild_cmd_helper.c\
 	our_cmd/ft_faind_in_env.c\
 	our_cmd/cd_2.c\
+	our_cmd/cd_helper_2.c\
+	our_cmd/cd_helper.c\
 	our_cmd/export.c\
 	our_cmd/export_2.c\
 	our_cmd/export_3.c\
 	our_cmd/export_chesk.c\
 	ft_execve.c\
+	ft_execve_helper.c\
 	our_cmd/echo.c\
 	ft_free_2.c\
 	#ft_heredoc.c

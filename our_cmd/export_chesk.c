@@ -23,21 +23,22 @@ int	ft_validation_argument(char *arg, int i)
 	{
 		if (i == 0)
 		{
-			if (( (ft_isalpha(arg[i])) || arg[i] == '_'))
+			if (((ft_isalpha(arg[i])) || arg[i] == '_'))
 				i++;
 			else
 			{
-				printf("bash: export: `%s': not a valid identifier\n",arg);
+				printf("minishell: export: `%s': "
+					"not a valid identifier\n", arg);
 				return (0);
 			}
 		}
-		if ( (ft_isalpha(arg[i]))  || (arg[i] == '_') || (ft_isdigit(arg[i])))
+		if ((ft_isalpha(arg[i])) || (arg[i] == '_') || (ft_isdigit(arg[i])))
 			i++;
-		if ( arg[i] == '\0' || arg[i] == '=')
+		if (arg[i] == '\0' || arg[i] == '=')
 			return (1);
-		if (!( (ft_isalnum(arg[i])) || arg[i] == '_' || arg[i] == '='))
+		if (!((ft_isalnum(arg[i])) || arg[i] == '_' || arg[i] == '='))
 		{
-			printf("bash: export: `%s': not a valid identifier\n", arg);
+			printf("minishell: export: `%s': not a valid identifier\n", arg);
 			return (0);
 		}
 	}

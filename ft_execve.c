@@ -29,17 +29,37 @@ int	size_key_value(char *key, char *value)
 	return (i + j + 1);
 }
 
+char	*create_env_entry(const char *key, const char *value)
+{
+	int		key_len;
+	int		val_len;
+	int		i;
+	int		j;
+	char	*entry;
+
+	key_len = ft_strlen(key);
+	val_len = ft_strlen(value);
+	entry = malloc(key_len + val_len + 2);
+	if (!entry)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (key[j])
+		entry[i++] = key[j++];
+	entry[i++] = '=';
+	j = 0;
+	while (value[j])
+		entry[i++] = value[j++];
+	entry[i] = '\0';
+	return (entry);
+}
+
 char	**shell_2_char(t_env *env)
 {
 	char	**my_env;
 	int		size;
 	int		i;
-	int		key_len;
-	int		val_len;
-	int		j;
-	int		t;
 
-	i = 0;
 	size = size_env(env);
 	my_env = malloc((size + 1) * sizeof(char *));
 	if (!my_env)
@@ -47,29 +67,15 @@ char	**shell_2_char(t_env *env)
 		g_exit_status = 1;
 		return (NULL);
 	}
+	i = 0;
 	while (env)
 	{
-		t = 0;
-		j = 0;
-		key_len = 0;
-		val_len = 0;
-		while (env->key[key_len])
-			key_len++;
-		while (env->value[val_len])
-			val_len++;
-		my_env[i] = malloc(key_len + val_len + 2);
+		my_env[i] = create_env_entry(env->key, env->value);
 		if (!my_env[i])
 		{
 			g_exit_status = 1;
 			return (NULL);
 		}
-		while (j < key_len)
-			my_env[i][t++] = env->key[j++];
-		my_env[i][t++] = '=';
-		j = 0;
-		while (j < val_len)
-			my_env[i][t++] = env->value[j++];
-		my_env[i][t] = '\0';
 		i++;
 		env = env->next;
 	}
@@ -83,7 +89,7 @@ void	ft_execve(char **argv, t_shell *shell)
 	char	**my_env;
 
 	my_env = NULL;
-	cmd_path = find_path(shell->env,argv[0]);
+	cmd_path = find_path(shell->env, argv[0]);
 	if (!cmd_path)
 	{
 		write(2, "minishell: ", 11);
@@ -104,52 +110,4 @@ void	ft_execve(char **argv, t_shell *shell)
 	write(2, "\n", 1);
 	g_exit_status = 126;
 	exit(g_exit_status);
-}
-
-
-char	*find_path_helper(char **paths, char *cmd)
-{
-	int		i;
-	char	*tmp;
-	char	*full_path;
-
-	i = 0;
-	while (paths[i])
-	{
-		tmp = ft_strjoin(paths[i], "/");
-		if (!tmp)
-			break ;
-		full_path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (!full_path)
-			break ;
-		if (access(full_path, X_OK) == 0)
-		{
-			//free_split(paths);
-			return (full_path);
-		}
-		free(full_path);
-		i++;
-	}
-	//free_split(paths);
-	return (NULL);
-}
-
-char	*find_path(t_env *s, char *cmd)
-{
-	char	**paths;
-	char	*path_env;
-	char	*result;
-
-	if (access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
-	path_env = ft_faind_in_env(s, "PATH");
-	if (!path_env)
-		return (NULL);
-	paths = ft_split(path_env, ':');
-	if (!paths)
-		return (NULL);
-	result = find_path_helper(paths, cmd);
-	ft_free_arr(paths);
-	return (result);
 }

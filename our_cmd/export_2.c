@@ -3,12 +3,12 @@
 void	ft_add_export_or_env(t_shell *shell, char *arg)
 {
 	int	i;
-	int n;
+	int	n;
 
 	i = 0;
 	while (arg[i] && arg[i] != '=')
 		i++;
-	n = ft_faind_and_rm(arg,shell);
+	n = ft_faind_and_rm(arg, shell);
 	if (n == 2)
 		return ;
 	if (arg[i] != '=')
@@ -76,7 +76,7 @@ t_env	*ft_add_env(t_env *env, char *arg)
 	while (arg[i] && arg[i] != '=')
 		i++;
 	if (arg[i + 1] == '\0')
-		value = ft_strdup("");/////?????
+		value = ft_strdup("");
 	else
 		value = ft_add_env_value(arg);
 	start->next = new_env_node(key, value);

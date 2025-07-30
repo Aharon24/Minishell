@@ -40,17 +40,35 @@ char	*get_env_value(char *key, t_env *env)
 	return (ft_strdup(""));
 }
 
-int	copy_var_value(char *res, int j, char *input, int *i, t_env *env)
+// int	copy_var_value(char *res, int j, char *input, int *i, t_env *env)
+// {
+// 	int		start;
+// 	char	*name;
+// 	char	*val;
+
+// 	start = ++(*i);
+// 	while (ft_isalnum(input[*i]) || input[*i] == '_')
+// 		(*i)++;
+// 	name = ft_substr(input, start, *i - start);
+// 	val = get_env_value(name, env);
+// 	ft_strlcpy(res + j, val, ft_strlen(val) + 1);
+// 	j += ft_strlen(val);
+// 	free(name);
+// 	free(val);
+// 	return (j);
+// }
+
+int	copy_var_value(char *res, int j, t_expand_ctx *ctx)
 {
 	int		start;
 	char	*name;
 	char	*val;
 
-	start = ++(*i);
-	while (ft_isalnum(input[*i]) || input[*i] == '_')
-		(*i)++;
-	name = ft_substr(input, start, *i - start);
-	val = get_env_value(name, env);
+	start = ++(*ctx->i);
+	while (ft_isalnum(ctx->input[*ctx->i]) || ctx->input[*ctx->i] == '_')
+		(*ctx->i)++;
+	name = ft_substr(ctx->input, start, *ctx->i - start);
+	val = get_env_value(name, ctx->env);
 	ft_strlcpy(res + j, val, ft_strlen(val) + 1);
 	j += ft_strlen(val);
 	free(name);
@@ -58,15 +76,14 @@ int	copy_var_value(char *res, int j, char *input, int *i, t_env *env)
 	return (j);
 }
 
-int ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(char *s1, char *s2)
 {
 	if (!s1 && !s2)
-		return 0;
+		return (0);
 	if (!s1)
-		return -1;
+		return (-1);
 	if (!s2)
-		return 1;
-
+		return (1);
 	while (*s1 && (*s1 == *s2))
 	{
 		s1++;
@@ -74,21 +91,3 @@ int ft_strcmp(char *s1, char *s2)
 	}
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
-
-
-char	*ft_strndup(char *line, int n)
-{
-	char	*new;
-	int		i;
-
-	i = 0;
-	new = malloc(sizeof(char) * (n + 1));
-	while (line[i] && i < n)
-	{
-		new[i] = line[i];
-		i++;
-	}
-	new[i] = '\0';
-	return (new);
-}
-

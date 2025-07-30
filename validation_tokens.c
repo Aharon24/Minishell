@@ -10,12 +10,14 @@ int	check_pipe_error(t_token *token)
 {
 	if (!token->next)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+		ft_putstr_fd("minishell: syntax error"
+			" near unexpected token `newline'\n", 2);
 		return (-1);
 	}
 	if (token->next->type == TOKEN_PIPE)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+		ft_putstr_fd("minishell: syntax error"
+			" near unexpected token `|'\n", 2);
 		return (-1);
 	}
 	return (0);
@@ -25,7 +27,8 @@ int	check_redirection_error(t_token *token)
 {
 	if (!token->next)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+		ft_putstr_fd("minishell: syntax error near"
+			" unexpected token `newline'\n", 2);
 		return (-1);
 	}
 	if (token->next->type != TOKEN_WORD)

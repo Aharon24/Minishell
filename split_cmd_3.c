@@ -58,23 +58,42 @@
 // 	return (res);
 // }
 
-int	handle_dollar_case(char *input, t_expand_data *d,
-	t_env *env, int *i)
+// int	handle_dollar_case(char *input, t_expand_data *d,
+// 	t_env *env, int *i)
+// {
+// 	char	*exit_str;
+// 	int		o;
+
+// 	if (input[*i + 1] == '?')
+// 	{
+// 		exit_str = ft_itoa(g_exit_status);
+// 		o = 0;
+// 		while (exit_str[o])
+// 			d->res[d->j++] = exit_str[o++];
+// 		free(exit_str);
+// 		*i += 2;
+// 	}
+// 	else
+// 		d->j = copy_var_value(d->res, d->j, input, i, env);
+// 	return (0);
+// }
+
+int	handle_dollar_case(t_expand_ctx *ctx, t_expand_data *d)
 {
 	char	*exit_str;
 	int		o;
 
-	if (input[*i + 1] == '?')
+	if (ctx->input[*ctx->i + 1] == '?')
 	{
 		exit_str = ft_itoa(g_exit_status);
 		o = 0;
 		while (exit_str[o])
 			d->res[d->j++] = exit_str[o++];
 		free(exit_str);
-		*i += 2;
+		*ctx->i += 2;
 	}
 	else
-		d->j = copy_var_value(d->res, d->j, input, i, env);
+		d->j = copy_var_value(d->res, d->j, ctx);
 	return (0);
 }
 
@@ -95,37 +114,43 @@ int	handle_quotes(char *input, t_expand_data *d)
 	return (0);
 }
 
-void	handle_dollar_or_char(char *input, t_expand_data *d, t_env *env)
+void	handle_dollar_or_char(t_expand_ctx *ctx, t_expand_data *d)
 {
-	if (input[d->i] == '$' && d->sq == 0)
+	if (ctx->input[d->i] == '$' && d->sq == 0)
 	{
-		if (input[d->i + 1] == '?'
-			|| ft_isalpha(input[d->i + 1]) || input[d->i + 1] == '_')
-			handle_dollar_case(input, d, env, &d->i);
+		if (ctx->input[d->i + 1] == '?'
+			|| ft_isalpha(ctx->input[d->i + 1])
+			|| ctx->input[d->i + 1] == '_')
+		{
+			handle_dollar_case(ctx, d);
+		}
 		else
-			d->res[d->j++] = input[d->i++];
+			d->res[d->j++] = ctx->input[d->i++];
 	}
 	else
-		d->res[d->j++] = input[d->i++];
+		d->res[d->j++] = ctx->input[d->i++];
 }
 
-void	copy_without_quotes_and_expand(char *input,
-	t_expand_data *d, t_env *env)
+void	copy_without_quotes_and_expand(t_expand_ctx *ctx, t_expand_data *d)
 {
-	while (input[d->i])
+	while (ctx->input[d->i])
 	{
-		if (!handle_quotes(input, d))
-			handle_dollar_or_char(input, d, env);
+		if (!handle_quotes(ctx->input, d))
+			handle_dollar_or_char(ctx, d);
 	}
 }
 
 char	*remove_quotes_and_expand(char *input, t_env *env)
 {
 	t_expand_data	d;
+	t_expand_ctx	ctx;
 
 	if (!init_remove_data(&d, input))
 		return (NULL);
-	copy_without_quotes_and_expand(input, &d, env);
+	ctx.input = input;
+	ctx.i = &d.i;
+	ctx.env = env;
+	copy_without_quotes_and_expand(&ctx, &d);
 	d.res[d.j] = '\0';
 	return (d.res);
 }

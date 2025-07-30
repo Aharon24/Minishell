@@ -45,7 +45,8 @@ void	wait_all_and_handle(void)
 	pid_t	pid;
 	int		sig;
 
-	while ((pid = wait(&wstatus)) > 0)
+	pid = wait(&wstatus);
+	while (pid > 0)
 	{
 		if ((wstatus & 0x7f) != 0)
 		{
@@ -58,6 +59,7 @@ void	wait_all_and_handle(void)
 		{
 			g_exit_status = (wstatus >> 8) & 0xff;
 		}
+		pid = wait(&wstatus);
 	}
 }
 

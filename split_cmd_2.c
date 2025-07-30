@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-int process_redirect(t_token **tokens, t_command *new_cmd, t_shell *shell)
+int	process_redirect(t_token **tokens, t_command *new_cmd, t_shell *shell)
 {
-	t_redirect *redir;
+	t_redirect	*redir;
 
 	redir = malloc(sizeof(t_redirect));
 	if (!redir)
@@ -12,14 +12,14 @@ int process_redirect(t_token **tokens, t_command *new_cmd, t_shell *shell)
 	redir->filename = NULL;
 	if (*tokens && (*tokens)->type == TOKEN_WORD)
 	{
-		redir->filename = remove_quotes_and_expand((*tokens)->value, shell->env);
+		redir->filename
+			= remove_quotes_and_expand((*tokens)->value, shell->env);
 		*tokens = (*tokens)->next;
 	}
 	redir->next = NULL;
 	add_redirect(&new_cmd->redirects, redir);
 	return (0);
 }
-
 
 int	fill_argv_and_redirects(t_token **tokens,
 	t_command *new_cmd, t_shell *shell)

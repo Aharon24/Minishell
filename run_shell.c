@@ -50,59 +50,6 @@
 // 	}
 // }
 
-// void run_shell(t_shell *shell)
-// {
-//     t_command *cmd;
-
-//     while (1)
-//     {
-//         signal(SIGINT, handle_sigint);
-//         signal(SIGQUIT, SIG_IGN);
-//         shell->line = readline("minishell -> ");
-//         if (!shell->line)
-//         {
-//             write(1, "exit\n", 5);
-//             break;
-//         }
-
-//         if (shell->line[0] == '\0')
-//         {
-//             free(shell->line);
-//             continue;
-//         }
-
-//         add_history(shell->line);
-
-//         if (tokenize(shell) == -1)
-//         {
-//             write(2, "minishell: syntax error\n", 25);
-//             g_exit_status = 258;
-//             free_tokens(&shell->tokens);
-//             free(shell->line);
-//             continue;
-//         }
-//         if (validate_tokens(shell->tokens) == -1)
-//         {
-//             g_exit_status = 2;
-//             free_tokens(&shell->tokens);
-//             free(shell->line);
-//             continue;
-//         }
-//         cmd = split_cmd(shell->tokens, shell);
-//         if (!cmd)
-//         {
-//             g_exit_status = 1;
-//             free_tokens(&shell->tokens);
-//             free(shell->line);
-//             continue;
-//         }
-//         ft_run_cmd(cmd, shell);
-//         cleanup_loop(shell, &cmd);
-//         free(shell->line);
-//     }
-//     free_shell(shell);
-// }
-
 void	handle_sigint(int signum)
 {
 	(void)signum;
@@ -159,49 +106,45 @@ int	process_tokens(t_shell *shell)
 	return (0);
 }
 
-void run_shell(t_shell *shell)
+void	run_shell(t_shell *shell)
 {
-    t_command *cmd;
+	t_command	*cmd;
 
-    while (1)
-    {
-        signal(SIGINT, handle_sigint);
-        signal(SIGQUIT, SIG_IGN);
-
-        shell->line = readline("minishell -> ");
-        if (!shell->line)
-        {
-            write(1, "exit\n", 5);
-            break;
-        }
-
-        if (shell->line[0] == '\0')
-        {
-            free(shell->line);
-            continue;
-        }
-
-        add_history(shell->line);
-        if (process_tokens(shell) == -1)
-        {
-            g_exit_status = 2;
-            free_tokens(&shell->tokens);
-            free(shell->line);
-            continue ;
-        }
-        cmd = split_cmd(shell->tokens, shell);
-        if (!cmd)
-        {
-            g_exit_status = 1;
-            free_tokens(&shell->tokens);
-            free(shell->line);
-            continue;
-        }
-
-        ft_run_cmd(cmd, shell);
+	while (1)
+	{
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
+		shell->line = readline("minishell -> ");
+		if (!shell->line)
+		{
+			write(1, "exit\n", 5);
+			break ;
+		}
+		if (shell->line[0] == '\0')
+		{
+			free(shell->line);
+			continue ;
+		}
+		add_history(shell->line);
+		if (process_tokens(shell) == -1)
+		{
+			g_exit_status = 2;
+			free_tokens(&shell->tokens);
+			free(shell->line);
+			continue ;
+		}
+		cmd = split_cmd(shell->tokens, shell);
+		if (!cmd)
+		{
+			g_exit_status = 1;
+			free_tokens(&shell->tokens);
+			free(shell->line);
+			continue ;
+		}
+		ft_run_cmd(cmd, shell);
 		free_cmd(cmd);
-        cleanup_loop(shell);
-        free(shell->line);
-    }
-    free_shell(shell);
+		cleanup_loop(shell);
+		free(shell->line);
+	}
+	free_shell(shell);
 }

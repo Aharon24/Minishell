@@ -38,6 +38,13 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_expand_ctx
+{
+	char	*input;
+	int		*i;
+	t_env	*env;
+}	t_expand_ctx;
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -137,16 +144,20 @@ int			handle_redirections(t_command *cmd);
 int			handle_heredoc(t_redirect *redir, int *heredoc_fd);
 int			read_all_heredocs(t_command *cmd_list);
 int			check_redirections(t_command *cmd, int fd);
+//handle_redirection_helper.c
+int			foo(char *name);
+int			foo2(char *name);
+int			foo3(char *name);
 
 //utils.c
-char		*ft_strndup(char *line, int n);
 int			ft_strcmp(char *s1, char *s2);
 char		*get_env_value(char *key, t_env *env);
-int			copy_var_value(char *res, int j, char *input, int *i, t_env *env);
+int			copy_var_value(char *res, int j, t_expand_ctx *ctx);
 void		print_str(const char *str);
 int			ft_handle_exit_cmd(char **argv);
 
 ///utils_2.c
+char		*ft_strndup(char *line, int n);
 int			ft_check_exit_cmd(char **argv);
 int			ft_ch(char *arr);
 int			extract_key_value(char *env_entry, char **key, char **value);
@@ -172,19 +183,13 @@ int			process_redirect(t_token **tokens,
 
 //split_cmd_3.c
 char		*remove_quotes_and_expand(char *input, t_env *env);
-void		copy_without_quotes_and_expand(char *input,
-				t_expand_data *d, t_env *env);
-void		handle_dollar_or_char(char *input, t_expand_data *d, t_env *env);
 int			handle_quotes(char *input, t_expand_data *d);
-int			handle_dollar_case(char *input,
-				t_expand_data *d, t_env *env, int *i);
+int			handle_dollar_case(t_expand_ctx *ctx, t_expand_data *d);
 
 //our_cmd/pwd.c
 void		ft_pwd(t_shell *shell);
-int			handle_dollar_case(char *input,
-				t_expand_data *d, t_env *env, int *i);
-void		copy_without_quotes_and_expand(char *input,
-				t_expand_data *d, t_env *env);
+void		copy_without_quotes_and_expand(t_expand_ctx *ctx, t_expand_data *d);
+void		handle_dollar_or_char(t_expand_ctx *ctx, t_expand_data *d);
 char		*remove_quotes_and_expand(char *input, t_env *env);
 
 //our_cmd/cd.c
@@ -199,8 +204,19 @@ void		ft_check_t(t_shell *shell, char *path);
 int			ft_check_len_argv(char **argv);
 
 //our_cmd/cd_3.c
-
 void		ft_chesk_home(t_shell *s_shell);
+
+//our_cmd/cd_helper_2.c
+void		ft_resolve_pwd(char **new_pwd, t_shell *shell, char *path);
+void		ft_handle_cd_dash(t_shell *shell);
+void		ft_handle_cd_home(t_shell *shell);
+
+//our_cmd/cd_delper_2.c
+void		ft_one(char **new_pwd, t_shell *shell);
+void		ft_two(char **new_pwd, t_shell *shell);
+void		ft_dash(char **new_pwd, t_shell *shell);
+void		ft_tilda(char **new_pwd, t_shell *shell);
+void		ft_relative(char **new_pwd, t_shell *shell, char *path);
 
 //our_cmd/unset.c
 void		unset_env(t_env **env, char *key);
@@ -231,6 +247,7 @@ int			ft_faind_key_in(t_env *e_e, char *key);
 
 //our_cmd/echo.c
 void		ft_echo(char **argv);
+int			ft_check_n_flag(char **argv, int *i);
 
 //our_cmd/export_chesk.c
 int			ft_validation_argument(char *arg, int i);
@@ -239,11 +256,14 @@ char		*ft_add_env_value(char *arg);
 
 ///ft_exece.c
 void		ft_execve(char **argv, t_shell *shell);
-char		*find_path_helper(char **paths, char *cmd);
-char		*find_path(t_env *s, char *cmd);
 char		*ft_add_env_key(char *arg);
 int			ft_chesk_eqvel(char *str);
 char		**shell_2_char(t_env *env);
+char		*create_env_entry(const char *key, const char *value);
+
+//ft_execve_helper.c
+char		*find_path(t_env *s, char *cmd);
+char		*find_path_helper(char **paths, char *cmd);
 
 //ft_bild_cmd_1.c
 void		ft_built_in_faind(char **argv, t_shell *shell);

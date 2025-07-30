@@ -18,41 +18,53 @@ int	extract_key_value(char *env_entry, char **key, char **value)
 	return (1);
 }
 
-int ft_check_exit_cmd(char **argv)
+int	ft_check_exit_cmd(char **argv)
 {
-	//int i;
-	int number;
+	int	number;
 
-	//printf("aaaa\n");
-	//i = 0;
+	number = 0;
 	if (argv[1] == NULL)
 		return (0);
 	else if (ft_ch(argv[1]))
 	{
 		return (258);
 	}
-	else if(argv[2])
+	else if (argv[2])
 		return (257);
 	number = ft_atoi(argv[1]);
-	//printf("11 ->%d\n",number);
-	if(number >= 256)
+	if (number >= 256)
 		g_exit_status = number % 256;
 	else
 		g_exit_status = number;
 	return (g_exit_status);
-
 }
 
-int ft_ch(char *arr)
+int	ft_ch(char *arr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (arr[i])
 	{
-		if( !(arr[i] >= '0' && arr[i] <= '9'))
+		if (!(arr[i] >= '0' && arr[i] <= '9'))
 			return (1);
 		i++;
 	}
 	return (0);
+}
+
+char	*ft_strndup(char *line, int n)
+{
+	char	*new;
+	int		i;
+
+	i = 0;
+	new = malloc(sizeof(char) * (n + 1));
+	while (line[i] && i < n)
+	{
+		new[i] = line[i];
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
 }
