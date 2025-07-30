@@ -13,7 +13,7 @@ int	ft_handle_command(t_command *cmd, t_shell *shell, int *prev_fd)
 	return (ft_fork_and_manage(cmd, shell, pipefd, prev_fd));
 }
 
-void    safe_exit(int status)
+void	safe_exit(int status)
 {
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);

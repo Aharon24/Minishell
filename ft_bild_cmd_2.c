@@ -2,9 +2,12 @@
 
 int	ft_handle_empty_cmd(t_command *cmd)
 {
+	int	fd;
+
+	fd = 0;
 	if (cmd->has_heredoc)
 		close(cmd->heredoc_fd);
-	if (check_redirections(cmd) == -1)
+	if (check_redirections(cmd, fd) == -1)
 		g_exit_status = 1;
 	return (0);
 }

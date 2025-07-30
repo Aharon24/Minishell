@@ -33,10 +33,9 @@ int	read_all_heredocs(t_command *cmd_list)
 	return (0);
 }
 
-int	check_redirections(t_command *cmd)
+int	check_redirections(t_command *cmd, int fd)
 {
 	t_redirect	*redir;
-	int			fd;
 
 	redir = cmd->redirects;
 	while (redir)

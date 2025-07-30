@@ -25,62 +25,67 @@ void ft_update_pwd(t_shell *shell, char *path)
     char cwd[4096];
     char *new_pwd;
 
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-    {
-        if (shell->pwd)
-            free(shell->pwd);
-        shell->pwd = ft_strdup(cwd);
-    }
-    else
-    {
-        if (!shell->pwd)
-            return;
-
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	{
+		if (shell->pwd)
+			free(shell->pwd);
+		shell->pwd = ft_strdup(cwd);
+	}
+	else
+	{
+		if (!shell->pwd)
+			return;
         if (ft_strcmp(path, ".") == 0)
         {
+			new_pwd = malloc(ft_strlen(shell->pwd) + 3);
+			if (!new_pwd)
+				return;
+			ft_strlcpy(new_pwd, shell->pwd, ft_strlen(shell->pwd) + 1);
+			ft_strlcat(new_pwd, "/.", ft_strlen(shell->pwd) + 3);
+			free(shell->pwd);
+			shell->pwd = new_pwd;
         }
-        else if (ft_strcmp(path, "..") == 0)
-        {
-            new_pwd = malloc(ft_strlen(shell->pwd) + 4);
-            if (!new_pwd)
-                return;
-            ft_strlcpy(new_pwd, shell->pwd, ft_strlen(shell->pwd) + 1);
-            ft_strlcat(new_pwd, "/..", ft_strlen(shell->pwd) + 4);
-            free(shell->pwd);
-            shell->pwd = new_pwd;
-        }
-        else if (path[0] == '/')
-        {
-            free(shell->pwd);
-            shell->pwd = ft_strdup(path);
-        }
+		else if (ft_strcmp(path, "..") == 0)
+		{
+			new_pwd = malloc(ft_strlen(shell->pwd) + 4);
+			if (!new_pwd)
+				return;
+			ft_strlcpy(new_pwd, shell->pwd, ft_strlen(shell->pwd) + 1);
+			ft_strlcat(new_pwd, "/..", ft_strlen(shell->pwd) + 4);
+			free(shell->pwd);
+			shell->pwd = new_pwd;
+		}
+		else if (path[0] == '/')
+		{
+			free(shell->pwd);
+			shell->pwd = ft_strdup(path);
+		}
         else if (ft_strcmp(path, "-") == 0)
-        {
-            free(shell->pwd);
-            shell->pwd = ft_strdup(shell->old_path ? shell->old_path : "");
+		{
+			free(shell->pwd);
+			shell->pwd = ft_strdup(shell->old_path ? shell->old_path : "");
+		}
+		else if (path[0] == '~')
+		{
+			free(shell->pwd);
+			shell->pwd = ft_strdup(shell->home ? shell->home : "");	
+		}
+		else
+		{
+			new_pwd = malloc(ft_strlen(shell->pwd) + ft_strlen(path) + 2);
+			if (!new_pwd)
+				return;
+			ft_strlcpy(new_pwd, shell->pwd, ft_strlen(shell->pwd) + 1);
+			ft_strlcat(new_pwd, "/", ft_strlen(shell->pwd) + ft_strlen(path) + 2);
+			ft_strlcat(new_pwd, path, ft_strlen(shell->pwd) + ft_strlen(path) + 2);
+			free(shell->pwd);
+			shell->pwd = new_pwd;
         }
-        else if (path[0] == '~')
-        {
-            free(shell->pwd);
-            shell->pwd = ft_strdup(shell->home ? shell->home : "");
-        }
-        else
-        {
-            new_pwd = malloc(ft_strlen(shell->pwd) + ft_strlen(path) + 2);
-            if (!new_pwd)
-                return;
-            ft_strlcpy(new_pwd, shell->pwd, ft_strlen(shell->pwd) + 1);
-            ft_strlcat(new_pwd, "/", ft_strlen(shell->pwd) + ft_strlen(path) + 2);
-            ft_strlcat(new_pwd, path, ft_strlen(shell->pwd) + ft_strlen(path) + 2);
-            free(shell->pwd);
-            shell->pwd = new_pwd;
-        }
-        printf("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
-    }
-    ft_faind_and_change("PWD", shell->env, shell->pwd);
-    ft_faind_and_change("OLDPWD", shell->env, shell->old_path);
+		printf("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
+	}
+	ft_faind_and_change("PWD", shell->env, shell->pwd);
+	ft_faind_and_change("OLDPWD", shell->env, shell->old_path);
 }
-
 
 void	ft_finish(void)
 {
@@ -98,7 +103,6 @@ void	ft_cd_more_argument(char *path, t_shell *shell)
 	{
 		pwd = ft_faind_in_env(shell->env, "PWD");
 		oldpwd = ft_faind_in_env(shell->env, "OLDPWD");
-
 		if (!shell->old_path)
 			shell->old_path = ft_strdup(pwd);
 		else
@@ -106,11 +110,10 @@ void	ft_cd_more_argument(char *path, t_shell *shell)
 			free(shell->old_path);
 			shell->old_path = ft_strdup(oldpwd);
 		}
-
 		if (chdir(shell->old_path) != 0)
 		{
 			perror(shell->old_path);
-			return;
+			return ;
 		}
 		free(shell->temp);
 		shell->temp = ft_strdup(pwd);
@@ -132,7 +135,7 @@ void	ft_cd_more_argument(char *path, t_shell *shell)
 
 void	ft_cd(char **argv, t_shell *shell)
 {
-	char *pwd;
+	char	*pwd;
 
 	shell->home_chesk = ft_faind_in_env(shell->env, "HOME");
 	if (shell->home_chesk)
@@ -141,7 +144,6 @@ void	ft_cd(char **argv, t_shell *shell)
 			free(shell->home);
 		shell->home = ft_strdup(shell->home_chesk);
 	}
-
 	if (argv[1] == NULL)
 	{
 		if (shell->home != NULL)
