@@ -1,5 +1,31 @@
 #include "minishell.h"
 
+void	ft_exec_or_exit(t_command *cmd, t_shell *shell)
+{
+	char	*path;
+	char	**envp;
+
+	handle_exit_and_builtins(cmd, shell);
+	path = find_path(shell->env, cmd->argv[0]);
+	if (!path)
+	{
+		if (cmd->pip)
+			exit(127);
+		write(2, "minishell: ", 11);
+		write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
+		write(2, ": command not found\n", 20);
+		exit(127);
+	}
+	envp = shell_2_char(shell->env);
+	execve(path, cmd->argv, envp);
+	if (cmd->pip)
+		exit(126);
+	write(2, "minishell: ", 11);
+	write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
+	write(2, ": Permission denied\n", 20);
+	exit(126);
+}
+
 int	ft_handle_empty_cmd(t_command *cmd)
 {
 	int	fd;
@@ -27,9 +53,7 @@ pid_t	ft_fork_and_manage(t_command *cmd, t_shell *shell,
 	return (pid);
 }
 
-
-void	ft_child(t_command *cmd, t_shell *shell,
-			int pipefd[2], int prev_fd)
+void	ft_child(t_command *cmd, t_shell *shell, int pipefd[2], int prev_fd)
 {
 	if (cmd->pip)
 	{
@@ -38,35 +62,18 @@ void	ft_child(t_command *cmd, t_shell *shell,
 		close(pipefd[1]);
 	}
 	if (cmd->has_heredoc)
+	{
 		dup2(cmd->heredoc_fd, STDIN_FILENO);
+		close(cmd->heredoc_fd);
+	}
 	else if (prev_fd != -1)
+	{
 		dup2(prev_fd, STDIN_FILENO);
+		close(prev_fd);
+	}
 	if (handle_redirections(cmd) == -1)
 		exit(1);
 	ft_exec_or_exit(cmd, shell);
-}
-
-void	ft_exec_or_exit(t_command *cmd, t_shell *shell)
-{
-	int	status;
-
-	if (ft_strcmp(cmd->argv[0], "exit") == 0)
-	{
-		status = ft_check_exit_cmd(cmd->argv);
-		if (status == 257)
-		{
-			write(2, "exit: too many arguments\n", 26);
-			safe_exit(1);
-		}
-		else if (status == 258)
-		{
-			write(2, "exit: numeric argument required\n", 33);
-			safe_exit(2);
-		}
-		exit(status);
-	}
-	ft_built_in_faind(cmd->argv, shell);
-	exit(g_exit_status);
 }
 
 void	ft_parent(t_command *cmd, int *prev_fd, int pipefd[2])

@@ -54,27 +54,15 @@ char	*create_env_entry(const char *key, const char *value)
 	return (entry);
 }
 
-static void	free_env_array(char **env_arr, int count)
-{
-	int i;
-	for (i = 0; i < count; i++)
-		free(env_arr[i]);
-	free(env_arr);
-}
-
-char **shell_2_char(t_env *env)
+char	**shell_2_char(t_env *env)
 {
 	char	**my_env;
 	int		size;
 	int		i;
 
-	size = size_env(env);
-	my_env = malloc((size + 1) * sizeof(char *));
+	my_env = allocate_env_array(env, &size);
 	if (!my_env)
-	{
-		g_exit_status = 1;
 		return (NULL);
-	}
 	i = 0;
 	while (env)
 	{
@@ -91,7 +79,6 @@ char **shell_2_char(t_env *env)
 	my_env[i] = NULL;
 	return (my_env);
 }
-
 
 void	ft_execve(char **argv, t_shell *shell)
 {

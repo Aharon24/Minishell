@@ -68,3 +68,16 @@ char	*ft_strndup(char *line, int n)
 	new[i] = '\0';
 	return (new);
 }
+
+void	free_env_array(char **env_arr, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		free(env_arr[i]);
+		i++;
+	}
+	free(env_arr);
+}

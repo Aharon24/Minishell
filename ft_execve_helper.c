@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+char	**allocate_env_array(t_env *env, int *out_size)
+{
+	char	**my_env;
+	int		size;
+
+	size = size_env(env);
+	my_env = malloc((size + 1) * sizeof(char *));
+	if (!my_env)
+	{
+		g_exit_status = 1;
+		return (NULL);
+	}
+	*out_size = size;
+	return (my_env);
+}
+
 char	*find_path_helper(char **paths, char *cmd)
 {
 	int		i;

@@ -23,6 +23,8 @@ SRC = main.c\
 	split_cmd_3.c\
 	our_cmd/cd.c\
 	our_cmd/pwd.c\
+	run_shell_helper.c\
+	ft_bild_cmd_helper_2.c\
 	our_cmd/unset.c\
 	our_cmd/env.c\
 	ft_bild_cmd_1.c\

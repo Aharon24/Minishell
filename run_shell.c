@@ -1,92 +1,40 @@
 #include "minishell.h"
 
-// void	print_tokens(t_token *tokens)
-// {
-// 	while (tokens)
-// 	{
-// 		printf("TOKEN: %-15s TYPE: %d\n", tokens->value, tokens->type);
-// 		tokens = tokens->next;
-// 	}
-// }
-
-// void	print_cmd(t_command *cmd)
-// {
-// 	int			i;
-// 	t_redirect	*redir;
-// 	int			cmd_index;
-
-// 	cmd_index = 0;
-// 	while (cmd)
-// 	{
-// 		printf("\n=== Command %d ===\n", cmd_index++);
-// 		printf("argv: ");
-// 		if (cmd->argv)
-// 		{
-// 			i = 0;
-// 			while (cmd->argv[i])
-// 			{
-// 				printf("[%s] ", cmd->argv[i]);
-// 				i++;
-// 			}
-// 		}
-// 		else
-// 			printf("(null)");
-// 		printf("\n");
-// 		printf("pipe: %d\n", cmd->pip);
-// 		redir = cmd->redirects;
-// 		while (redir)
-// 		{
-// 			if (redir->type == TOKEN_REDIRECT_IN)
-// 				printf("redirect in:    %s\n", redir->filename);
-// 			else if (redir->type == TOKEN_REDIRECT_OUT)
-// 				printf("redirect out:   %s\n", redir->filename);
-// 			else if (redir->type == TOKEN_REDIRECT_APPEND)
-// 				printf("redirect append: %s\n", redir->filename);
-// 			else if (redir->type == TOKEN_HEREDOC)
-// 				printf("heredoc:        %s\n", redir->filename);
-// 			redir = redir->next;
-// 		}
-// 		cmd = cmd->next;
-// 	}
-// }
-
-void	handle_sigint(int signum)
+void	setup_signals(void)
 {
-	(void)signum;
-	g_exit_status = 130;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-void	handle_sigcat(int signum)
-{
-	(void)signum;
-	g_exit_status = 130;
-	rl_on_new_line();
-	rl_replace_line("", 0);
-}
-
-char	*read_line_or_exit(void)
+char	*read_input()
 {
 	char	*line;
 
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
 	line = readline("minishell -> ");
 	if (!line)
 	{
 		write(1, "exit\n", 5);
-		return (NULL);
 	}
-	if (line[0] == '\0')
-	{
-		free(line);
-		return (NULL);
-	}
-	add_history(line);
 	return (line);
+}
+
+int	process_line(t_shell *shell, t_command **cmd_out)
+{
+	add_history(shell->line);
+	if (tokenize(shell) == -1)
+	{
+		g_exit_status = 2;
+		free_tokens(&shell->tokens);
+		return (1);
+	}
+	*cmd_out = split_cmd(shell->tokens, shell);
+	if (!*cmd_out)
+	{
+		g_exit_status = 1;
+		free_tokens(&shell->tokens);
+		return (1);
+	}
+	return (0);
 }
 
 void	run_shell(t_shell *shell)
@@ -96,37 +44,19 @@ void	run_shell(t_shell *shell)
 	g_exit_status = 0;
 	while (1)
 	{
-		signal(SIGINT, handle_sigint);
-		signal(SIGQUIT, SIG_IGN);
-		shell->line = readline("minishell -> ");
+		setup_signals();
+		shell->line = read_input();
 		if (!shell->line)
-		{
-			write(1, "exit\n", 5);
 			break ;
-		}
 		if (shell->line[0] == '\0')
 		{
 			free(shell->line);
 			continue ;
 		}
-		add_history(shell->line);
-		if (tokenize(shell) == -1)
-		{
-			g_exit_status = 2;
-			free_tokens(&shell->tokens);
-			free(shell->line);
-			continue ;
-		}
-		cmd = split_cmd(shell->tokens, shell);
-		if (!cmd)
-		{
-			g_exit_status = 1;
-			free_tokens(&shell->tokens);
-			free(shell->line);
-			continue ;
-		}
-		ft_run_cmd(cmd, shell);
-		free_cmd(cmd);
+		if (process_line(shell, &cmd) == 0)
+			ft_run_cmd(cmd, shell);
+		if (cmd)
+			free_cmd(cmd);
 		cleanup_loop(shell);
 		free(shell->line);
 	}
