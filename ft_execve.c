@@ -54,7 +54,15 @@ char	*create_env_entry(const char *key, const char *value)
 	return (entry);
 }
 
-char	**shell_2_char(t_env *env)
+static void	free_env_array(char **env_arr, int count)
+{
+	int i;
+	for (i = 0; i < count; i++)
+		free(env_arr[i]);
+	free(env_arr);
+}
+
+char **shell_2_char(t_env *env)
 {
 	char	**my_env;
 	int		size;
@@ -73,6 +81,7 @@ char	**shell_2_char(t_env *env)
 		my_env[i] = create_env_entry(env->key, env->value);
 		if (!my_env[i])
 		{
+			free_env_array(my_env, i);
 			g_exit_status = 1;
 			return (NULL);
 		}
@@ -83,6 +92,7 @@ char	**shell_2_char(t_env *env)
 	return (my_env);
 }
 
+
 void	ft_execve(char **argv, t_shell *shell)
 {
 	char	*cmd_path;
@@ -92,9 +102,6 @@ void	ft_execve(char **argv, t_shell *shell)
 	cmd_path = find_path(shell->env, argv[0]);
 	if (!cmd_path)
 	{
-		write(2, "minishell: ", 11);
-		write(2, argv[0], ft_strlen(argv[0]));
-		write(2, ": command not found\n", 21);
 		g_exit_status = 127;
 		exit(g_exit_status);
 	}

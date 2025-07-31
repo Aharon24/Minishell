@@ -29,7 +29,7 @@ void	ft_echo(char **argv)
 	i = 1;
 	if (!argv[1])
 	{
-		printf("\n");
+		write(1, "\n", 1); // stdout
 		return ;
 	}
 	print_newline = ft_check_n_flag(argv, &i);
@@ -38,13 +38,15 @@ void	ft_echo(char **argv)
 		j = 0;
 		while (argv[i][j])
 		{
-			printf("%c", argv[i][j]);
+			write(1, &argv[i][j], 1); // stdout
 			j++;
 		}
 		if (argv[i + 1] != NULL)
-			printf(" ");
+			write(1, " ", 1); // stdout
 		i++;
 	}
 	if (print_newline)
-		printf("\n");
+		write(1, "\n", 1); // stdout
 }
+
+

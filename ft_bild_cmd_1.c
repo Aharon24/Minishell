@@ -39,34 +39,63 @@ void	print_signal_message(int sig)
 		print_str("Quit\n");
 }
 
-void	wait_all_and_handle(void)
+void wait_all_and_handle(pid_t *pids, t_command **cmds, int count)
 {
-	int		wstatus;
-	pid_t	pid;
-	int		sig;
+    int wstatus;
+    int sig;
+    int i = 0;
+    int exit_codes[1024]; // Массив для кодов выхода
 
-	pid = wait(&wstatus);
-	while (pid > 0)
-	{
-		if ((wstatus & 0x7f) != 0)
-		{
-			sig = wstatus & 0x7f;
-			print_signal_message(sig);
-			if (sig != 13)
-				g_exit_status = 128 + sig;
-		}
-		else
-		{
-			g_exit_status = (wstatus >> 8) & 0xff;
-		}
-		pid = wait(&wstatus);
-	}
+    // Ждём все процессы и сохраняем коды выхода
+    while (i < count)
+    {
+        if (pids[i] == -1)
+        {
+            exit_codes[i] = -1;
+            i++;
+            continue;
+        }
+        waitpid(pids[i], &wstatus, 0);
+
+        if ((wstatus & 0x7f) != 0) // процесс завершён сигналом
+        {
+            sig = wstatus & 0x7f;
+            print_signal_message(sig);
+            if (sig != 13)
+                g_exit_status = 128 + sig;
+            exit_codes[i] = 128 + sig;
+        }
+        else // процесс завершился нормально
+        {
+            exit_codes[i] = (wstatus >> 8) & 0xff;
+            g_exit_status = exit_codes[i];
+        }
+        i++;
+    }
+
+    // Теперь выводим ошибки по порядку, после всех waitpid
+    i = 0;
+    while (i < count)
+    {
+        if (exit_codes[i] == 127) // команда не найдена
+        {
+            write(2, "minishell: ", 11);
+            write(2, cmds[i]->argv[0], ft_strlen(cmds[i]->argv[0]));
+            write(2, ": command not found\n", 20);
+        }
+        i++;
+    }
 }
 
-void	ft_run_cmd(t_command *cmd_list, t_shell *shell)
+
+
+void ft_run_cmd(t_command *cmd_list, t_shell *shell)
 {
 	t_command	*cmd;
 	int			prev_fd;
+	pid_t		pids[1024];
+	t_command	*cmds[1024];
+	int			pid_count;
 
 	if (read_all_heredocs(cmd_list) == -1)
 		return ;
@@ -76,13 +105,19 @@ void	ft_run_cmd(t_command *cmd_list, t_shell *shell)
 		free_tokens(&shell->tokens);
 		return ;
 	}
-	cmd = cmd_list;
+
 	prev_fd = -1;
+	pid_count = 0;
+	cmd = cmd_list;
 	while (cmd)
 	{
-		if (ft_handle_command(cmd, shell, &prev_fd) == -1)
+		if (ft_handle_command(cmd, shell, &prev_fd, &pids[pid_count]) == -1)
 			return ;
+		cmds[pid_count] = cmd;
+		pid_count++;
 		cmd = cmd->next;
 	}
-	wait_all_and_handle();
+
+	wait_all_and_handle(pids, cmds, pid_count);
 }
+

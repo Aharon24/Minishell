@@ -12,7 +12,7 @@ int	ft_handle_empty_cmd(t_command *cmd)
 	return (0);
 }
 
-int	ft_fork_and_manage(t_command *cmd, t_shell *shell,
+pid_t	ft_fork_and_manage(t_command *cmd, t_shell *shell,
 			int pipefd[2], int *prev_fd)
 {
 	pid_t	pid;
@@ -24,10 +24,9 @@ int	ft_fork_and_manage(t_command *cmd, t_shell *shell,
 		ft_child(cmd, shell, pipefd, *prev_fd);
 	else if (pid > 0)
 		ft_parent(cmd, prev_fd, pipefd);
-	else
-		return (perror("fork"), -1);
-	return (0);
+	return (pid);
 }
+
 
 void	ft_child(t_command *cmd, t_shell *shell,
 			int pipefd[2], int prev_fd)

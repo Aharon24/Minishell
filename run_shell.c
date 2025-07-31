@@ -93,6 +93,7 @@ void	run_shell(t_shell *shell)
 {
 	t_command	*cmd;
 
+	g_exit_status = 0;
 	while (1)
 	{
 		signal(SIGINT, handle_sigint);

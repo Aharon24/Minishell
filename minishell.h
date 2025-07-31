@@ -269,7 +269,7 @@ char		*find_path_helper(char **paths, char *cmd);
 void		ft_built_in_faind(char **argv, t_shell *shell);
 int			ft_bild_cmd_out_fork(char **argv, t_shell *shell);
 void		print_signal_message(int sig);
-void		wait_all_and_handle(void);
+void wait_all_and_handle(pid_t *pids, t_command **cmds, int count);
 void		ft_run_cmd(t_command *cmd_list, t_shell *shell);
 
 //ft_bild_cmd_2.c
@@ -277,12 +277,12 @@ void		ft_parent(t_command *cmd, int *prev_fd, int pipefd[2]);
 void		ft_exec_or_exit(t_command *cmd, t_shell *shell);
 void		ft_child(t_command *cmd, t_shell *shell,
 				int pipefd[2], int prev_fd);
-int			ft_fork_and_manage(t_command *cmd, t_shell *shell,
+pid_t		ft_fork_and_manage(t_command *cmd, t_shell *shell,
 				int pipefd[2], int *prev_fd);
 int			ft_handle_empty_cmd(t_command *cmd);
 
 //ft_fild_cmd_3.c
-int			ft_handle_command(t_command *cmd, t_shell *shell, int *prev_fd);
+int			ft_handle_command(t_command *cmd, t_shell *shell, int *prev_fd, pid_t *pid_out);
 void		safe_exit(int status);
 
 // ft_bild_cmd_helper.c
