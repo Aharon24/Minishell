@@ -4,7 +4,9 @@ void	ft_end_e(t_shell *shell, char *path)
 {
 	if (path[0] == '~' && path[1] == '\0')
 	{
-		shell->old_path = ft_faind_in_env(shell->env, "PWD");
+		if (shell->old_path)
+			free(shell->old_path);
+		shell->old_path = strdup(ft_faind_in_env(shell->env, "PWD"));
 		ft_faind_and_change("OLDPWD", shell->env, shell->old_path);
 		ft_faind_and_change("PWD", shell->env, shell->home);
 		chdir(shell->home);
@@ -26,7 +28,8 @@ void	ft_update_pwd(t_shell *shell, char *path)
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
-		free(shell->pwd);
+		if (shell->pwd)
+			free(shell->pwd);
 		shell->pwd = ft_strdup(cwd);
 	}
 	else
@@ -62,7 +65,8 @@ void	ft_cd_more_argument(char *path, t_shell *shell)
 	if (chdir(path) == 0)
 	{
 		pwd = ft_faind_in_env(shell->env, "PWD");
-		free(shell->old_path);
+		if (shell->old_path)
+			free(shell->old_path);
 		shell->old_path = ft_strdup(pwd);
 		ft_update_pwd(shell, path);
 	}

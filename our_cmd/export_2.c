@@ -1,30 +1,15 @@
 #include "../minishell.h"
 
-void	ft_add_export_or_env(t_shell *shell, char *arg)
+char	*value_(char *arg, int i)
 {
-	int	i;
-	int	n;
+	char	*value;
 
-	i = 0;
-	while (arg[i] && arg[i] != '=')
-		i++;
-	n = ft_faind_and_rm(arg, shell);
-	if (n == 2)
-		return ;
-	if (arg[i] != '=')
-	{
-		shell->export = ft_add_export(shell->export, arg);
-	}
-	else if (arg[i] == '=' && arg[i + 1] == '\0')
-	{
-		shell->export = ft_add_export(shell->export, arg);
-		shell->env = ft_add_env(shell->env, arg);
-	}
+	value = NULL;
+	if (arg[i + 1] == '\0' && arg[i] == '=')
+		value = ft_strdup("");
 	else
-	{
-		shell->export = ft_add_export(shell->export, arg);
-		shell->env = ft_add_env(shell->env, arg);
-	}
+		value = ft_value_string(arg);
+	return (value);
 }
 
 t_env	*ft_add_export(t_env *export, char *arg)
@@ -42,15 +27,16 @@ t_env	*ft_add_export(t_env *export, char *arg)
 		return (NULL);
 	key = ft_ket_string(arg);
 	if (ft_faind_key_in(start, key) == 1)
+	{
 		unset_env(&start, key);
+		free(key);
+		key = ft_ket_string(arg);
+	}
 	while (start->next)
 		start = start->next;
 	while (arg[i] && arg[i] != '=')
 		i++;
-	if (arg[i + 1] == '\0' && arg[i] == '=')
-		value = ft_strdup("");
-	else
-		value = ft_value_string(arg);
+	value = value_(arg, i);
 	start->next = new_env_node(key, value);
 	return (export);
 }

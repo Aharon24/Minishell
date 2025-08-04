@@ -35,7 +35,8 @@ void	ft_handle_cd_dash(t_shell *shell)
 		perror(shell->old_path);
 		return ;
 	}
-	free(shell->temp);
+	if (shell->temp)
+		free(shell->temp);
 	shell->temp = ft_strdup(pwd);
 	ft_faind_and_change("PWD", shell->env, shell->old_path);
 	ft_faind_and_change("OLDPWD", shell->env, shell->temp);

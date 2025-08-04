@@ -6,7 +6,7 @@ void	setup_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-char	*read_input()
+char	*read_input(void)
 {
 	char	*line;
 

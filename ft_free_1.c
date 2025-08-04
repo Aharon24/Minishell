@@ -68,4 +68,7 @@ void	free_shell(t_shell *shell)
 	if (shell->pwd)
 		free(shell->pwd);
 	shell->pwd = NULL;
+	if (shell->old_path)
+		free(shell->old_path);
+	shell->old_path = NULL;
 }

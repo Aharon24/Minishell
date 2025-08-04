@@ -45,9 +45,11 @@ pid_t	ft_fork_and_manage(t_command *cmd, t_shell *shell,
 
 	pid = fork();
 	signal(SIGINT, handle_sigcat);
-	signal(SIGQUIT, SIG_DFL);
 	if (pid == 0)
+	{
+		signal(SIGQUIT, SIG_DFL);
 		ft_child(cmd, shell, pipefd, *prev_fd);
+	}
 	else if (pid > 0)
 		ft_parent(cmd, prev_fd, pipefd);
 	return (pid);

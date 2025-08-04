@@ -130,7 +130,6 @@ int			ft_check_n_flag(char **argv, int *i);
 void		ft_env(t_shell *shell);
 
 //our_cmd/export_2.c
-void		ft_add_export_or_env(t_shell *shell, char *arg);
 t_env		*ft_add_export(t_env *export, char *arg);
 t_env		*ft_add_env(t_env *env, char *arg);
 char		*ft_ket_string(char *arg);
@@ -138,6 +137,7 @@ char		*ft_value_string(char *arg);
 
 //our_cmd/export_3.c
 int			ft_faind_key_in(t_env *e_e, char *key);
+void		ft_add_export_or_env(t_shell *shell, char *arg);
 
 //our_cmd/export_chesk.c
 int			ft_validation_argument(char *arg, int i);
@@ -267,7 +267,7 @@ void		handle_sigcat(int signum);
 //run_shell.c
 void		run_shell(t_shell *shell);
 void		setup_signals(void);
-char		*read_input();
+char		*read_input(void);
 int			process_line(t_shell *shell, t_command **cmd_out);
 
 //split_cmd_2.c

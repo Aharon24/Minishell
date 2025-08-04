@@ -32,7 +32,7 @@ void	print_signal_message(int sig)
 	else if (sig == 2)
 		write(1, "\n", 1);
 	else if (sig == 3)
-		print_str("Quit\n");
+		print_str("Quit (core dumped)\n");
 }
 
 void	wait_all_and_handle(pid_t *pids, t_command **cmds, int count)

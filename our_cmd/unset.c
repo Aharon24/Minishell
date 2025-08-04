@@ -52,7 +52,11 @@ int	ft_faind_and_rm(char *arg, t_shell *shell)
 	if (!get)
 		unset_env(&(shell->export), key);
 	if ((ft_strcmp(key, arg) == 0) && get)
+	{
+		free(key);
 		return (2);
+	}
+	free(key);
 	return (1);
 }
 

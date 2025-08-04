@@ -13,3 +13,30 @@ int	ft_faind_key_in(t_env *e_e, char *key)
 	}
 	return (0);
 }
+
+void	ft_add_export_or_env(t_shell *shell, char *arg)
+{
+	int	i;
+	int	n;
+
+	i = 0;
+	while (arg[i] && arg[i] != '=')
+		i++;
+	n = ft_faind_and_rm(arg, shell);
+	if (n == 2)
+		return ;
+	if (arg[i] != '=')
+	{
+		shell->export = ft_add_export(shell->export, arg);
+	}
+	else if (arg[i] == '=' && arg[i + 1] == '\0')
+	{
+		shell->export = ft_add_export(shell->export, arg);
+		shell->env = ft_add_env(shell->env, arg);
+	}
+	else
+	{
+		shell->export = ft_add_export(shell->export, arg);
+		shell->env = ft_add_env(shell->env, arg);
+	}
+}
