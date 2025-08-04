@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror   -g3
+CFLAGS = -Wall -Wextra -Werror 
 
 LIBFT_DIR = Libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
@@ -43,7 +43,6 @@ SRC = main.c\
 	ft_execve_helper.c\
 	our_cmd/echo.c\
 	ft_free_2.c\
-	#ft_heredoc.c
  
 OBJ = $(SRC:.c=.o)
 

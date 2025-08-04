@@ -12,6 +12,7 @@ void	print_not_found_errors(t_command **cmds, int *exit_codes, int count)
 			write(2, "minishell: ", 11);
 			write(2, cmds[i]->argv[0], ft_strlen(cmds[i]->argv[0]));
 			write(2, ": command not found\n", 20);
+			g_exit_status = 127;
 		}
 		i++;
 	}

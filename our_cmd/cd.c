@@ -71,7 +71,10 @@ void	ft_cd_more_argument(char *path, t_shell *shell)
 		ft_update_pwd(shell, path);
 	}
 	else
+	{
+		g_exit_status = 1;
 		perror(path);
+	}
 }
 
 void	ft_cd(char **argv, t_shell *shell)

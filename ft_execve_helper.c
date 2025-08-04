@@ -12,6 +12,7 @@ char	**allocate_env_array(t_env *env, int *out_size)
 		g_exit_status = 1;
 		return (NULL);
 	}
+	g_exit_status = 0;
 	*out_size = size;
 	return (my_env);
 }

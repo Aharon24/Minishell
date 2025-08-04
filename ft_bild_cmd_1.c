@@ -57,6 +57,7 @@ void	ft_run_cmd(t_command *cmd_list, t_shell *shell)
 		free_tokens(&shell->tokens);
 		return ;
 	}
+	g_exit_status = 0;
 	pid_count = run_all_commands(cmd_list, shell, pids, cmds);
 	if (pid_count >= 0)
 		wait_all_and_handle(pids, cmds, pid_count);

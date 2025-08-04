@@ -16,6 +16,7 @@ void	ft_exec_or_exit(t_command *cmd, t_shell *shell)
 		write(2, ": command not found\n", 20);
 		exit(127);
 	}
+	g_exit_status = 0;
 	envp = shell_2_char(shell->env);
 	execve(path, cmd->argv, envp);
 	if (cmd->pip)
@@ -35,6 +36,7 @@ int	ft_handle_empty_cmd(t_command *cmd)
 		close(cmd->heredoc_fd);
 	if (check_redirections(cmd, fd) == -1)
 		g_exit_status = 1;
+	g_exit_status = 0;
 	return (0);
 }
 

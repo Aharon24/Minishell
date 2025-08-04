@@ -92,6 +92,7 @@ void	ft_execve(char **argv, t_shell *shell)
 		g_exit_status = 127;
 		exit(g_exit_status);
 	}
+	g_exit_status = 0;
 	my_env = shell_2_char(shell->env);
 	if (!my_env)
 	{
@@ -99,6 +100,7 @@ void	ft_execve(char **argv, t_shell *shell)
 		g_exit_status = 1;
 		exit(g_exit_status);
 	}
+	g_exit_status = 0;
 	execve(cmd_path, argv, my_env);
 	write(2, "minishell: execve: ", 20);
 	write(2, "\n", 1);
