@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:43 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:44 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:19:04 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	karjacum(void)
 {
 	ft_putstr_fd("minishell: syntax error near "
 		"unexpected token `newline'\n", 2);
+	g_exit_status = 2;
 	return (-1);
 }
 

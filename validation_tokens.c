@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:07:08 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:07:09 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:19:54 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@ int	check_pipe_error(t_token *token)
 	{
 		ft_putstr_fd("minishell: syntax error"
 			" near unexpected token `newline'\n", 2);
+		g_exit_status = 2;
 		return (-1);
 	}
 	if (token->next->type == TOKEN_PIPE)
 	{
 		ft_putstr_fd("minishell: syntax error"
 			" near unexpected token `|'\n", 2);
+		g_exit_status = 2;
 		return (-1);
 	}
 	return (0);
@@ -41,6 +43,7 @@ int	check_redirection_error(t_token *token)
 	{
 		ft_putstr_fd("minishell: syntax error near"
 			" unexpected token `newline'\n", 2);
+		g_exit_status = 2;
 		return (-1);
 	}
 	if (token->next->type != TOKEN_WORD)
