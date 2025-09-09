@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:23 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:24 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/13 14:42:06 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	print_not_found_errors(t_command **cmds, int *exit_codes, int count)
 			write(2, "minishell: ", 11);
 			write(2, cmds[i]->argv[0], ft_strlen(cmds[i]->argv[0]));
 			write(2, ": command not found\n", 20);
-			g_exit_status = 127;
 		}
 		i++;
 	}
@@ -58,6 +57,7 @@ void	collect_exit_codes(pid_t *pids, int *exit_codes, int count)
 	int	wstatus;
 
 	i = 0;
+	wstatus = 0;
 	while (i < count)
 	{
 		if (pids[i] != -1)
@@ -67,6 +67,21 @@ void	collect_exit_codes(pid_t *pids, int *exit_codes, int count)
 		}
 		i++;
 	}
+}
+
+int	process_command_entry(t_command *cmd, t_shell *shell,
+			int *prev_fd, pid_t *pid)
+{
+	int	handle;
+
+	if ((!cmd->argv || !cmd->argv[0]) && cmd->next && !cmd->pip)
+		cmd->pip = 1;
+	handle = ft_handle_command(cmd, shell, prev_fd, pid);
+	if (handle == -1)
+		return (-1);
+	else if (handle == -2)
+		return (-2);
+	return (0);
 }
 
 int	run_all_commands(t_command *cmd_list, t_shell *shell,
@@ -79,11 +94,12 @@ int	run_all_commands(t_command *cmd_list, t_shell *shell,
 	cmd = cmd_list;
 	prev_fd = -1;
 	pid_count = 0;
+	if (cmd->pip)
+		shell->hello = 1;
 	while (cmd)
 	{
-		if ((!cmd->argv || !cmd->argv[0]) && cmd->next && !cmd->pip)
-			cmd->pip = 1;
-		if (ft_handle_command(cmd, shell, &prev_fd, &pids[pid_count]) == -1)
+		if (process_command_entry(cmd, shell, &prev_fd,
+				&pids[pid_count]) == -1)
 			return (-1);
 		if (pids[pid_count] != -1)
 			cmds[pid_count++] = cmd;

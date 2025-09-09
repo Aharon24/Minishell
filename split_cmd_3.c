@@ -69,13 +69,11 @@
 // 	res[j] = '\0';
 // 	return (res);
 // }
-
 // int	handle_dollar_case(char *input, t_expand_data *d,
 // 	t_env *env, int *i)
 // {
 // 	char	*exit_str;
 // 	int		o;
-
 // 	if (input[*i + 1] == '?')
 // 	{
 // 		exit_str = ft_itoa(g_exit_status);
@@ -90,7 +88,7 @@
 // 	return (0);
 // }
 
-int	handle_dollar_case(t_expand_ctx *ctx, t_expand_data *d)
+int	handle_dollar_case(t_expand_ctx *ctx, t_expand_data *d, t_shell *shell)
 {
 	char	*exit_str;
 	int		o;
@@ -105,7 +103,7 @@ int	handle_dollar_case(t_expand_ctx *ctx, t_expand_data *d)
 		*ctx->i += 2;
 	}
 	else
-		d->j = copy_var_value(d->res, d->j, ctx);
+		d->j = copy_var_value(d->res, d->j, ctx, shell);
 	return (0);
 }
 
@@ -126,7 +124,8 @@ int	handle_quotes(char *input, t_expand_data *d)
 	return (0);
 }
 
-void	handle_dollar_or_char(t_expand_ctx *ctx, t_expand_data *d)
+void	handle_dollar_or_char(t_expand_ctx *ctx,
+			t_expand_data *d, t_shell *shell)
 {
 	if (ctx->input[d->i] == '$' && d->sq == 0)
 	{
@@ -134,7 +133,7 @@ void	handle_dollar_or_char(t_expand_ctx *ctx, t_expand_data *d)
 			|| ft_isalpha(ctx->input[d->i + 1])
 			|| ctx->input[d->i + 1] == '_')
 		{
-			handle_dollar_case(ctx, d);
+			handle_dollar_case(ctx, d, shell);
 		}
 		else
 			d->res[d->j++] = ctx->input[d->i++];
@@ -143,16 +142,17 @@ void	handle_dollar_or_char(t_expand_ctx *ctx, t_expand_data *d)
 		d->res[d->j++] = ctx->input[d->i++];
 }
 
-void	copy_without_quotes_and_expand(t_expand_ctx *ctx, t_expand_data *d)
+void	copy_without_quotes_and_expand(t_expand_ctx *ctx,
+			t_expand_data *d, t_shell *shell)
 {
 	while (ctx->input[d->i])
 	{
 		if (!handle_quotes(ctx->input, d))
-			handle_dollar_or_char(ctx, d);
+			handle_dollar_or_char(ctx, d, shell);
 	}
 }
 
-char	*remove_quotes_and_expand(char *input, t_env *env)
+char	*remove_quotes_and_expand(char *input, t_env *env, t_shell *shell)
 {
 	t_expand_data	d;
 	t_expand_ctx	ctx;
@@ -162,7 +162,7 @@ char	*remove_quotes_and_expand(char *input, t_env *env)
 	ctx.input = input;
 	ctx.i = &d.i;
 	ctx.env = env;
-	copy_without_quotes_and_expand(&ctx, &d);
+	copy_without_quotes_and_expand(&ctx, &d, shell);
 	d.res[d.j] = '\0';
 	return (d.res);
 }

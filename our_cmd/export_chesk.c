@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:05:43 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:05:44 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/13 14:26:34 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,7 @@ int	ft_validation_argument(char *arg, int i)
 			if (((ft_isalpha(arg[i])) || arg[i] == '_'))
 				i++;
 			else
-			{
-				printf("minishell: export: `%s': "
-					"not a valid identifier\n", arg);
 				return (0);
-			}
 		}
 		if ((ft_isalpha(arg[i])) || (arg[i] == '_') || (ft_isdigit(arg[i])))
 			i++;

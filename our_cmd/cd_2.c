@@ -6,34 +6,47 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:04:05 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:04:53 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/09/04 18:02:42 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+void	ft_else(void)
+{
+	perror("No");
+	g_exit_status = 1;
+}
+
+int	ft_chlp(void)
+{
+	g_exit_status = 1;
+	return (0);
+}
+
 int	artur(t_shell **shell, char **get_pwd, char **new)
 {
 	char	*pwd;
 
-	pwd = NULL;
 	if (!(*shell)->home)
 	{
-		free((*new));
+		free(*new);
+		g_exit_status = 1;
 		return (0);
 	}
-	pwd = ft_strjoin((*shell)->home, (*new));
-	free((*new));
+	pwd = ft_strjoin((*shell)->home, *new);
+	free(*new);
 	if (!pwd)
-		return (0);
+		return (ft_chlp());
 	if (chdir(pwd) == 0)
 	{
-		(*get_pwd) = ft_faind_in_env((*shell)->env, "PWD");
-		ft_faind_and_change("OLDPWD", (*shell)->env, (*get_pwd));
+		*get_pwd = ft_faind_in_env((*shell)->env, "PWD");
+		ft_faind_and_change("OLDPWD", (*shell)->env, *get_pwd);
 		ft_faind_and_change("PWD", (*shell)->env, pwd);
+		g_exit_status = 0;
 	}
 	else
-		perror("No");
+		ft_else();
 	free(pwd);
 	return (1);
 }
@@ -48,7 +61,10 @@ void	ft_check_t(t_shell *shell, char *path)
 	new = NULL;
 	new = malloc(ft_strlen(path) + 1);
 	if (!new)
+	{
+		g_exit_status = 1;
 		return ;
+	}
 	while (path[i])
 	{
 		new[i] = path[i];
@@ -71,6 +87,7 @@ int	ft_check_len_argv(char **argv)
 	if (i > 2)
 	{
 		ft_finish();
+		g_exit_status = 1;
 		return (0);
 	}
 	return (1);

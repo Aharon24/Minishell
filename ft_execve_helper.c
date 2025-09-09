@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:32 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:33 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:42:19 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char	**allocate_env_array(t_env *env, int *out_size)
 		g_exit_status = 1;
 		return (NULL);
 	}
-	g_exit_status = 0;
 	*out_size = size;
 	return (my_env);
 }
@@ -59,7 +58,7 @@ char	*find_path(t_env *s, char *cmd)
 	char	*path_env;
 	char	*result;
 
-	if (access(cmd, X_OK) == 0)
+	if (access(cmd, F_OK) == 0)
 		return (ft_strdup(cmd));
 	path_env = ft_faind_in_env(s, "PATH");
 	if (!path_env)
@@ -70,4 +69,32 @@ char	*find_path(t_env *s, char *cmd)
 	result = find_path_helper(paths, cmd);
 	ft_free_arr(paths);
 	return (result);
+}
+
+void	ft_execve_error_exit(char *cmd, int code, char *msg)
+{
+	write(2, "minishell: ", 11);
+	write(2, cmd, ft_strlen(cmd));
+	write(2, msg, ft_strlen(msg));
+	g_exit_status = code;
+	exit(g_exit_status);
+}
+
+int	check_command_permission(t_shell *shell, char *cmd)
+{
+	char	*cmd_path;
+
+	cmd_path = find_path(shell->env, cmd);
+	if (cmd_path == NULL)
+	{
+		free(cmd_path);
+		return (127);
+	}
+	if (access(cmd_path, X_OK) != 0 && access(cmd_path, F_OK) == 0)
+	{
+		free(cmd_path);
+		return (126);
+	}
+	free(cmd_path);
+	return (0);
 }

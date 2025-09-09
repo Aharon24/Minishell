@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:34 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:35 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:58:47 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,10 @@ void	free_shell(t_shell *shell)
 	if (shell->old_path)
 		free(shell->old_path);
 	shell->old_path = NULL;
+	if (shell->export)
+		free_env(shell->export);
+	shell->export = NULL;
+	if (shell->temp)
+		free(shell->temp);
+	shell->temp = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:05:58 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:05:59 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:24:26 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	ft_unset(char **argv, t_shell *shell)
 	int	i;
 
 	i = 1;
+	g_exit_status = 0;
 	while (argv[i])
 	{
 		unset_env(&(shell->env), argv[i]);

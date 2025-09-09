@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:05:28 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:05:29 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:19:08 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,5 @@ void	ft_env(t_shell *shell)
 		printf("%s=%s\n", env->key, env->value);
 		env = env->next;
 	}
+	g_exit_status = 0;
 }

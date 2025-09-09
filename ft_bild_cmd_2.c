@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:13 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:15 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:40:09 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,20 @@ void	ft_exec_or_exit(t_command *cmd, t_shell *shell)
 
 	handle_exit_and_builtins(cmd, shell);
 	path = find_path(shell->env, cmd->argv[0]);
-	if (!path)
-	{
-		if (cmd->pip)
-			exit(127);
-		write(2, "minishell: ", 11);
-		write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
-		write(2, ": command not found\n", 20);
-		exit(127);
-	}
-	g_exit_status = 0;
+	if (!path || cmd->argv[0][0] == '\0'
+				|| (access(path, F_OK) == 0 && path[0] != '.'
+					&& path[0] != '/'))
+		er_case(cmd);
 	envp = shell_2_char(shell->env);
 	execve(path, cmd->argv, envp);
+	if (access(path, F_OK) == 0)
+		er_case(cmd);
 	if (cmd->pip)
 		exit(126);
 	write(2, "minishell: ", 11);
 	write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
-	write(2, ": Permission denied\n", 20);
+	write(2, ": Permission denied\n", 21);
+	printf("hi\n");
 	exit(126);
 }
 
@@ -48,7 +45,6 @@ int	ft_handle_empty_cmd(t_command *cmd)
 		close(cmd->heredoc_fd);
 	if (check_redirections(cmd, fd) == -1)
 		g_exit_status = 1;
-	g_exit_status = 0;
 	return (0);
 }
 

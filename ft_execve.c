@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:33 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:34 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/13 15:57:23 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,25 +97,23 @@ void	ft_execve(char **argv, t_shell *shell)
 	char	*cmd_path;
 	char	**my_env;
 
-	my_env = NULL;
 	cmd_path = find_path(shell->env, argv[0]);
 	if (!cmd_path)
+		ft_execve_error_exit(argv[0], 127, ": command not found\n");
+	if (access(cmd_path, X_OK) != 0)
 	{
-		g_exit_status = 127;
-		exit(g_exit_status);
+		free(cmd_path);
+		ft_execve_error_exit(argv[0], 126, ": Permission denied\n");
 	}
-	g_exit_status = 0;
 	my_env = shell_2_char(shell->env);
 	if (!my_env)
 	{
-		write(2, "minishell: failed to prepare environment\n", 41);
-		g_exit_status = 1;
-		exit(g_exit_status);
+		free(cmd_path);
+		ft_execve_error_exit(argv[0], 1, ": failed to prepare environment\n");
 	}
-	g_exit_status = 0;
 	execve(cmd_path, argv, my_env);
-	write(2, "minishell: execve: ", 20);
-	write(2, "\n", 1);
-	g_exit_status = 126;
+	free(cmd_path);
+	write(2, "minishell: execve error\n", 23);
+	g_exit_status = 1;
 	exit(g_exit_status);
 }

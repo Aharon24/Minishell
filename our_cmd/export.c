@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:05:46 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:05:47 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:20:40 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	ft_validation(char *arg, t_shell *shell)
 	if (ft_validation_argument(arg, i) == 1)
 		ft_add_export_or_env(shell, arg);
 	else
-		return ;
+	{
+		printf("minishell: export: `%s': not a valid identifier\n", arg);
+		g_exit_status = 1;
+	}
 }
 
 void	ft_check_line_export(char **argv, t_shell *shell)
@@ -111,5 +114,8 @@ void	ft_export(t_shell*shell, char **argv)
 		return ;
 	}
 	else if (argv[1])
+	{
+		g_exit_status = 0;
 		ft_check_line_export(argv, shell);
+	}
 }

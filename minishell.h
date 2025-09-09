@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:07:26 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:07:27 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/16 18:37:26 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@
 # include "Libft/libft.h"
 
 extern int	g_exit_status;
+
+void		heredoc_sigint_handler(int signo);
+void		handle_sigdfl(int signum);
 
 typedef struct s_expand_data
 {
@@ -72,6 +75,7 @@ typedef struct s_redirect
 	t_token_type		type;
 	char				*filename;
 	struct s_redirect	*next;
+	int					herdok_chesk;
 }	t_redirect;
 
 typedef struct s_command
@@ -107,6 +111,9 @@ typedef struct s_shell
 	int		len;
 	int		exit_i;
 	int		check_exit;
+	int		heredoc_interrupted;
+	int		hello;
+	int		ivalid_var;
 }	t_shell;
 
 //////////////OUR_CMD////////////////////////
@@ -114,11 +121,13 @@ typedef struct s_shell
 ///our_cmd/cd_2.c
 void		ft_check_t(t_shell *shell, char *path);
 int			ft_check_len_argv(char **argv);
+int			artur(t_shell **shell, char **get_pwd, char **new);
 
 //our_cmd/cd_helper_2.c
 void		ft_resolve_pwd(char **new_pwd, t_shell *shell, char *path);
 void		ft_handle_cd_dash(t_shell *shell);
 void		ft_handle_cd_home(t_shell *shell);
+void		ft_qsan_hing_tox(char *path);
 
 //our_cmd/cd_helper.c
 void		ft_one(char **new_pwd, t_shell *shell);
@@ -170,9 +179,11 @@ t_env		*ft_faind_and_change(char *argumnet, t_env *env, char *new_path);
 
 //our_cmd/pwd.c
 void		ft_pwd(t_shell *shell);
-void		copy_without_quotes_and_expand(t_expand_ctx *ctx, t_expand_data *d);
-void		handle_dollar_or_char(t_expand_ctx *ctx, t_expand_data *d);
-char		*remove_quotes_and_expand(char *input, t_env *env);
+void		copy_without_quotes_and_expand(t_expand_ctx *ctx,
+				t_expand_data *d, t_shell *shell);
+void		handle_dollar_or_char(t_expand_ctx *ctx,
+				t_expand_data *d, t_shell *shell);
+// char		*remove_quotes_and_expand(char *input, t_env *env);
 
 //our_cmd/unset.c
 void		unset_env(t_env **env, char *key);
@@ -217,6 +228,7 @@ int			ft_exec_cd(char **argv, t_shell *shell);
 int			ft_exec_unset(char **argv, t_shell *shell);
 int			ft_exec_export(char **argv, t_shell *shell);
 int			ft_exec_exit(char **argv);
+void		ft_init_pid(pid_t *p, t_command **cmd);
 
 //ft_bild_cmd_helper_2.c
 void		print_not_found_errors(t_command **cmds,
@@ -230,6 +242,8 @@ int			process_status(int wstatus);
 char		*find_path(t_env *s, char *cmd);
 char		*find_path_helper(char **paths, char *cmd);
 char		**allocate_env_array(t_env *env, int *out_size);
+void		ft_execve_error_exit(char *cmd, int code, char *msg);
+int			check_command_permission(t_shell *shell, char *cmd);
 
 //ft_exece.c
 void		ft_execve(char **argv, t_shell *shell);
@@ -253,8 +267,12 @@ void		free_command(t_command *cmd);
 void		ft_free_arr(char **arr);
 void		free_tokens(t_token **head);
 void		free_env(t_env *env);
+int			check_command_and_permissions(t_shell *shell,
+				t_command *cmd, pid_t *pid_out);
+void		er_case(t_command *cmd);
 
 //handle_redirection.c
+int			karjacum(void);
 int			handle_redirections(t_command *cmd);
 int			handle_heredoc(t_redirect *redir, int *heredoc_fd);
 int			read_all_heredocs(t_command *cmd_list);
@@ -264,6 +282,14 @@ int			check_redirections(t_command *cmd, int fd);
 int			foo(char *name);
 int			foo2(char *name);
 int			foo3(char *name);
+int			read_heredocs_for_command(t_command *cmd);
+void		exec_heredoc_child(t_redirect *redir, int pipefd[2]);
+
+//handle_redirection_helper_2.c
+void		heredoc_sigint_handler(int signo);
+void		handle_sigdfl(int signum);
+void		restore_signals(void (*old_handler)(int));
+void		write_heredoc_line(int fd, char *line);
 
 //init.c
 void		init_shell(t_shell *shell, char **env);
@@ -274,6 +300,7 @@ int			init_remove_data(t_expand_data *d, char *input);
 int			process_tokens(t_shell *shell);
 char		*read_line_or_exit(void);
 void		handle_sigint(int signum);
+int			process_and_execute(t_shell *shell, t_command **cmd);
 void		handle_sigcat(int signum);
 
 //run_shell.c
@@ -292,9 +319,10 @@ int			process_redirect(t_token **tokens,
 				t_command *new_cmd, t_shell *shell);
 
 //split_cmd_3.c
-char		*remove_quotes_and_expand(char *input, t_env *env);
+char		*remove_quotes_and_expand(char *input, t_env *env, t_shell *shell);
 int			handle_quotes(char *input, t_expand_data *d);
-int			handle_dollar_case(t_expand_ctx *ctx, t_expand_data *d);
+int			handle_dollar_case(t_expand_ctx *ctx,
+				t_expand_data *d, t_shell *shell);
 
 //split_cmd.c
 
@@ -323,7 +351,7 @@ void		free_env_array(char **env_arr, int count);
 //utils.c
 int			ft_strcmp(char *s1, char *s2);
 char		*get_env_value(char *key, t_env *env);
-int			copy_var_value(char *res, int j, t_expand_ctx *ctx);
+int			copy_var_value(char *res, int j, t_expand_ctx *ctx, t_shell *shell);
 void		print_str(const char *str);
 int			ft_handle_exit_cmd(char **argv);
 

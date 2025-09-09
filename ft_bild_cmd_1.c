@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:07 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:08 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/09/08 19:09:37 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,11 @@ int	ft_bild_cmd_out_fork(char **argv, t_shell *shell)
 	if (!argv || !argv[0])
 		return (0);
 	if (ft_strcmp(argv[0], "cd") == 0)
+	{
+		if (ft_check_len_argv(argv) == 0)
+			return (1);
 		return (ft_exec_cd(argv, shell));
+	}
 	if (ft_strcmp(argv[0], "unset") == 0)
 		return (ft_exec_unset(argv, shell));
 	if (ft_strcmp(argv[0], "export") == 0)
@@ -61,16 +65,23 @@ void	ft_run_cmd(t_command *cmd_list, t_shell *shell)
 	t_command	*cmds[1024];
 	int			pid_count;
 
-	if (read_all_heredocs(cmd_list) == -1)
+	pid_count = 0;
+	shell->heredoc_interrupted = 0;
+	ft_init_pid(pids, cmds);
+	if (read_all_heredocs(cmd_list) == -2)
+	{
+		shell->heredoc_interrupted = 1;
+		g_exit_status = 130;
 		return ;
+	}
 	if (validate_tokens(shell->tokens) == -1)
 	{
 		g_exit_status = 2;
 		free_tokens(&shell->tokens);
 		return ;
 	}
-	g_exit_status = 0;
 	pid_count = run_all_commands(cmd_list, shell, pids, cmds);
+	shell->hello = 0;
 	if (pid_count >= 0)
 		wait_all_and_handle(pids, cmds, pid_count);
 }

@@ -6,11 +6,11 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:07:03 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:07:04 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/08 19:30:03 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int	extract_key_value(char *env_entry, char **key, char **value)
 {
@@ -36,7 +36,7 @@ int	ft_check_exit_cmd(char **argv)
 
 	number = 0;
 	if (argv[1] == NULL)
-		return (0);
+		return (g_exit_status);
 	else if (ft_ch(argv[1]))
 	{
 		return (258);

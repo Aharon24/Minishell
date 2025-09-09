@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:22 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:23 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/09/08 19:54:56 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,16 @@ void	handle_exit_and_builtins(t_command *cmd, t_shell *shell)
 
 int	handle_builtin_command(t_command *cmd, t_shell *shell, pid_t *pid_out)
 {
-	if (ft_bild_cmd_out_fork(cmd->argv, shell))
+	int	i;
+
+	i = ft_bild_cmd_out_fork(cmd->argv, shell);
+	if (i > 0)
 	{
 		*pid_out = -1;
 		return (1);
 	}
+	else if (i == -1)
+		return (-1);
 	return (0);
 }
 
@@ -64,11 +69,6 @@ int	handle_empty_command(t_command *cmd, int *prev_fd, pid_t *pid_out)
 				close(*prev_fd);
 			*prev_fd = pipefd[0];
 		}
-		else if (*prev_fd != -1)
-		{
-			close(*prev_fd);
-			*prev_fd = -1;
-		}
 		ft_handle_empty_cmd(cmd);
 		return (1);
 	}
@@ -80,13 +80,21 @@ int	ft_handle_command(t_command *cmd, t_shell *shell,
 {
 	int		pipefd[2];
 	pid_t	pid;
+	int		res;
 
-	if (handle_empty_command(cmd, prev_fd, pid_out))
-		return (0);
-	if (handle_builtin_command(cmd, shell, pid_out))
-		return (0);
+	res = check_command_and_permissions(shell, cmd, pid_out);
+	if (res != 0)
+	{
+		if (res == -1)
+			return (-2);
+		else
+			return (0);
+	}
 	if (cmd->pip && pipe(pipefd) < 0)
-		return (perror("pipe"), -1);
+	{
+		perror("pipe");
+		return (-1);
+	}
 	pid = ft_fork_and_manage(cmd, shell, pipefd, prev_fd);
 	if (pid < 0)
 		return (-1);

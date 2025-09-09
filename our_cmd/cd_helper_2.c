@@ -6,11 +6,17 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:04:28 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:04:40 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/08 20:05:22 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	ft_mlp(char *path)
+{
+	perror(path);
+	g_exit_status = 1;
+}
 
 void	ft_resolve_pwd(char **new_pwd, t_shell *shell, char *path)
 {
@@ -33,6 +39,7 @@ void	ft_handle_cd_dash(t_shell *shell)
 	char	*pwd;
 	char	*oldpwd;
 
+	oldpwd = NULL;
 	pwd = ft_faind_in_env(shell->env, "PWD");
 	oldpwd = ft_faind_in_env(shell->env, "OLDPWD");
 	if (!shell->old_path)
@@ -44,9 +51,10 @@ void	ft_handle_cd_dash(t_shell *shell)
 	}
 	if (chdir(shell->old_path) != 0)
 	{
-		perror(shell->old_path);
+		ft_mlp(shell->old_path);
 		return ;
 	}
+	g_exit_status = 0;
 	if (shell->temp)
 		free(shell->temp);
 	shell->temp = ft_strdup(pwd);
@@ -68,9 +76,17 @@ void	ft_handle_cd_home(t_shell *shell)
 		ft_faind_and_change("OLDPWD", shell->env, shell->old_path);
 		ft_faind_and_change("PWD", shell->env, shell->home);
 		chdir(shell->home);
+		g_exit_status = 0;
 	}
 	else
 	{
 		write(2, "minishell: HOME not set\n", 24);
+		g_exit_status = 1;
 	}
+}
+
+void	ft_qsan_hing_tox(char *path)
+{
+	g_exit_status = 1;
+	perror(path);
 }

@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:44 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:45 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/07 20:34:26 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,11 @@ void	init_shell(t_shell *shell, char **env)
 	shell->export = NULL;
 	shell->pwd = NULL;
 	shell->check_exit = 0;
+	shell->temp = NULL;
 	shell->env = init_env(env);
+	shell->heredoc_interrupted = 1;
+	shell->hello = 0;
+	shell->ivalid_var = 0;
 	if (!shell->env)
 	{
 		write(2, "minishell: failed to initialize environment\n", 44);

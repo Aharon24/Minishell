@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:57 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:58 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/12 17:28:36 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	process_redirect(t_token **tokens, t_command *new_cmd, t_shell *shell)
 	if (*tokens && (*tokens)->type == TOKEN_WORD)
 	{
 		redir->filename
-			= remove_quotes_and_expand((*tokens)->value, shell->env);
+			= remove_quotes_and_expand((*tokens)->value, shell->env, shell);
 		*tokens = (*tokens)->next;
 	}
 	redir->next = NULL;
@@ -40,7 +40,8 @@ int	fill_argv_and_redirects(t_token **tokens,
 	{
 		if ((*tokens)->type == TOKEN_WORD)
 		{
-			if (fill_argv(tokens, new_cmd, shell) == -1)
+			if (fill_argv(tokens, new_cmd, shell) == -1
+				&& shell->ivalid_var == 0)
 				return (-1);
 		}
 		else if ((*tokens)->type == TOKEN_REDIRECT_IN
@@ -77,9 +78,17 @@ int	fill_argv(t_token **tokens, t_command *new_cmd, t_shell *shell)
 	while (*tokens && (*tokens)->type == TOKEN_WORD)
 	{
 		new_cmd->argv[new_cmd->argc]
-			= remove_quotes_and_expand((*tokens)->value, shell->env);
+			= remove_quotes_and_expand((*tokens)->value, shell->env, shell);
 		if (!new_cmd->argv[new_cmd->argc])
 			return (-1);
+		if (new_cmd->argv[new_cmd->argc][0] == '\0' && shell->ivalid_var == 1)
+		{
+			free(new_cmd->argv[new_cmd->argc]);
+			g_exit_status = 0;
+			shell->ivalid_var = 0;
+			*tokens = (*tokens)->next;
+			continue ;
+		}
 		new_cmd->argc++;
 		*tokens = (*tokens)->next;
 	}

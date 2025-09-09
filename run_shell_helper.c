@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:53 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:54 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/13 17:57:25 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,22 @@ char	*read_line_or_exit(void)
 	}
 	add_history(line);
 	return (line);
+}
+
+int	process_and_execute(t_shell *shell, t_command **cmd)
+{
+	if (process_line(shell, cmd) == 0)
+	{
+		ft_run_cmd(*cmd, shell);
+		if (shell->heredoc_interrupted)
+		{
+			free_tokens(&shell->tokens);
+			cleanup_loop(shell);
+			free_cmd(*cmd);
+			free(shell->line);
+			g_exit_status = 130;
+			return (-1);
+		}
+	}
+	return (0);
 }

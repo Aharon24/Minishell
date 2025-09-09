@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:43 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:19:04 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/13 17:48:23 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int	karjacum(void)
 {
-	ft_putstr_fd("minishell: syntax error near "
-		"unexpected token `newline'\n", 2);
 	g_exit_status = 2;
 	return (-1);
 }
@@ -23,27 +21,15 @@ int	karjacum(void)
 int	read_all_heredocs(t_command *cmd_list)
 {
 	t_command	*cmd;
-	t_redirect	*redir;
-	int			fd;
+	int			result;
 
 	cmd = cmd_list;
 	while (cmd)
 	{
 		cmd->has_heredoc = 0;
-		redir = cmd->redirects;
-		while (redir)
-		{
-			if (redir->type == TOKEN_HEREDOC)
-			{
-				if (!redir->filename)
-					return (karjacum());
-				if (handle_heredoc(redir, &fd) < 0)
-					return (-1);
-				cmd->heredoc_fd = fd;
-				cmd->has_heredoc = 1;
-			}
-			redir = redir->next;
-		}
+		result = read_heredocs_for_command(cmd);
+		if (result != 0)
+			return (result);
 		cmd = cmd->next;
 	}
 	return (0);
@@ -81,25 +67,28 @@ int	check_redirections(t_command *cmd, int fd)
 int	handle_heredoc(t_redirect *redir, int *heredoc_fd)
 {
 	int		pipefd[2];
-	char	*line;
+	pid_t	pid;
+	int		status;
+	void	(*old_handler)(int);
 
-	if (!redir->filename)
+	if (!redir->filename || pipe(pipefd) == -1)
 		return (-1);
-	if (pipe(pipefd) == -1)
-		return (-1);
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, redir->filename) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write(pipefd[1], line, ft_strlen(line));
-		write(pipefd[1], "\n", 1);
-		free(line);
-	}
+	old_handler = signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	pid = fork();
+	if (pid == -1)
+		return (restore_signals(old_handler), -1);
+	if (pid == 0)
+		exec_heredoc_child(redir, pipefd);
 	close(pipefd[1]);
+	waitpid(pid, &status, 0);
+	restore_signals(old_handler);
+	if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		|| (WIFEXITED(status) && WEXITSTATUS(status) == 130))
+	{
+		close(pipefd[0]);
+		return (-2);
+	}
 	*heredoc_fd = pipefd[0];
 	return (0);
 }

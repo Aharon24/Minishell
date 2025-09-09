@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:47 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:48 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/16 18:37:55 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,13 @@ int	main(int argc, char **argv, char **env)
 {
 	t_shell	shell;
 
-	(void)argc;
 	(void)argv;
+	if (argc > 1)
+	{
+		printf("minishell: %s: No such file or directory\n", argv[1]);
+		return (127);
+	}
 	init_shell(&shell, env);
 	run_shell(&shell);
-	return (0);
+	return (g_exit_status);
 }

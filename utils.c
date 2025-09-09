@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:07:04 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:07:05 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/12 17:28:02 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*get_env_value(char *key, t_env *env)
 			return (ft_strdup(env->value));
 		env = env->next;
 	}
-	return (ft_strdup(""));
+	return (NULL);
 }
 
 // int	copy_var_value(char *res, int j, char *input, int *i, t_env *env)
@@ -70,7 +70,7 @@ char	*get_env_value(char *key, t_env *env)
 // 	return (j);
 // }
 
-int	copy_var_value(char *res, int j, t_expand_ctx *ctx)
+int	copy_var_value(char *res, int j, t_expand_ctx *ctx, t_shell *shell)
 {
 	int		start;
 	char	*name;
@@ -81,6 +81,12 @@ int	copy_var_value(char *res, int j, t_expand_ctx *ctx)
 		(*ctx->i)++;
 	name = ft_substr(ctx->input, start, *ctx->i - start);
 	val = get_env_value(name, ctx->env);
+	if (!val && name)
+	{
+		shell->ivalid_var = 1;
+		free(name);
+		return (0);
+	}
 	ft_strlcpy(res + j, val, ft_strlen(val) + 1);
 	j += ft_strlen(val);
 	free(name);

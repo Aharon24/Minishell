@@ -6,7 +6,7 @@
 /*   By: ahapetro <ahapetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:06:56 by ahapetro          #+#    #+#             */
-/*   Updated: 2025/08/04 20:06:57 by ahapetro         ###   ########.fr       */
+/*   Updated: 2025/08/08 16:43:07 by ahapetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ void	run_shell(t_shell *shell)
 {
 	t_command	*cmd;
 
-	g_exit_status = 0;
 	while (1)
 	{
+		shell->heredoc_interrupted = 0;
 		setup_signals();
 		shell->line = read_input();
 		if (!shell->line)
@@ -65,8 +65,8 @@ void	run_shell(t_shell *shell)
 			free(shell->line);
 			continue ;
 		}
-		if (process_line(shell, &cmd) == 0)
-			ft_run_cmd(cmd, shell);
+		if (process_and_execute(shell, &cmd) == -1)
+			continue ;
 		if (cmd)
 			free_cmd(cmd);
 		cleanup_loop(shell);
