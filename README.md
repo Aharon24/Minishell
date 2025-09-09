@@ -70,3 +70,31 @@ When presenting, show: parser code, how pipes are wired, heredoc handling, and a
 git clone <your-repo-url>
 cd minishell
 make
+## Example session
+
+Copy-paste into your shell to reproduce:
+
+```bash
+$ echo "Hello World"
+Hello World
+
+$ export MYVAR=42
+$ echo "Value: $MYVAR"
+Value: 42
+
+$ ls -la | grep minishell > out.txt
+$ cat out.txt
+
+$ cat << EOF
+line1
+line2
+EOF
+line1
+line2
+
+$ false
+$ echo $?
+1
+
+$ exit
+
