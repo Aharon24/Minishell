@@ -66,7 +66,7 @@ When presenting, show: parser code, how pipes are wired, heredoc handling, and a
 
 **Build**
 
-```bash
+**bash**
 git clone <your-repo-url>
 cd minishell
 make
