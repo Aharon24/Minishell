@@ -12,7 +12,7 @@
 ## Table of contents
 
 - [Pitch](#pitch)  
-- [Why this project (portfolio highlights)](#why-this-project-portfolio-highlights)  
+- [Why this project](#why-this-project-portfolio-highlights)  
 - [Features](#features)  
 - [Build & Run](#build--run)  
 - [Usage examples](#usage-examples)  
@@ -33,8 +33,6 @@ This `minishell` is a compact reimplementation of core shell features. It is int
 ---
 
 ## Why this project (portfolio highlights)
-
-Include this project in your portfolio to show:
 
 - **Low-level system skills** — process control (`fork`, `execve`, `pipe`, `dup2`), file descriptors and redirections.  
 - **Unix internals** — environment variables, signal handling and job control basics.  
