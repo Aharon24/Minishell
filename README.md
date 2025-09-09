@@ -9,14 +9,6 @@
 
 ---
 
-## Demo
-
-> GIF / short video: `assets/demo.gif` *(replace with actual recording)*
-
-![demo placeholder](assets/demo.gif)
-
----
-
 ## Table of contents
 
 - [Pitch](#pitch)  
